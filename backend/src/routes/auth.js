@@ -2,6 +2,7 @@ const express = require('express');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const rateLimit = require('express-rate-limit');
 const { query } = require('../config/database');
 const { validate, required, minLength, maxLength, isEmail, isIn } = require('../middleware/validate');
 const { requireAuth, requireRole } = require('../middleware/requireAuth');
@@ -146,9 +147,18 @@ router.get('/admin/test', requireAuth, requireRole('admin'), (req, res) => {
   res.json({ message: 'Admin access granted', user: req.user });
 });
 
+const forgotPasswordLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 3,
+  message: { error: 'Too many requests. Try again in 15 minutes.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 // POST /api/auth/forgot-password
 router.post(
   '/forgot-password',
+  forgotPasswordLimiter,
   validate({
     email: [required, isEmail],
   }),

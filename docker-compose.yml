@@ -26,6 +26,8 @@ services:
       DATABASE_URL: postgres://viatrip:viatrip_dev@db:5432/viatrip
       JWT_SECRET: dev-jwt-secret-change-in-production
       PORT: 3001
+      EMAIL_USER: viatrip.app@gmail.com
+      EMAIL_PASS: xzdu fqyt obog ukux
     volumes:
       - ./backend/src:/app/src
       - ./backend/sql:/app/sql
