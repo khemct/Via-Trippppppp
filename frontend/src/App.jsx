@@ -4,6 +4,9 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
+import TripListPage from './pages/TripListPage';
+import TripSetupPage from './pages/TripSetupPage';
+import TripDetailPage from './pages/TripDetailPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import RoleGuard from './components/RoleGuard';
 
@@ -77,15 +80,6 @@ function HomePage() {
   );
 }
 
-function TripsPage() {
-  return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-4">My Trips</h1>
-      <p className="text-gray-500 text-sm">No trips yet. Plan your first road trip!</p>
-    </div>
-  );
-}
-
 function AdminPage() {
   return (
     <div className="p-8">
@@ -111,7 +105,25 @@ export default function App() {
           path="/trips"
           element={
             <ProtectedRoute>
-              <TripsPage />
+              <TripListPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/trips/new"
+          element={
+            <ProtectedRoute>
+              <TripSetupPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/trips/:tripId"
+          element={
+            <ProtectedRoute>
+              <TripDetailPage />
             </ProtectedRoute>
           }
         />
