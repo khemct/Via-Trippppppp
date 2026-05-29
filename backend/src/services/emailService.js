@@ -1,23 +1,34 @@
 const nodemailer = require('nodemailer');
 
-const transporter = (process.env.EMAIL_USER && process.env.EMAIL_PASS)
-  ? nodemailer.createTransport({
+let transporter;
+let useStreamTransport = false;
+
+function getTransporter() {
+  if (transporter) return transporter;
+
+  if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+    transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
-    })
-  : nodemailer.createTransport({
+    });
+  } else {
+    useStreamTransport = true;
+    transporter = nodemailer.createTransport({
       streamTransport: true,
       newline: 'unix',
       buffer: true,
     });
+  }
 
-async function sendPasswordResetEmail(to, resetToken) {
-  const resetUrl = `http://localhost:3000/reset-password?token=${resetToken}`;
+  return transporter;
+}
 
-  const info = await transporter.sendMail({
+async function trySendRealMail(to, resetUrl) {
+  const t = getTransporter();
+  const info = await t.sendMail({
     from: `"Via-Trip" <${process.env.EMAIL_USER || 'noreply@viatrip.com'}>`,
     to,
     subject: 'Your Via-Trip Password Reset Link',
@@ -48,14 +59,29 @@ async function sendPasswordResetEmail(to, resetToken) {
       '</div>',
     ].join(''),
   });
+  console.log('Password reset email sent to:', to, '(id:', info.messageId, ')');
+}
 
-  if (transporter.transporter && transporter.transporter.name === 'StreamTransport') {
-    console.log('\n=== Password Reset Email (DEV MODE) ===');
-    console.log('To:', to);
-    console.log('Reset URL:', resetUrl);
-    console.log('=== End Email ===\n');
-  } else {
-    console.log('Password reset email sent to:', to, '(id:', info.messageId, ')');
+function logDevEmail(to, resetUrl) {
+  console.log('\n=== Password Reset Email (DEV MODE) ===');
+  console.log('To:', to);
+  console.log('Reset URL:', resetUrl);
+  console.log('=== End Email ===\n');
+}
+
+async function sendPasswordResetEmail(to, resetToken) {
+  const resetUrl = `http://localhost:3000/reset-password?token=${resetToken}`;
+
+  if (useStreamTransport) {
+    logDevEmail(to, resetUrl);
+    return;
+  }
+
+  try {
+    await trySendRealMail(to, resetUrl);
+  } catch (err) {
+    console.error('Gmail SMTP failed, falling back to dev log:', err.message);
+    logDevEmail(to, resetUrl);
   }
 }
 

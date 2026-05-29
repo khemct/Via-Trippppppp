@@ -180,7 +180,11 @@ router.post(
           [tokenHash, result.rows[0].id]
         );
 
-        await sendPasswordResetEmail(trimmedEmail, rawToken);
+        try {
+          await sendPasswordResetEmail(trimmedEmail, rawToken);
+        } catch (emailErr) {
+          console.error('Failed to send password reset email:', emailErr.message);
+        }
       }
 
       res.json({ message: 'If this email is registered, a reset link has been sent' });
