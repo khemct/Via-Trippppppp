@@ -1,9 +1,11 @@
 const express = require('express');
+const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { query } = require('../config/database');
 const { validate, required, minLength, maxLength, isEmail, isIn } = require('../middleware/validate');
 const { requireAuth } = require('../middleware/requireAuth');
+const { sendPasswordResetEmail } = require('../services/emailService');
 
 const router = express.Router();
 const SALT_ROUNDS = 12;
@@ -138,5 +140,76 @@ router.get('/me', requireAuth, async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+// POST /api/auth/forgot-password
+router.post(
+  '/forgot-password',
+  validate({
+    email: [required, isEmail],
+  }),
+  async (req, res) => {
+    try {
+      const { email } = req.body;
+      const trimmedEmail = email.trim().toLowerCase();
+
+      const result = await query('SELECT id FROM users WHERE email = $1', [trimmedEmail]);
+
+      if (result.rows.length > 0) {
+        const rawToken = crypto.randomBytes(32).toString('hex');
+        const tokenHash = crypto.createHash('sha256').update(rawToken).digest('hex');
+
+        await query(
+          `UPDATE users
+           SET reset_token_hash = $1, reset_token_expires_at = NOW() + INTERVAL '1 hour'
+           WHERE id = $2`,
+          [tokenHash, result.rows[0].id]
+        );
+
+        await sendPasswordResetEmail(trimmedEmail, rawToken);
+      }
+
+      res.json({ message: 'If this email is registered, a reset link has been sent' });
+    } catch (err) {
+      console.error('Forgot password error:', err);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+);
+
+// POST /api/auth/reset-password
+router.post(
+  '/reset-password',
+  validate({
+    token: [required],
+    password: [required, minLength(8)],
+  }),
+  async (req, res) => {
+    try {
+      const { token, password } = req.body;
+      const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
+
+      const result = await query(
+        'SELECT id FROM users WHERE reset_token_hash = $1 AND reset_token_expires_at > NOW()',
+        [tokenHash]
+      );
+
+      if (result.rows.length === 0) {
+        return res.status(400).json({ error: 'Invalid or expired reset token' });
+      }
+
+      const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+
+      await query(
+        'UPDATE users SET password_hash = $1, reset_token_hash = NULL, reset_token_expires_at = NULL WHERE id = $2',
+        [passwordHash, result.rows[0].id]
+      );
+
+      res.json({ message: 'Password reset successful' });
+    } catch (err) {
+      console.error('Reset password error:', err);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+);
 
 module.exports = router;
