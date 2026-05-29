@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { query } = require('../config/database');
 const { validate, required, minLength, maxLength, isEmail, isIn } = require('../middleware/validate');
-const { requireAuth } = require('../middleware/requireAuth');
+const { requireAuth, requireRole } = require('../middleware/requireAuth');
 const { sendPasswordResetEmail } = require('../services/emailService');
 
 const router = express.Router();
@@ -139,6 +139,11 @@ router.get('/me', requireAuth, async (req, res) => {
     console.error('/me error:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
+});
+
+// GET /api/auth/admin/test — admin-only test endpoint
+router.get('/admin/test', requireAuth, requireRole('admin'), (req, res) => {
+  res.json({ message: 'Admin access granted', user: req.user });
 });
 
 // POST /api/auth/forgot-password
