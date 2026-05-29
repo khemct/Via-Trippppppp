@@ -1,61 +1,21 @@
 const { query } = require('../config/database');
 const { getDirections } = require('./googleMapsService');
 
-async function createTrip(userId, input) {
-  const data = await getDirections(input.origin, input.destination);
+const TRIP_SELECT = `
+  trip_id, user_id, name, origin, destination,
+  ST_X(origin_coordinates::geometry) AS origin_lng,
+  ST_Y(origin_coordinates::geometry) AS origin_lat,
+  ST_X(dest_coordinates::geometry) AS dest_lng,
+  ST_Y(dest_coordinates::geometry) AS dest_lat,
+  travel_date, number_of_days, daily_hours,
+  travel_style, estimated_stop_duration,
+  route_polyline, total_distance_km,
+  total_duration_minutes, total_duration_estimate,
+  status, feasibility_status,
+  created_at, updated_at
+`;
 
-  if (data.distance_km > 300) {
-    throw Object.assign(
-      new Error(`Route exceeds maximum distance of 300 km (${data.distance_km} km)`),
-      { code: 'TOO_FAR' }
-    );
-  }
-
-  const result = await query(
-    `INSERT INTO trips (
-       user_id, name, origin, destination,
-       origin_coordinates, dest_coordinates,
-       travel_date, number_of_days, daily_hours,
-       travel_style, estimated_stop_duration,
-       route_polyline, total_distance_km,
-       total_duration_minutes, feasibility_status
-     ) VALUES (
-       $1, $2, $3, $4,
-       ST_SetSRID(ST_MakePoint($5, $6), 4326)::geography,
-       ST_SetSRID(ST_MakePoint($7, $8), 4326)::geography,
-       $9, $10, $11,
-       $12, $13,
-       $14, $15,
-       $16, 'feasible'
-     )
-     RETURNING
-       trip_id, user_id, name, origin, destination,
-       ST_X(origin_coordinates::geometry) AS origin_lng,
-       ST_Y(origin_coordinates::geometry) AS origin_lat,
-       ST_X(dest_coordinates::geometry) AS dest_lng,
-       ST_Y(dest_coordinates::geometry) AS dest_lat,
-       travel_date, number_of_days, daily_hours,
-       travel_style, estimated_stop_duration,
-       route_polyline, total_distance_km,
-       total_duration_minutes, total_duration_estimate,
-       status, feasibility_status,
-       created_at, updated_at`,
-    [
-      userId, input.name.trim(), input.origin.trim(), input.destination.trim(),
-      data.origin_lng, data.origin_lat,
-      data.dest_lng, data.dest_lat,
-      input.travel_date, input.number_of_days,
-      input.daily_hours || 10,
-      input.travel_style || 'chill',
-      input.estimated_stop_duration || 30,
-      data.polyline,
-      data.distance_km,
-      data.duration_minutes,
-    ]
-  );
-
-  const row = result.rows[0];
-
+function rowToTrip(row) {
   return {
     trip_id: row.trip_id,
     user_id: row.user_id,
@@ -86,4 +46,167 @@ async function createTrip(userId, input) {
   };
 }
 
-module.exports = { createTrip };
+async function createTrip(userId, input) {
+  const data = await getDirections(input.origin, input.destination);
+
+  if (data.distance_km > 300) {
+    throw Object.assign(
+      new Error(`Route exceeds maximum distance of 300 km (${data.distance_km} km)`),
+      { code: 'TOO_FAR' }
+    );
+  }
+
+  const result = await query(
+    `INSERT INTO trips (
+       user_id, name, origin, destination,
+       origin_coordinates, dest_coordinates,
+       travel_date, number_of_days, daily_hours,
+       travel_style, estimated_stop_duration,
+       route_polyline, total_distance_km,
+       total_duration_minutes, feasibility_status
+     ) VALUES (
+       $1, $2, $3, $4,
+       ST_SetSRID(ST_MakePoint($5, $6), 4326)::geography,
+       ST_SetSRID(ST_MakePoint($7, $8), 4326)::geography,
+       $9, $10, $11,
+       $12, $13,
+       $14, $15,
+       $16, 'feasible'
+     )
+     RETURNING ${TRIP_SELECT}`,
+    [
+      userId, input.name.trim(), input.origin.trim(), input.destination.trim(),
+      data.origin_lng, data.origin_lat,
+      data.dest_lng, data.dest_lat,
+      input.travel_date, input.number_of_days,
+      input.daily_hours || 10,
+      input.travel_style || 'chill',
+      input.estimated_stop_duration || 30,
+      data.polyline,
+      data.distance_km,
+      data.duration_minutes,
+    ]
+  );
+
+  return rowToTrip(result.rows[0]);
+}
+
+async function listTrips(userId, page = 1, limit = 20, status) {
+  const offset = (page - 1) * limit;
+  const conditions = ['user_id = $1'];
+  const params = [userId];
+  let paramIdx = 2;
+
+  if (status) {
+    conditions.push(`status = $${paramIdx}`);
+    params.push(status);
+    paramIdx++;
+  }
+
+  const where = conditions.join(' AND ');
+
+  const countResult = await query(
+    `SELECT COUNT(*) FROM trips WHERE ${where}`,
+    params
+  );
+  const total = parseInt(countResult.rows[0].count, 10);
+
+  const result = await query(
+    `SELECT ${TRIP_SELECT}
+     FROM trips
+     WHERE ${where}
+     ORDER BY created_at DESC
+     LIMIT $${paramIdx} OFFSET $${paramIdx + 1}`,
+    [...params, limit, offset]
+  );
+
+  return {
+    trips: result.rows.map(rowToTrip),
+    total,
+    page,
+    limit,
+  };
+}
+
+async function getTrip(tripId, userId) {
+  const result = await query(
+    `SELECT ${TRIP_SELECT} FROM trips WHERE trip_id = $1`,
+    [tripId]
+  );
+
+  if (result.rows.length === 0) {
+    throw Object.assign(new Error('Trip not found'), { code: 'NOT_FOUND' });
+  }
+
+  const trip = result.rows[0];
+
+  if (trip.user_id !== userId) {
+    throw Object.assign(new Error('Not authorized'), { code: 'FORBIDDEN' });
+  }
+
+  return rowToTrip(trip);
+}
+
+async function updateTrip(tripId, userId, input) {
+  const existing = await query('SELECT user_id FROM trips WHERE trip_id = $1', [tripId]);
+
+  if (existing.rows.length === 0) {
+    throw Object.assign(new Error('Trip not found'), { code: 'NOT_FOUND' });
+  }
+
+  if (existing.rows[0].user_id !== userId) {
+    throw Object.assign(new Error('Not authorized'), { code: 'FORBIDDEN' });
+  }
+
+  const sets = [];
+  const params = [];
+  let idx = 1;
+
+  const allowedFields = {
+    name: 'name',
+    travel_date: 'travel_date',
+    number_of_days: 'number_of_days',
+    daily_hours: 'daily_hours',
+    travel_style: 'travel_style',
+    estimated_stop_duration: 'estimated_stop_duration',
+    status: 'status',
+  };
+
+  for (const [field, col] of Object.entries(allowedFields)) {
+    if (input[field] !== undefined) {
+      sets.push(`${col} = $${idx}`);
+      params.push(input[field]);
+      idx++;
+    }
+  }
+
+  if (sets.length === 0) {
+    throw Object.assign(new Error('No fields to update'), { code: 'NO_UPDATES' });
+  }
+
+  params.push(tripId);
+  const result = await query(
+    `UPDATE trips SET ${sets.join(', ')}
+     WHERE trip_id = $${idx}
+     RETURNING ${TRIP_SELECT}`,
+    params
+  );
+
+  return rowToTrip(result.rows[0]);
+}
+
+async function deleteTrip(tripId, userId) {
+  const existing = await query('SELECT user_id FROM trips WHERE trip_id = $1', [tripId]);
+
+  if (existing.rows.length === 0) {
+    throw Object.assign(new Error('Trip not found'), { code: 'NOT_FOUND' });
+  }
+
+  if (existing.rows[0].user_id !== userId) {
+    throw Object.assign(new Error('Not authorized'), { code: 'FORBIDDEN' });
+  }
+
+  await query('DELETE FROM trips WHERE trip_id = $1', [tripId]);
+}
+
+module.exports = { createTrip, listTrips, getTrip, updateTrip, deleteTrip };
