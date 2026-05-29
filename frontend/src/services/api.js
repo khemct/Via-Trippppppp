@@ -37,3 +37,18 @@ export const auth = {
 
   resetPassword: (body) => request('POST', '/auth/reset-password', body),
 };
+
+export const trips = {
+  create: (body, token) => request('POST', '/trips', body, token),
+
+  list: (params, token) => {
+    const qs = params ? '?' + new URLSearchParams(params).toString() : '';
+    return request('GET', '/trips' + qs, null, token);
+  },
+
+  get: (id, token) => request('GET', `/trips/${id}`, null, token),
+
+  update: (id, body, token) => request('PATCH', `/trips/${id}`, body, token),
+
+  delete: (id, token) => request('DELETE', `/trips/${id}`, null, token),
+};
