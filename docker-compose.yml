@@ -31,5 +31,18 @@ services:
       - ./backend/sql:/app/sql
       - ./backend/package.json:/app/package.json
 
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      VITE_API_URL: http://localhost:3001
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/index.html:/app/index.html
+      - ./frontend/package.json:/app/package.json
+
 volumes:
   pgdata:
