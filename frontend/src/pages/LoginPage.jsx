@@ -55,7 +55,7 @@ export default function LoginPage() {
         <div
           style={{
             flex: '0 0 45%',
-            background: 'linear-gradient(135deg, #c8e0b8, #a8c898)',
+            background: 'linear-gradient(135deg, #2a2820, #1e1c14)',
             padding: 48,
             display: 'flex',
             flexDirection: 'column',
@@ -66,13 +66,13 @@ export default function LoginPage() {
             style={{
               fontSize: 32,
               fontWeight: 700,
-              color: '#2d4a24',
+              color: '#c8c4a0',
               marginBottom: 16,
             }}
           >
             Welcome Back Explorer! ✦
           </h2>
-          <p style={{ fontSize: 15, color: '#5a6b4e', lineHeight: 1.7, marginBottom: 32 }}>
+          <p style={{ fontSize: 15, color: '#9a9478', lineHeight: 1.7, marginBottom: 32 }}>
             Log in to continue your journey. Access your saved trips, discover new routes, and pick up right where you left off.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -87,7 +87,7 @@ export default function LoginPage() {
                     flexShrink: 0,
                   }}
                 />
-                <span style={{ fontSize: 15, color: '#2d4a24', fontWeight: 500 }}>{item}</span>
+                <span style={{ fontSize: 15, color: '#c8c4a0', fontWeight: 500 }}>{item}</span>
               </div>
             ))}
           </div>
@@ -97,7 +97,7 @@ export default function LoginPage() {
         <div
           style={{
             flex: 1,
-            background: '#fff',
+            background: '#3e3b2a',
             padding: 48,
             display: 'flex',
             flexDirection: 'column',
@@ -105,16 +105,16 @@ export default function LoginPage() {
             maxWidth: 480,
           }}
         >
-          <h3 style={{ fontSize: 24, fontWeight: 700, color: '#2d4a24', marginBottom: 4 }}>
+          <h3 style={{ fontSize: 24, fontWeight: 700, color: '#c8c4a0', marginBottom: 4 }}>
             Log In
           </h3>
-          <p style={{ fontSize: 14, color: '#8a9e7c', marginBottom: 28 }}>
+          <p style={{ fontSize: 14, color: '#7a7558', marginBottom: 28 }}>
             Welcome back, explorer!
           </p>
 
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#5a6b4e', display: 'block', marginBottom: 6 }}>
+              <label style={{ fontSize: 13, fontWeight: 500,                   color: '#9a9478', display: 'block', marginBottom: 6 }}>
                 Email Address
               </label>
               <input
@@ -124,12 +124,12 @@ export default function LoginPage() {
                 placeholder="you@example.com"
                 style={{
                   width: '100%',
-                  border: '1.5px solid #d4cfbf',
+                  border: '1.5px solid #4a4738',
                   borderRadius: 8,
-                  background: '#fafaf7',
+                  background: '#252318',
                   padding: '10px 14px',
                   fontSize: 14,
-                  color: '#5a6b4e',
+                  color: '#c8c4a0',
                   outline: 'none',
                   boxSizing: 'border-box',
                 }}
@@ -137,7 +137,7 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#5a6b4e', display: 'block', marginBottom: 6 }}>
+              <label style={{ fontSize: 13, fontWeight: 500,                   color: '#9a9478', display: 'block', marginBottom: 6 }}>
                 Password
               </label>
               <div style={{ position: 'relative' }}>
@@ -148,12 +148,12 @@ export default function LoginPage() {
                   placeholder="Enter your password"
                   style={{
                     width: '100%',
-                    border: '1.5px solid #d4cfbf',
+                    border: '1.5px solid #4a4738',
                     borderRadius: 8,
-                    background: '#fafaf7',
+                    background: '#252318',
                     padding: '10px 14px',
                     fontSize: 14,
-                    color: '#5a6b4e',
+                    color: '#c8c4a0',
                     outline: 'none',
                     boxSizing: 'border-box',
                     paddingRight: 44,
@@ -171,7 +171,7 @@ export default function LoginPage() {
                     border: 'none',
                     cursor: 'pointer',
                     fontSize: 16,
-                    color: '#8a9e7c',
+                    color: '#7a7558',
                     padding: 0,
                   }}
                 >
@@ -187,13 +187,13 @@ export default function LoginPage() {
                 justifyContent: 'space-between',
               }}
             >
-              <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#5a6b4e', cursor: 'pointer' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#9a9478', cursor: 'pointer' }}>
                 <input type="checkbox" defaultChecked style={{ accentColor: '#4a6741' }} />
                 Remember me
               </label>
               <Link
                 to="/forgot-password"
-                style={{ fontSize: 13, color: '#4a6741', fontWeight: 500, textDecoration: 'none' }}
+                style={{ fontSize: 13, color: '#8aab7a', fontWeight: 500, textDecoration: 'none' }}
               >
                 Forgot Password?
               </Link>
@@ -220,8 +220,8 @@ export default function LoginPage() {
               style={{
                 width: '100%',
                 height: 48,
-                background: loading ? '#8a9e7c' : '#4a6741',
-                color: '#fff',
+                background: loading ? '#7a7558' : '#4a6741',
+                color: '#c8dbb8',
                 border: 'none',
                 borderRadius: 8,
                 fontSize: 15,
@@ -241,9 +241,9 @@ export default function LoginPage() {
               margin: '24px 0',
             }}
           >
-            <div style={{ flex: 1, height: 1, background: '#e0ddd6' }} />
-            <span style={{ fontSize: 13, color: '#8a9e7c', whiteSpace: 'nowrap' }}>or continue with</span>
-            <div style={{ flex: 1, height: 1, background: '#e0ddd6' }} />
+            <div style={{ flex: 1, height: 1, background: '#3e3b2a' }} />
+            <span style={{ fontSize: 13, color: '#7a7558', whiteSpace: 'nowrap' }}>or continue with</span>
+            <div style={{ flex: 1, height: 1, background: '#3e3b2a' }} />
           </div>
 
           <div style={{ display: 'flex', gap: 12 }}>
@@ -255,12 +255,12 @@ export default function LoginPage() {
                 style={{
                   flex: 1,
                   height: 44,
-                  border: '1.5px solid #e0ddd6',
+                  border: '1.5px solid #3e3b2a',
                   borderRadius: 8,
-                  background: '#fafaf7',
+                  background: '#252318',
                   fontSize: 13,
                   fontWeight: 500,
-                  color: '#8a9e7c',
+                  color: '#7a7558',
                   cursor: 'not-allowed',
                   opacity: 0.6,
                 }}
@@ -270,9 +270,9 @@ export default function LoginPage() {
             ))}
           </div>
 
-          <p style={{ textAlign: 'center', marginTop: 24, fontSize: 14, color: '#5a6b4e' }}>
+          <p style={{ textAlign: 'center', marginTop: 24, fontSize: 14, color: '#9a9478' }}>
             Don&apos;t have an account?{' '}
-            <Link to="/register" style={{ color: '#4a6741', fontWeight: 600, textDecoration: 'none' }}>
+            <Link to="/register" style={{ color: '#8aab7a', fontWeight: 600, textDecoration: 'none' }}>
               Register now →
             </Link>
           </p>
@@ -282,12 +282,12 @@ export default function LoginPage() {
       {/* Footer copyright only */}
       <div
         style={{
-          borderTop: '1px solid #e0ddd6',
-          background: '#fff',
+          borderTop: '1px solid #3e3b2a',
+          background: '#1e1c14',
           padding: '16px 24px',
           textAlign: 'center',
           fontSize: 13,
-          color: '#8a9e7c',
+          color: '#7a7558',
         }}
       >
         &copy; 2026 Via-Trip. All rights reserved.
