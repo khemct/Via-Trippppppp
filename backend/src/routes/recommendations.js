@@ -1,7 +1,7 @@
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 const { requireAuth } = require('../middleware/requireAuth');
-const { seedTripCache, getRecommendations, reseedTripCache, seedGuestCache } = require('../services/placesService');
+const { seedTripCache, getRecommendations, reseedTripCache, rescopeTripCache, seedGuestCache } = require('../services/placesService');
 
 const router = express.Router();
 
@@ -148,6 +148,35 @@ router.post('/:tripId/recommendations/reseed', requireAuth, async (req, res) => 
       return res.status(400).json({ error: 'Trip has no route' });
     }
     console.error('Reseed error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+router.post('/:tripId/recommendations/rescope', requireAuth, async (req, res) => {
+  const { tripId } = req.params;
+  const { travel_style } = req.body;
+  const pool = req.app.locals.pool || require('../config/database');
+
+  if (!travel_style || !['chill', 'foodie', 'photographer', 'adventure', 'budget'].includes(travel_style)) {
+    return res.status(400).json({ error: 'Valid travel_style is required' });
+  }
+
+  try {
+    const tripCheck = await pool.query(
+      'SELECT user_id FROM trips WHERE trip_id = $1',
+      [tripId]
+    );
+    if (tripCheck.rows.length === 0) {
+      return res.status(404).json({ error: 'Trip not found' });
+    }
+    if (tripCheck.rows[0].user_id !== req.user.id) {
+      return res.status(403).json({ error: 'Not authorized' });
+    }
+
+    const result = await rescopeTripCache(tripId, travel_style, pool);
+    res.json(result);
+  } catch (err) {
+    console.error('Rescope error:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

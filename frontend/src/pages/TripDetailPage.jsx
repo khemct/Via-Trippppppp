@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { trips as tripsApi } from '../services/api';
+import { trips as tripsApi, itinerary as itineraryApi } from '../services/api';
 import RouteMap from '../components/RouteMap';
 
 const STYLES = ['chill', 'foodie', 'photographer', 'adventure', 'budget'];
@@ -281,6 +281,7 @@ export default function TripDetailPage() {
     }
 
     setSaving(true);
+    const styleChanged = editForm.travel_style !== trip.travel_style;
     try {
       const data = await tripsApi.update(
         tripId,
@@ -294,6 +295,10 @@ export default function TripDetailPage() {
       );
       setTrip(data.trip);
       setEditing(false);
+
+      if (styleChanged && data.trip.travel_style) {
+        itineraryApi.rescope(tripId, { travel_style: data.trip.travel_style }, token).catch(() => {});
+      }
     } catch (err) {
       setSaveError(err.data?.error || err.data?.details?.[0] || err.message || 'Failed to save');
     } finally {

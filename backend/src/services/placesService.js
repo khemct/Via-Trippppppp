@@ -320,10 +320,35 @@ async function seedGuestCache(routePolyline, travelStyle, pool) {
   return { places: places.rows, from_cache: false };
 }
 
+async function rescopeTripCache(tripId, travelStyle, pool) {
+  const result = await pool.query(
+    `SELECT cache_id, category, rating, user_ratings_total, distance_from_route
+     FROM trip_places_cache WHERE trip_id = $1`,
+    [tripId]
+  );
+
+  if (result.rows.length === 0) {
+    return { count: 0, message: 'No cached places to rescope' };
+  }
+
+  let updated = 0;
+  for (const row of result.rows) {
+    const score = computeScore(row, travelStyle);
+    await pool.query(
+      `UPDATE trip_places_cache SET score = $1 WHERE cache_id = $2`,
+      [score, row.cache_id]
+    );
+    updated++;
+  }
+
+  return { count: updated, message: `Rescoped ${updated} places for ${travelStyle}` };
+}
+
 module.exports = {
   seedTripCache,
   getRecommendations,
   reseedTripCache,
+  rescopeTripCache,
   seedGuestCache,
   fetchNearbyPlaces,
   mapGoogleCategory,

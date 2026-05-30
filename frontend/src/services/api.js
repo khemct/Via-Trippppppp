@@ -56,6 +56,7 @@ export const trips = {
 export const itinerary = {
   seed: (tripId, token) => request('POST', `/trips/${tripId}/recommendations/seed`, null, token),
   reseed: (tripId, token) => request('POST', `/trips/${tripId}/recommendations/reseed`, null, token),
+  rescope: (tripId, body, token) => request('POST', `/trips/${tripId}/recommendations/rescope`, body, token),
   listRecommendations: (tripId, params, token) => {
     const qs = params ? '?' + new URLSearchParams(params).toString() : '';
     return request('GET', `/trips/${tripId}/recommendations${qs}`, null, token);
