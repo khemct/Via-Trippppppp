@@ -9,7 +9,7 @@ const CATEGORY_ICONS = {
 
 function StarIcon({ filled }) {
   return (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill={filled ? '#d97706' : '#3e3b2a'} stroke={filled ? '#d97706' : '#3e3b2a'} strokeWidth="1">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill={filled ? '#d97706' : '#5a5540'} stroke={filled ? '#d97706' : '#5a5540'} strokeWidth="1">
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
     </svg>
   );
@@ -49,7 +49,7 @@ export default function RecommendationPanel({
   }
 
   return (
-    <div className="h-full flex flex-col bg-[#3e3b2a] border border-[#4a4738] rounded-lg overflow-hidden">
+    <div className="h-full flex flex-col bg-[#2a2820] border border-[#4a4738] rounded-lg overflow-hidden">
       {/* Header */}
       <div className="shrink-0 px-4 pt-4 pb-3 border-b border-[#3e3b2a]">
         <h2 className="text-sm font-semibold text-[#c8c4a0]">Recommendations</h2>
@@ -79,7 +79,7 @@ export default function RecommendationPanel({
           </select>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs text-[#7a7558] shrink-0">Min rating:</span>
+          <span className="text-xs text-[#8a8468] shrink-0">Min rating:</span>
           <input
             type="range"
             min="0"
@@ -90,14 +90,14 @@ export default function RecommendationPanel({
             className="flex-1"
             style={{ accentColor: '#4a6741', height: 4 }}
           />
-          <span className="text-xs text-[#9a9478] w-6 text-right">{filters.rating_min}</span>
+          <span className="text-xs text-[#a8a080] w-6 text-right">{filters.rating_min}</span>
         </div>
       </div>
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto min-h-0">
         {seeding && (
-          <div className="p-6 text-center text-sm text-[#7a7558]">Seeding recommendations...</div>
+          <div className="p-6 text-center text-sm text-[#8a8468]">Seeding recommendations...</div>
         )}
 
         {!seeding && error && (
@@ -105,7 +105,7 @@ export default function RecommendationPanel({
         )}
 
         {!seeding && !error && places.length === 0 && (
-          <div className="p-6 text-center text-sm text-[#7a7558] space-y-2">
+          <div className="p-6 text-center text-sm text-[#8a8468] space-y-2">
             <p>No recommendations found.</p>
             <button
               onClick={onReseed}
@@ -119,14 +119,14 @@ export default function RecommendationPanel({
         {!seeding && places.length > 0 && (
           <div className="divide-y divide-[#3e3b2a]">
             {places.map((place) => (
-              <div key={place.place_id} className="px-4 py-3 hover:bg-[#2a2820] transition-colors">
+              <div key={place.place_id} className="px-4 py-3 hover:bg-[#1e1c14] transition-colors">
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5 mb-0.5">
-                      <span className="text-xs text-[#7a7558]">{CATEGORY_ICONS[place.category] || '📍'}</span>
+                      <span className="text-xs text-[#8a8468]">{CATEGORY_ICONS[place.category] || '📍'}</span>
                       <span className="text-xs font-medium text-[#c8c4a0] truncate">{place.name}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-xs text-[#7a7558]">
+                    <div className="flex items-center gap-2 text-xs text-[#8a8468]">
                       {renderRating(place.rating)}
                       <span>({place.user_ratings_total || 0})</span>
                     </div>
@@ -134,7 +134,7 @@ export default function RecommendationPanel({
                   <div className="flex items-center gap-1.5 shrink-0">
                     <span
                       className={`text-xs font-medium px-1.5 py-0.5 rounded ${
-                        place.score >= 70 ? 'bg-[#3e3b2a] text-[#8aab7a]' : place.score >= 50 ? 'bg-[#fef3c7] text-[#92400e]' : 'bg-[#252318] text-[#7a7558]'
+                        place.score >= 70 ? 'bg-[#3e3b2a] text-[#8aab7a]' : place.score >= 50 ? 'bg-[#fef3c7] text-[#92400e]' : 'bg-[#252318] text-[#8a8468]'
                       }`}
                     >
                       {place.score}
@@ -142,7 +142,7 @@ export default function RecommendationPanel({
                   </div>
                 </div>
                 <div className="flex items-center justify-between mt-1.5">
-                  <span className="text-xs text-[#7a7558]">
+                  <span className="text-xs text-[#8a8468]">
                     {place.distance_from_route < 1000
                       ? `${place.distance_from_route}m from route`
                       : `${(place.distance_from_route / 1000).toFixed(1)}km detour`}
@@ -185,7 +185,7 @@ export default function RecommendationPanel({
       )}
 
       {!hasMore && places.length > 0 && !loading && (
-        <div className="shrink-0 p-3 border-t border-[#3e3b2a] text-center text-xs text-[#7a7558]">
+        <div className="shrink-0 p-3 border-t border-[#3e3b2a] text-center text-xs text-[#8a8468]">
           All recommendations loaded
         </div>
       )}

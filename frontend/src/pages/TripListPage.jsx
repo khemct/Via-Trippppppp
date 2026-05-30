@@ -45,11 +45,11 @@ export default function TripListPage() {
         </div>
       )}
 
-      {loading && <p className="text-[#7a7558] text-sm">Loading...</p>}
+      {loading && <p className="text-[#8a8468] text-sm">Loading...</p>}
 
       {!loading && !error && trips.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-[#7a7558] mb-4">No trips yet. Plan your first road trip!</p>
+          <p className="text-[#8a8468] mb-4">No trips yet. Plan your first road trip!</p>
           <Link
             to="/trips/new"
             className="bg-[#4a6741] text-[#c8dbb8] px-6 py-2 rounded text-sm hover:bg-[#3d5a35]"
@@ -66,15 +66,15 @@ export default function TripListPage() {
               <Link
                 key={trip.trip_id}
                 to={`/trips/${trip.trip_id}`}
-                className="block bg-[#3e3b2a] border border-[#4a4738] rounded p-4 hover:shadow-sm"
+                className="block bg-[#2a2820] border border-[#4a4738] rounded p-4 hover:shadow-sm"
               >
                 <div className="flex items-start justify-between">
                   <div>
                     <h2 className="font-semibold text-[#c8c4a0]">{trip.name}</h2>
-                    <p className="text-sm text-[#7a7558] mt-1">
+                    <p className="text-sm text-[#8a8468] mt-1">
                       {trip.origin} &rarr; {trip.destination}
                     </p>
-                    <p className="text-xs text-[#7a7558] mt-1">
+                    <p className="text-xs text-[#8a8468] mt-1">
                       {trip.travel_date} &middot; {trip.number_of_days} day
                       {trip.number_of_days > 1 ? 's' : ''} &middot; {trip.travel_style} &middot;{' '}
                       {trip.total_distance_km} km
@@ -84,7 +84,7 @@ export default function TripListPage() {
                     className={`text-xs font-medium px-2 py-0.5 rounded ${
                       trip.status === 'saved'
                         ? 'bg-[#3e3b2a] text-[#8aab7a]'
-                        : 'bg-[#252318] text-[#7a7558]'
+                        : 'bg-[#252318] text-[#8a8468]'
                     }`}
                   >
                     {trip.status}
@@ -103,7 +103,7 @@ export default function TripListPage() {
               >
                 Previous
               </button>
-              <span className="text-sm text-[#7a7558]">
+              <span className="text-sm text-[#8a8468]">
                 Page {page} of {totalPages}
               </span>
               <button

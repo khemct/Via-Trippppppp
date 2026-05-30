@@ -21,23 +21,23 @@ function SortableWaypoint({ wp, onRemove, onUpdateDuration }) {
     <div
       ref={setNodeRef}
       style={style}
-      className="flex items-center gap-1.5 px-3 py-2.5 border-b border-[#3e3b2a] hover:bg-[#2a2820] transition-colors"
+      className="flex items-center gap-1.5 px-3 py-2.5 border-b border-[#3e3b2a] hover:bg-[#1e1c14] transition-colors"
     >
-      <button {...attributes} {...listeners} className="cursor-grab text-[#5a5540] hover:text-[#9a9478] shrink-0 px-1">
+      <button {...attributes} {...listeners} className="cursor-grab text-[#6b6650] hover:text-[#a8a080] shrink-0 px-1">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
           <circle cx="9" cy="5" r="1.5" /><circle cx="15" cy="5" r="1.5" />
           <circle cx="9" cy="12" r="1.5" /><circle cx="15" cy="12" r="1.5" />
           <circle cx="9" cy="19" r="1.5" /><circle cx="15" cy="19" r="1.5" />
         </svg>
       </button>
-      <span className="text-xs font-bold text-[#7a7558] w-5 shrink-0">{wp.order}</span>
+      <span className="text-xs font-bold text-[#8a8468] w-5 shrink-0">{wp.order}</span>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1">
           <span className="text-xs">{CATEGORY_ICONS[wp.category] || '📍'}</span>
           <span className="text-xs font-medium text-[#c8c4a0] truncate">{wp.name}</span>
         </div>
         <div className="flex items-center gap-2 mt-1">
-          <span className="text-xs text-[#7a7558]">{wp.score}</span>
+          <span className="text-xs text-[#8a8468]">{wp.score}</span>
           {wp.distance_from_route >= 1000 && (
             <span className="text-xs text-[#d97706]">{(wp.distance_from_route / 1000).toFixed(1)}km detour</span>
           )}
@@ -53,7 +53,7 @@ function SortableWaypoint({ wp, onRemove, onUpdateDuration }) {
           onChange={(e) => onUpdateDuration(wp.waypoint_id, parseInt(e.target.value, 10) || 30)}
           className="w-12 text-xs text-center border border-[#4a4738] rounded px-1 py-0.5 text-[#c8c4a0] focus:outline-none focus:ring-1 focus:ring-[#4a6741]"
         />
-        <span className="text-xs text-[#7a7558]">min</span>
+        <span className="text-xs text-[#8a8468]">min</span>
         <button
           onClick={() => onRemove(wp.waypoint_id)}
           className="ml-1 text-[#5a5540] hover:text-red-500 transition-colors"
@@ -107,10 +107,10 @@ export default function ItinerarySidebar({
   const feasi = feasibility ? feasiColors[feasibility.status] || feasiColors.feasible : null;
 
   return (
-    <div className="h-full flex flex-col bg-[#3e3b2a] border border-[#4a4738] rounded-lg overflow-hidden">
+    <div className="h-full flex flex-col bg-[#2a2820] border border-[#4a4738] rounded-lg overflow-hidden">
       <div className="shrink-0 px-4 pt-4 pb-3 border-b border-[#3e3b2a] flex items-center justify-between">
         <h2 className="text-sm font-semibold text-[#c8c4a0]">Itinerary</h2>
-        <span className="text-xs text-[#7a7558]">{waypoints.length} stop{waypoints.length !== 1 ? 's' : ''}</span>
+        <span className="text-xs text-[#8a8468]">{waypoints.length} stop{waypoints.length !== 1 ? 's' : ''}</span>
       </div>
 
       <div className="flex-1 overflow-y-auto min-h-0">
@@ -126,7 +126,7 @@ export default function ItinerarySidebar({
         )}
 
         {!loading && waypoints.length === 0 && (
-          <div className="p-6 text-center text-sm text-[#7a7558] space-y-2">
+          <div className="p-6 text-center text-sm text-[#8a8468] space-y-2">
             <p>No waypoints yet.</p>
             <p className="text-xs">Click <span className="text-[#8aab7a]">+ Add</span> on a recommendation to add it here.</p>
             {onReset && (

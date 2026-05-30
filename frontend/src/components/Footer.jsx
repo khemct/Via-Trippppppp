@@ -24,7 +24,7 @@ const columns = [
           </div>
           <span style={{ fontSize: 16, fontWeight: 700, color: '#c8c4a0' }}>Via-Trip</span>
         </div>
-        <p style={{ fontSize: 13, color: '#7a7558', lineHeight: 1.6, maxWidth: 240 }}>
+        <p style={{ fontSize: 13, color: '#8a8468', lineHeight: 1.6, maxWidth: 240 }}>
           Plan your perfect road trip, discover hidden gems, and collect memories along the way.
         </p>
       </div>
@@ -76,7 +76,7 @@ export default function Footer() {
                   style={{
                     fontSize: 12,
                     fontWeight: 600,
-                    color: '#7a7558',
+                    color: '#8a8468',
                     letterSpacing: '0.5px',
                     marginBottom: 16,
                   }}
@@ -90,7 +90,7 @@ export default function Footer() {
                       to="/"
                       style={{
                         fontSize: 13,
-                        color: '#9a9478',
+                        color: '#a8a080',
                         textDecoration: 'none',
                       }}
                     >
@@ -110,7 +110,7 @@ export default function Footer() {
           padding: '16px 24px',
           textAlign: 'center',
           fontSize: 13,
-          color: '#7a7558',
+          color: '#8a8468',
           background: '#1e1c14',
         }}
       >

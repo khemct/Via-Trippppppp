@@ -114,7 +114,7 @@ function AdminPage() {
   return (
     <div style={{ padding: 32 }}>
       <h1 style={{ fontSize: 24, fontWeight: 700, color: '#c8c4a0', marginBottom: 12 }}>Admin Dashboard</h1>
-      <p style={{ fontSize: 14, color: '#7a7558' }}>Admin controls will appear here.</p>
+      <p style={{ fontSize: 14, color: '#8a8468' }}>Admin controls will appear here.</p>
     </div>
   );
 }

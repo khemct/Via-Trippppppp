@@ -8,7 +8,7 @@ export default function ProtectedRoute({ children }) {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#312f24]">
-        <p className="text-[#7a7558] text-sm">Loading...</p>
+        <p className="text-[#8a8468] text-sm">Loading...</p>
       </div>
     );
   }

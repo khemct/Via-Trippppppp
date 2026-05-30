@@ -193,7 +193,7 @@ export default function ItineraryPage() {
           </Link>
           <div className="flex items-center gap-3">
             <span className="text-sm font-medium text-[#c8c4a0]">{trip.name}</span>
-            <span className="text-xs text-[#7a7558] capitalize">{trip.travel_style}</span>
+            <span className="text-xs text-[#8a8468] capitalize">{trip.travel_style}</span>
           </div>
         </div>
 
@@ -216,7 +216,7 @@ export default function ItineraryPage() {
           </div>
 
           {/* Center: Map */}
-          <div className="flex-1 min-w-0 bg-[#3e3b2a] border border-[#4a4738] rounded-lg overflow-hidden">
+          <div className="flex-1 min-w-0 bg-[#2a2820] border border-[#4a4738] rounded-lg overflow-hidden">
             <RouteMap
               origin={
                 trip.origin_coordinates
