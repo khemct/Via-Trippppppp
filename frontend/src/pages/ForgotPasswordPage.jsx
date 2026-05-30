@@ -30,10 +30,10 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md bg-white p-8 rounded shadow">
-        <h1 className="text-2xl font-bold mb-2 text-center">Reset Password</h1>
-        <p className="text-sm text-gray-600 mb-6 text-center">
+    <div className="min-h-screen flex items-center justify-center bg-[#312f24]">
+      <div className="w-full max-w-md bg-[#3e3b2a] p-8 rounded shadow">
+        <h1 className="text-2xl font-bold mb-2 text-center text-[#c8c4a0]">Reset Password</h1>
+        <p className="text-sm text-[#9a9478] mb-6 text-center">
           Enter your email and we&apos;ll send you a reset link.
         </p>
 
@@ -51,12 +51,12 @@ export default function ForgotPasswordPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
+            <label className="block text-sm font-medium mb-1 text-[#9a9478]">Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
+              className="w-full border border-[#4a4738] rounded px-3 py-2 text-sm bg-[#252318] text-[#c8c4a0]"
               placeholder="you@example.com"
               autoFocus
             />
@@ -65,14 +65,14 @@ export default function ForgotPasswordPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 rounded text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+            className="w-full bg-[#4a6741] text-[#c8dbb8] py-2 rounded text-sm font-medium hover:bg-[#3d5a35] disabled:opacity-50"
           >
             {loading ? 'Sending...' : 'Send Reset Link'}
           </button>
         </form>
 
         <p className="mt-4 text-sm text-center">
-          <Link to="/login" className="text-blue-600 hover:underline">
+          <Link to="/login" className="text-[#8aab7a] hover:underline">
             Back to Sign In
           </Link>
         </p>
