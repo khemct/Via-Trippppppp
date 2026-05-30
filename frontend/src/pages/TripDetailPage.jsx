@@ -599,14 +599,13 @@ export default function TripDetailPage() {
 
           {/* Actions */}
           <div className="mt-6 pt-4 border-t border-[#e0ddd6] space-y-2.5">
-            <button
-              disabled
-              title="Coming in next update"
-              className="w-full inline-flex items-center justify-center gap-2 bg-[#4a6741] text-white rounded-lg px-4 py-2.5 text-sm font-medium opacity-60 cursor-not-allowed"
+            <Link
+              to={`/trips/${tripId}/itinerary`}
+              className="w-full inline-flex items-center justify-center gap-2 bg-[#4a6741] text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-[#3d5a35] transition-colors"
             >
               <RouteIcon />
               Plan Itinerary
-            </button>
+            </Link>
             {isOwner() && (
               <button
                 onClick={handleDelete}

@@ -9,6 +9,7 @@ import ResetPasswordPage from './pages/ResetPasswordPage';
 import TripListPage from './pages/TripListPage';
 import TripSetupPage from './pages/TripSetupPage';
 import TripDetailPage from './pages/TripDetailPage';
+import ItineraryPage from './pages/ItineraryPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import RoleGuard from './components/RoleGuard';
 
@@ -71,6 +72,14 @@ export default function App() {
         element={
           <ProtectedRoute>
             <TripSetupPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/trips/:tripId/itinerary"
+        element={
+          <ProtectedRoute>
+            <ItineraryPage />
           </ProtectedRoute>
         }
       />

@@ -52,3 +52,18 @@ export const trips = {
 
   delete: (id, token) => request('DELETE', `/trips/${id}`, null, token),
 };
+
+export const itinerary = {
+  seed: (tripId, token) => request('POST', `/trips/${tripId}/recommendations/seed`, null, token),
+  reseed: (tripId, token) => request('POST', `/trips/${tripId}/recommendations/reseed`, null, token),
+  listRecommendations: (tripId, params, token) => {
+    const qs = params ? '?' + new URLSearchParams(params).toString() : '';
+    return request('GET', `/trips/${tripId}/recommendations${qs}`, null, token);
+  },
+  listWaypoints: (tripId, token) => request('GET', `/trips/${tripId}/waypoints`, null, token),
+  addWaypoint: (tripId, body, token) => request('POST', `/trips/${tripId}/waypoints`, body, token),
+  updateWaypoint: (tripId, waypointId, body, token) => request('PATCH', `/trips/${tripId}/waypoints/${waypointId}`, body, token),
+  deleteWaypoint: (tripId, waypointId, token) => request('DELETE', `/trips/${tripId}/waypoints/${waypointId}`, null, token),
+  reorderWaypoints: (tripId, body, token) => request('PUT', `/trips/${tripId}/waypoints/reorder`, body, token),
+  getFeasibility: (tripId, token) => request('GET', `/trips/${tripId}/feasibility`, null, token),
+};
