@@ -15,7 +15,7 @@ import RoleGuard from './components/RoleGuard';
 
 function Layout({ children, noGlobalNav }) {
   return (
-    <div style={{ minHeight: '100vh', background: '#f5f3ee', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100vh', background: '#312f24', display: 'flex', flexDirection: 'column' }}>
       {!noGlobalNav && <GlobalNavBar />}
       {children}
     </div>
@@ -113,8 +113,8 @@ export default function App() {
 function AdminPage() {
   return (
     <div style={{ padding: 32 }}>
-      <h1 style={{ fontSize: 24, fontWeight: 700, color: '#2d4a24', marginBottom: 12 }}>Admin Dashboard</h1>
-      <p style={{ fontSize: 14, color: '#8a9e7c' }}>Admin controls will appear here.</p>
+      <h1 style={{ fontSize: 24, fontWeight: 700, color: '#c8c4a0', marginBottom: 12 }}>Admin Dashboard</h1>
+      <p style={{ fontSize: 14, color: '#7a7558' }}>Admin controls will appear here.</p>
     </div>
   );
 }
