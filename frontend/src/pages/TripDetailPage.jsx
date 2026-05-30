@@ -296,8 +296,8 @@ export default function TripDetailPage() {
       setTrip(data.trip);
       setEditing(false);
 
-      if (styleChanged && data.trip.travel_style) {
-        itineraryApi.rescope(tripId, { travel_style: data.trip.travel_style }, token).catch(() => {});
+      if (styleChanged) {
+        itineraryApi.reseed(tripId, token).catch(() => {});
       }
     } catch (err) {
       setSaveError(err.data?.error || err.data?.details?.[0] || err.message || 'Failed to save');

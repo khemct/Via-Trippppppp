@@ -41,9 +41,9 @@ async function assessFeasibility(tripId, pool) {
   const utilization = availableMinutes > 0 ? totalRequiredMinutes / availableMinutes : 1;
 
   let status;
-  if (utilization <= 0.7) {
+  if (utilization <= 0.85) {
     status = 'feasible';
-  } else if (utilization <= 0.9) {
+  } else if (utilization <= 1.0) {
     status = 'tight';
   } else {
     status = 'at_risk';

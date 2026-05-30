@@ -28,6 +28,14 @@ const STYLE_SCORES = {
   budget: { restaurant: 70, cafe: 60, park: 80, museum: 50, shopping: 40, attraction: 70, accommodation: 60, gas_station: 40, cafe: 60 },
 };
 
+const STYLE_RADIUS = {
+  chill: 5000, foodie: 3000, photographer: 8000, adventure: 10000, budget: 5000,
+};
+
+function getSearchRadius(travelStyle) {
+  return STYLE_RADIUS[travelStyle] || 5000;
+}
+
 function mapGoogleCategory(googleTypes) {
   if (!googleTypes || !googleTypes.length) return 'attraction';
   for (const t of googleTypes) {
@@ -87,12 +95,13 @@ async function seedTripCache(tripId, polylineEncoded, travelStyle, pool) {
   const { samplePoints } = require('./polylineService');
   const samples = samplePoints(points, 25);
   const BATCH_SIZE = 3;
+  const radius = getSearchRadius(travelStyle);
   const allPlaces = new Map();
 
   for (let i = 0; i < samples.length; i += BATCH_SIZE) {
     const batch = samples.slice(i, i + BATCH_SIZE);
     const results = await Promise.allSettled(
-      batch.map(s => fetchNearbyPlaces(s.lat, s.lng, 5000, apiKey))
+      batch.map(s => fetchNearbyPlaces(s.lat, s.lng, radius, apiKey))
     );
     for (const result of results) {
       if (result.status === 'fulfilled') {
@@ -320,35 +329,10 @@ async function seedGuestCache(routePolyline, travelStyle, pool) {
   return { places: places.rows, from_cache: false };
 }
 
-async function rescopeTripCache(tripId, travelStyle, pool) {
-  const result = await pool.query(
-    `SELECT cache_id, category, rating, user_ratings_total, distance_from_route
-     FROM trip_places_cache WHERE trip_id = $1`,
-    [tripId]
-  );
-
-  if (result.rows.length === 0) {
-    return { count: 0, message: 'No cached places to rescope' };
-  }
-
-  let updated = 0;
-  for (const row of result.rows) {
-    const score = computeScore(row, travelStyle);
-    await pool.query(
-      `UPDATE trip_places_cache SET score = $1 WHERE cache_id = $2`,
-      [score, row.cache_id]
-    );
-    updated++;
-  }
-
-  return { count: updated, message: `Rescoped ${updated} places for ${travelStyle}` };
-}
-
 module.exports = {
   seedTripCache,
   getRecommendations,
   reseedTripCache,
-  rescopeTripCache,
   seedGuestCache,
   fetchNearbyPlaces,
   mapGoogleCategory,

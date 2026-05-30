@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { itinerary as itineraryApi, trips as tripsApi } from '../services/api';
+import useWaypoints from '../hooks/useWaypoints';
 import RouteMap from '../components/RouteMap';
 import RecommendationPanel from '../components/RecommendationPanel';
 import ItinerarySidebar from '../components/ItinerarySidebar';
@@ -28,8 +29,7 @@ export default function ItineraryPage() {
   const [filters, setFilters] = useState({ category: '', rating_min: 0, sort_by: 'score', cursor: null });
   const filtersRef = useRef(filters);
 
-  const [waypoints, setWaypoints] = useState([]);
-  const [waypointsLoading, setWaypointsLoading] = useState(true);
+  const { waypoints, loading: waypointsLoading, add: addWaypointFn, remove: removeWaypointFn, updateDuration: updateWaypointDuration, reorder: reorderWaypoints } = useWaypoints(tripId, token);
 
   const [feasibility, setFeasibility] = useState(null);
 
@@ -87,18 +87,6 @@ export default function ItineraryPage() {
     }
   }, [tripId, token, fetchRecommendations]);
 
-  const fetchWaypoints = useCallback(async () => {
-    setWaypointsLoading(true);
-    try {
-      const data = await itineraryApi.listWaypoints(tripId, token);
-      setWaypoints(data.waypoints);
-    } catch (err) {
-      console.error('Failed to load waypoints:', err);
-    } finally {
-      setWaypointsLoading(false);
-    }
-  }, [tripId, token]);
-
   const fetchFeasibility = useCallback(async () => {
     try {
       const data = await itineraryApi.getFeasibility(tripId, token);
@@ -111,9 +99,8 @@ export default function ItineraryPage() {
   useEffect(() => {
     if (!trip) return;
     seedRecommendations();
-    fetchWaypoints();
     fetchFeasibility();
-  }, [trip, seedRecommendations, fetchWaypoints, fetchFeasibility]);
+  }, [trip, seedRecommendations, fetchFeasibility]);
 
   function handleFilterChange(newFilters) {
     setFilters(newFilters);
@@ -135,27 +122,23 @@ export default function ItineraryPage() {
 
   async function handleAddWaypoint(place) {
     const stopDur = trip ? trip.estimated_stop_duration : 30;
-    await itineraryApi.addWaypoint(tripId, { place_id: place.place_id, stop_duration_minutes: stopDur }, token);
-    await fetchWaypoints();
-    await fetchFeasibility();
+    await addWaypointFn(place.place_id, stopDur);
+    fetchFeasibility();
   }
 
   async function handleRemoveWaypoint(waypointId) {
-    await itineraryApi.deleteWaypoint(tripId, waypointId, token);
-    await fetchWaypoints();
-    await fetchFeasibility();
+    await removeWaypointFn(waypointId);
+    fetchFeasibility();
   }
 
-  async function handleUpdateDuration(waypointId, minutes) {
-    await itineraryApi.updateWaypoint(tripId, waypointId, { stop_duration_minutes: minutes }, token);
-    await fetchWaypoints();
-    await fetchFeasibility();
+  function handleUpdateDuration(waypointId, minutes) {
+    updateWaypointDuration(waypointId, minutes);
+    setTimeout(fetchFeasibility, 800);
   }
 
   async function handleReorder(orderArray) {
-    await itineraryApi.reorderWaypoints(tripId, { order: orderArray }, token);
-    await fetchWaypoints();
-    await fetchFeasibility();
+    await reorderWaypoints(orderArray);
+    fetchFeasibility();
   }
 
   const routeWaypoints = waypoints.map((wp) => ({

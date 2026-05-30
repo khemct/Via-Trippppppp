@@ -1,18 +1,70 @@
-import { useState } from 'react';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 const CATEGORY_ICONS = {
   restaurant: '🍽', cafe: '☕', attraction: '🎯', park: '🌳',
   museum: '🏛', shopping: '🛍', accommodation: '🏨', gas_station: '⛽',
 };
 
-function DragHandle() {
+function SortableWaypoint({ wp, onRemove, onUpdateDuration }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: wp.waypoint_id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    background: isDragging ? '#eef4e8' : undefined,
+  };
+
   return (
-    <div className="cursor-grab active:cursor-grabbing text-[#c0bcb2] hover:text-[#8a9e7c] shrink-0 px-1">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-        <circle cx="9" cy="5" r="1.5" /><circle cx="15" cy="5" r="1.5" />
-        <circle cx="9" cy="12" r="1.5" /><circle cx="15" cy="12" r="1.5" />
-        <circle cx="9" cy="19" r="1.5" /><circle cx="15" cy="19" r="1.5" />
-      </svg>
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="flex items-center gap-1.5 px-3 py-2.5 border-b border-[#f0f0ee] hover:bg-[#faf9f7] transition-colors"
+    >
+      <button {...attributes} {...listeners} className="cursor-grab text-[#c0bcb2] hover:text-[#8a9e7c] shrink-0 px-1">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+          <circle cx="9" cy="5" r="1.5" /><circle cx="15" cy="5" r="1.5" />
+          <circle cx="9" cy="12" r="1.5" /><circle cx="15" cy="12" r="1.5" />
+          <circle cx="9" cy="19" r="1.5" /><circle cx="15" cy="19" r="1.5" />
+        </svg>
+      </button>
+      <span className="text-xs font-bold text-[#8a9e7c] w-5 shrink-0">{wp.order}</span>
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-1">
+          <span className="text-xs">{CATEGORY_ICONS[wp.category] || '📍'}</span>
+          <span className="text-xs font-medium text-[#2d4a24] truncate">{wp.name}</span>
+        </div>
+        <div className="flex items-center gap-2 mt-1">
+          <span className="text-xs text-[#8a9e7c]">{wp.score}</span>
+          {wp.distance_from_route >= 1000 && (
+            <span className="text-xs text-[#d97706]">{(wp.distance_from_route / 1000).toFixed(1)}km detour</span>
+          )}
+        </div>
+      </div>
+      <div className="flex items-center gap-1 shrink-0">
+        <input
+          type="number"
+          min="5"
+          max="180"
+          step="5"
+          value={wp.stop_duration_minutes || 30}
+          onChange={(e) => onUpdateDuration(wp.waypoint_id, parseInt(e.target.value, 10) || 30)}
+          className="w-12 text-xs text-center border border-[#d4cfbf] rounded px-1 py-0.5 text-[#2d4a24] focus:outline-none focus:ring-1 focus:ring-[#4a6741]"
+        />
+        <span className="text-xs text-[#8a9e7c]">min</span>
+        <button
+          onClick={() => onRemove(wp.waypoint_id)}
+          className="ml-1 text-[#c0bcb2] hover:text-red-500 transition-colors"
+          title="Remove"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
     </div>
   );
 }
@@ -26,43 +78,24 @@ export default function ItinerarySidebar({
   onReorder,
   onReset,
 }) {
-  const [dragIdx, setDragIdx] = useState(null);
-  const [dragOverIdx, setDragOverIdx] = useState(null);
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  );
 
-  function handleDragStart(e, idx) {
-    setDragIdx(idx);
-    e.dataTransfer.effectAllowed = 'move';
-  }
+  function handleDragEnd(event) {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
 
-  function handleDragOver(e, idx) {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-    setDragOverIdx(idx);
-  }
+    const oldIdx = waypoints.findIndex((wp) => wp.waypoint_id === active.id);
+    const newIdx = waypoints.findIndex((wp) => wp.waypoint_id === over.id);
+    if (oldIdx === -1 || newIdx === -1) return;
 
-  function handleDragLeave() {
-    setDragOverIdx(null);
-  }
-
-  function handleDrop(e, dropIdx) {
-    e.preventDefault();
-    if (dragIdx === null || dragIdx === dropIdx) {
-      setDragIdx(null);
-      setDragOverIdx(null);
-      return;
-    }
     const reordered = [...waypoints];
-    const [moved] = reordered.splice(dragIdx, 1);
-    reordered.splice(dropIdx, 0, moved);
+    const [moved] = reordered.splice(oldIdx, 1);
+    reordered.splice(newIdx, 0, moved);
     const withOrder = reordered.map((wp, i) => ({ waypoint_id: wp.waypoint_id, order: i + 1 }));
     onReorder(withOrder);
-    setDragIdx(null);
-    setDragOverIdx(null);
-  }
-
-  function handleDragEnd() {
-    setDragIdx(null);
-    setDragOverIdx(null);
   }
 
   const feasiColors = {
@@ -75,13 +108,11 @@ export default function ItinerarySidebar({
 
   return (
     <div className="h-full flex flex-col bg-white border border-[#e8e4da] rounded-lg overflow-hidden">
-      {/* Header */}
       <div className="shrink-0 px-4 pt-4 pb-3 border-b border-[#e0ddd6] flex items-center justify-between">
         <h2 className="text-sm font-semibold text-[#2d4a24]">Itinerary</h2>
         <span className="text-xs text-[#8a9e7c]">{waypoints.length} stop{waypoints.length !== 1 ? 's' : ''}</span>
       </div>
 
-      {/* List */}
       <div className="flex-1 overflow-y-auto min-h-0">
         {loading && (
           <div className="p-4 space-y-3">
@@ -107,63 +138,16 @@ export default function ItinerarySidebar({
         )}
 
         {!loading && waypoints.length > 0 && (
-          <div className="divide-y divide-[#f0f0ee]">
-            {waypoints.map((wp, idx) => (
-              <div
-                key={wp.waypoint_id}
-                draggable
-                onDragStart={(e) => handleDragStart(e, idx)}
-                onDragOver={(e) => handleDragOver(e, idx)}
-                onDragLeave={handleDragLeave}
-                onDrop={(e) => handleDrop(e, idx)}
-                onDragEnd={handleDragEnd}
-                className={`flex items-center gap-1.5 px-3 py-2.5 transition-colors ${
-                  dragOverIdx === idx ? 'bg-[#eef4e8]' : dragIdx === idx ? 'opacity-50 bg-[#f5f3ee]' : 'hover:bg-[#faf9f7]'
-                }`}
-              >
-                <DragHandle />
-                <span className="text-xs font-bold text-[#8a9e7c] w-5 shrink-0">{wp.order}</span>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-1">
-                    <span className="text-xs">{CATEGORY_ICONS[wp.category] || '📍'}</span>
-                    <span className="text-xs font-medium text-[#2d4a24] truncate">{wp.name}</span>
-                  </div>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="text-xs text-[#8a9e7c]">{wp.score}</span>
-                    {wp.distance_from_route >= 1000 && (
-                      <span className="text-xs text-[#d97706]">{(wp.distance_from_route / 1000).toFixed(1)}km detour</span>
-                    )}
-                  </div>
-                </div>
-                <div className="flex items-center gap-1 shrink-0">
-                  <input
-                    type="number"
-                    min="5"
-                    max="180"
-                    step="5"
-                    value={wp.stop_duration_minutes || 30}
-                    onChange={(e) => onUpdateDuration(wp.waypoint_id, parseInt(e.target.value, 10) || 30)}
-                    className="w-12 text-xs text-center border border-[#d4cfbf] rounded px-1 py-0.5 text-[#2d4a24] focus:outline-none focus:ring-1 focus:ring-[#4a6741]"
-                  />
-                  <span className="text-xs text-[#8a9e7c]">min</span>
-                  <button
-                    onClick={() => onRemove(wp.waypoint_id)}
-                    className="ml-1 text-[#c0bcb2] hover:text-red-500 transition-colors"
-                    title="Remove"
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <line x1="18" y1="6" x2="6" y2="18" />
-                      <line x1="6" y1="6" x2="18" y2="18" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <SortableContext items={waypoints.map((wp) => wp.waypoint_id)} strategy={verticalListSortingStrategy}>
+              {waypoints.map((wp) => (
+                <SortableWaypoint key={wp.waypoint_id} wp={wp} onRemove={onRemove} onUpdateDuration={onUpdateDuration} />
+              ))}
+            </SortableContext>
+          </DndContext>
         )}
       </div>
 
-      {/* Feasibility Bar */}
       {feasi && (
         <div className="shrink-0 p-4 border-t border-[#e0ddd6]" style={{ background: feasi.bg }}>
           <div className="flex items-center justify-between mb-1.5">
