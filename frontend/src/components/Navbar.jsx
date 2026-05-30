@@ -5,8 +5,8 @@ export default function Navbar({ isLoggedIn, userName, onLogout }) {
     <nav
       style={{
         height: 60,
-        background: '#fff',
-        borderBottom: '1px solid #e0ddd6',
+        background: '#252318',
+        borderBottom: '1px solid #3e3b2a',
         position: 'sticky',
         top: 0,
         zIndex: 50,
@@ -40,10 +40,10 @@ export default function Navbar({ isLoggedIn, userName, onLogout }) {
             🏔
           </div>
           <div>
-            <div style={{ fontSize: 16, fontWeight: 700, color: '#2d4a24', lineHeight: 1.2 }}>
+            <div style={{ fontSize: 16, fontWeight: 700, color: '#c8c4a0', lineHeight: 1.2 }}>
               Via-Trip
             </div>
-            <div style={{ fontSize: 11, color: '#8a9e7c', lineHeight: 1.2 }}>
+            <div style={{ fontSize: 11, color: '#7a7558', lineHeight: 1.2 }}>
               Journey your way.
             </div>
           </div>
@@ -52,28 +52,28 @@ export default function Navbar({ isLoggedIn, userName, onLogout }) {
         <div style={{ display: 'flex', gap: 28, marginLeft: 48 }}>
           {!isLoggedIn ? (
             <>
-              <Link to="/" style={{ color: '#5a6b4e', fontSize: 14, fontWeight: 500, textDecoration: 'none' }}>
+              <Link to="/" style={{ color: '#9a9478', fontSize: 14, fontWeight: 500, textDecoration: 'none' }}>
                 Explore
               </Link>
-              <Link to="/" style={{ color: '#5a6b4e', fontSize: 14, fontWeight: 500, textDecoration: 'none' }}>
+              <Link to="/" style={{ color: '#9a9478', fontSize: 14, fontWeight: 500, textDecoration: 'none' }}>
                 How It Works
               </Link>
-              <Link to="/" style={{ color: '#5a6b4e', fontSize: 14, fontWeight: 500, textDecoration: 'none' }}>
+              <Link to="/" style={{ color: '#9a9478', fontSize: 14, fontWeight: 500, textDecoration: 'none' }}>
                 About Us
               </Link>
             </>
           ) : (
             <>
-              <Link to="/" style={{ color: '#5a6b4e', fontSize: 14, fontWeight: 500, textDecoration: 'none' }}>
+              <Link to="/" style={{ color: '#9a9478', fontSize: 14, fontWeight: 500, textDecoration: 'none' }}>
                 Home
               </Link>
-              <Link to="/" style={{ color: '#5a6b4e', fontSize: 14, fontWeight: 500, textDecoration: 'none' }}>
+              <Link to="/" style={{ color: '#9a9478', fontSize: 14, fontWeight: 500, textDecoration: 'none' }}>
                 Explore
               </Link>
-              <Link to="/trips" style={{ color: '#5a6b4e', fontSize: 14, fontWeight: 500, textDecoration: 'none' }}>
+              <Link to="/trips" style={{ color: '#9a9478', fontSize: 14, fontWeight: 500, textDecoration: 'none' }}>
                 My Trips
               </Link>
-              <Link to="/" style={{ color: '#5a6b4e', fontSize: 14, fontWeight: 500, textDecoration: 'none' }}>
+              <Link to="/" style={{ color: '#9a9478', fontSize: 14, fontWeight: 500, textDecoration: 'none' }}>
                 How It Works
               </Link>
             </>
@@ -87,7 +87,7 @@ export default function Navbar({ isLoggedIn, userName, onLogout }) {
                 to="/login"
                 style={{
                   border: '1.5px solid #4a6741',
-                  color: '#4a6741',
+                  color: '#8aab7a',
                   borderRadius: 8,
                   padding: '8px 20px',
                   fontSize: 14,
@@ -103,7 +103,7 @@ export default function Navbar({ isLoggedIn, userName, onLogout }) {
                 to="/register"
                 style={{
                   background: '#4a6741',
-                  color: '#fff',
+                  color: '#c8dbb8',
                   borderRadius: 8,
                   padding: '8px 20px',
                   fontSize: 14,
@@ -118,17 +118,17 @@ export default function Navbar({ isLoggedIn, userName, onLogout }) {
             </>
           ) : (
             <>
-              <span style={{ color: '#5a6b4e', fontSize: 14 }}>Hello, {userName}! 👋</span>
+              <span style={{ color: '#9a9478', fontSize: 14 }}>Hello, {userName}! 👋</span>
               <div
                 style={{
                   width: 36,
                   height: 36,
                   borderRadius: '50%',
-                  background: '#eef4e8',
+                  background: '#3e3b2a',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: '#4a6741',
+                  color: '#8aab7a',
                   fontWeight: 600,
                   fontSize: 14,
                 }}
@@ -139,8 +139,8 @@ export default function Navbar({ isLoggedIn, userName, onLogout }) {
                 <button
                   onClick={onLogout}
                   style={{
-                    border: '1.5px solid #e0ddd6',
-                    color: '#5a6b4e',
+                    border: '1.5px solid #3e3b2a',
+                    color: '#9a9478',
                     borderRadius: 8,
                     padding: '8px 16px',
                     fontSize: 13,

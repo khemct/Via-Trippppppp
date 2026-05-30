@@ -22,9 +22,9 @@ const columns = [
           >
             🏔
           </div>
-          <span style={{ fontSize: 16, fontWeight: 700, color: '#2d4a24' }}>Via-Trip</span>
+          <span style={{ fontSize: 16, fontWeight: 700, color: '#c8c4a0' }}>Via-Trip</span>
         </div>
-        <p style={{ fontSize: 13, color: '#8a9e7c', lineHeight: 1.6, maxWidth: 240 }}>
+        <p style={{ fontSize: 13, color: '#7a7558', lineHeight: 1.6, maxWidth: 240 }}>
           Plan your perfect road trip, discover hidden gems, and collect memories along the way.
         </p>
       </div>
@@ -51,8 +51,8 @@ export default function Footer() {
   return (
     <footer
       style={{
-        background: '#fff',
-        borderTop: '1px solid #e0ddd6',
+        background: '#252318',
+        borderTop: '1px solid #3e3b2a',
         marginTop: 'auto',
       }}
     >
@@ -76,7 +76,7 @@ export default function Footer() {
                   style={{
                     fontSize: 12,
                     fontWeight: 600,
-                    color: '#8a9e7c',
+                    color: '#7a7558',
                     letterSpacing: '0.5px',
                     marginBottom: 16,
                   }}
@@ -90,7 +90,7 @@ export default function Footer() {
                       to="/"
                       style={{
                         fontSize: 13,
-                        color: '#5a6b4e',
+                        color: '#9a9478',
                         textDecoration: 'none',
                       }}
                     >
@@ -106,11 +106,12 @@ export default function Footer() {
 
       <div
         style={{
-          borderTop: '1px solid #e0ddd6',
+          borderTop: '1px solid #3e3b2a',
           padding: '16px 24px',
           textAlign: 'center',
           fontSize: 13,
-          color: '#8a9e7c',
+          color: '#7a7558',
+          background: '#1e1c14',
         }}
       >
         &copy; 2026 Via-Trip. All rights reserved.
