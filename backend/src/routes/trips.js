@@ -12,7 +12,7 @@ router.post(
   '/',
   requireAuth,
   validate({
-    name: [required, minLength(1), maxLength(200)],
+    name: [maxLength(200)],
     origin: [required, minLength(1), maxLength(500)],
     destination: [required, minLength(1), maxLength(500)],
     travel_date: [required],
@@ -23,15 +23,29 @@ router.post(
     try {
       const { name, origin, destination, travel_date, number_of_days, daily_hours, travel_style, estimated_stop_duration } = req.body;
 
+      const ndays = parseInt(number_of_days, 10);
+      if (isNaN(ndays) || ndays < 1 || ndays > 30) {
+        return res.status(400).json({ error: 'number_of_days must be between 1 and 30' });
+      }
+      const dhours = daily_hours !== undefined ? parseInt(daily_hours, 10) : 10;
+      if (isNaN(dhours) || dhours < 4 || dhours > 16) {
+        return res.status(400).json({ error: 'daily_hours must be between 4 and 16' });
+      }
+      const stopDur = estimated_stop_duration !== undefined ? parseInt(estimated_stop_duration, 10) : 30;
+      if (isNaN(stopDur) || stopDur < 5 || stopDur > 180) {
+        return res.status(400).json({ error: 'estimated_stop_duration must be between 5 and 180' });
+      }
+
+      const tripName = (name && name.trim()) ? name.trim() : `Trip to ${destination.trim()}`;
       const trip = await createTrip(req.user.id, {
-        name,
+        name: tripName,
         origin,
         destination,
         travel_date,
-        number_of_days: parseInt(number_of_days, 10),
-        daily_hours: daily_hours !== undefined ? parseInt(daily_hours, 10) : 10,
+        number_of_days: ndays,
+        daily_hours: dhours,
         travel_style: travel_style || 'chill',
-        estimated_stop_duration: estimated_stop_duration !== undefined ? parseInt(estimated_stop_duration, 10) : 30,
+        estimated_stop_duration: stopDur,
       });
 
       res.status(201).json({ trip });
@@ -39,8 +53,8 @@ router.post(
       if (err.code === 'TOO_FAR') {
         return res.status(400).json({ error: err.message });
       }
-      if (err.code === 'ZERO_RESULTS' || err.code === 'API_ERROR') {
-        return res.status(400).json({ error: err.message });
+      if (err.code === 'ZERO_RESULTS' || err.code === 'API_ERROR' || err.code === 'TIMEOUT' || err.code === 'NETWORK_ERROR') {
+        return res.status(502).json({ error: err.message });
       }
       if (err.code === 'API_KEY_MISSING') {
         console.error('GOOGLE_MAPS_API_KEY not configured');
@@ -107,13 +121,19 @@ router.patch('/:tripId', requireAuth, async (req, res) => {
     }
 
     if (req.body.number_of_days !== undefined) {
-      req.body.number_of_days = parseInt(req.body.number_of_days, 10);
+      const v = parseInt(req.body.number_of_days, 10);
+      if (isNaN(v) || v < 1 || v > 30) return res.status(400).json({ error: 'number_of_days must be between 1 and 30' });
+      req.body.number_of_days = v;
     }
     if (req.body.daily_hours !== undefined) {
-      req.body.daily_hours = parseInt(req.body.daily_hours, 10);
+      const v = parseInt(req.body.daily_hours, 10);
+      if (isNaN(v) || v < 4 || v > 16) return res.status(400).json({ error: 'daily_hours must be between 4 and 16' });
+      req.body.daily_hours = v;
     }
     if (req.body.estimated_stop_duration !== undefined) {
-      req.body.estimated_stop_duration = parseInt(req.body.estimated_stop_duration, 10);
+      const v = parseInt(req.body.estimated_stop_duration, 10);
+      if (isNaN(v) || v < 5 || v > 180) return res.status(400).json({ error: 'estimated_stop_duration must be between 5 and 180' });
+      req.body.estimated_stop_duration = v;
     }
 
     const trip = await updateTrip(req.params.tripId, req.user.id, req.body);

@@ -22,7 +22,7 @@ export function AuthProvider({ children }) {
 
     const cachedUser = localStorage.getItem(USER_KEY);
     if (cachedUser) {
-      setUser(JSON.parse(cachedUser));
+      try { setUser(JSON.parse(cachedUser)); } catch { localStorage.removeItem(USER_KEY); }
     }
 
     authApi

@@ -30,10 +30,10 @@ export default function TripListPage() {
   return (
     <div className="max-w-3xl mx-auto mt-8 p-6">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">My Trips</h1>
+        <h1 className="text-2xl font-bold text-[#2d4a24]">My Trips</h1>
         <Link
           to="/trips/new"
-          className="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700"
+          className="bg-[#4a6741] text-white px-4 py-2 rounded text-sm hover:bg-[#3d5a35]"
         >
           + New Trip
         </Link>
@@ -45,14 +45,14 @@ export default function TripListPage() {
         </div>
       )}
 
-      {loading && <p className="text-gray-500 text-sm">Loading...</p>}
+      {loading && <p className="text-[#8a9e7c] text-sm">Loading...</p>}
 
       {!loading && !error && trips.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-gray-500 mb-4">No trips yet. Plan your first road trip!</p>
+          <p className="text-[#8a9e7c] mb-4">No trips yet. Plan your first road trip!</p>
           <Link
             to="/trips/new"
-            className="bg-blue-600 text-white px-6 py-2 rounded text-sm hover:bg-blue-700"
+            className="bg-[#4a6741] text-white px-6 py-2 rounded text-sm hover:bg-[#3d5a35]"
           >
             Plan a Trip
           </Link>
@@ -66,15 +66,15 @@ export default function TripListPage() {
               <Link
                 key={trip.trip_id}
                 to={`/trips/${trip.trip_id}`}
-                className="block bg-white border border-gray-200 rounded p-4 hover:shadow-sm"
+                className="block bg-white border border-[#e8e4da] rounded p-4 hover:shadow-sm"
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <h2 className="font-semibold text-gray-800">{trip.name}</h2>
-                    <p className="text-sm text-gray-500 mt-1">
+                    <h2 className="font-semibold text-[#2d4a24]">{trip.name}</h2>
+                    <p className="text-sm text-[#8a9e7c] mt-1">
                       {trip.origin} &rarr; {trip.destination}
                     </p>
-                    <p className="text-xs text-gray-400 mt-1">
+                    <p className="text-xs text-[#8a9e7c] mt-1">
                       {trip.travel_date} &middot; {trip.number_of_days} day
                       {trip.number_of_days > 1 ? 's' : ''} &middot; {trip.travel_style} &middot;{' '}
                       {trip.total_distance_km} km
@@ -83,8 +83,8 @@ export default function TripListPage() {
                   <span
                     className={`text-xs font-medium px-2 py-0.5 rounded ${
                       trip.status === 'saved'
-                        ? 'bg-green-100 text-green-700'
-                        : 'bg-gray-100 text-gray-600'
+                        ? 'bg-[#eef4e8] text-[#4a6741]'
+                        : 'bg-[#f0f0ee] text-[#8a9e7c]'
                     }`}
                   >
                     {trip.status}
@@ -103,7 +103,7 @@ export default function TripListPage() {
               >
                 Previous
               </button>
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-[#8a9e7c]">
                 Page {page} of {totalPages}
               </span>
               <button

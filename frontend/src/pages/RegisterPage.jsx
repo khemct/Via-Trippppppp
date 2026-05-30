@@ -1,133 +1,299 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import Navbar from '../components/Navbar';
+
+const perks = [
+  'Mountains & Viewpoints',
+  'Waterfalls & Nature',
+  'Local Cafés & Food',
+  'Good Vibes ♡',
+];
+
+const roles = [
+  { value: 'traveler', label: 'Traveler', desc: 'I want to plan trips' },
+  { value: 'place_owner', label: 'Place Owner', desc: 'I manage a location' },
+];
 
 export default function RegisterPage() {
-  const { register } = useAuth();
+  const { isAuthenticated, register } = useAuth();
   const navigate = useNavigate();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [confirmPw, setConfirmPw] = useState('');
   const [role, setRole] = useState('traveler');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (isAuthenticated) navigate('/trips', { replace: true });
+  }, [isAuthenticated, navigate]);
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
 
-    if (!name || !email || !password || !confirmPassword) {
-      setError('All fields are required');
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
-
-    if (password.length < 8) {
-      setError('Password must be at least 8 characters');
-      return;
-    }
+    if (!name.trim()) { setError('Full name is required.'); return; }
+    if (!email.trim()) { setError('Email address is required.'); return; }
+    if (password.length < 8) { setError('Password must be at least 8 characters.'); return; }
+    if (password !== confirmPw) { setError('Passwords do not match.'); return; }
+    if (!role) { setError('Please select a role.'); return; }
 
     setLoading(true);
     try {
-      await register(name, email, password, role);
+      await register(name.trim(), email.trim(), password, role);
       navigate('/trips', { replace: true });
     } catch (err) {
-      setError(err.message || 'Registration failed');
+      setError(err.data?.error || err.data?.details?.[0] || err.message || 'Registration failed.');
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md bg-white p-8 rounded shadow">
-        <h1 className="text-2xl font-bold mb-6 text-center">Create Account</h1>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <Navbar isLoggedIn={false} />
 
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-sm">
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-              placeholder="Your name"
-              autoFocus
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-              placeholder="you@example.com"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-              placeholder="At least 8 characters"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Confirm Password</label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-              placeholder="Repeat your password"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">I want to</label>
-            <select
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-            >
-              <option value="traveler">Plan trips (Traveler)</option>
-              <option value="place_owner">List places (Place Owner)</option>
-            </select>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 rounded text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+      <div style={{ display: 'flex', flex: 1 }}>
+        {/* Left */}
+        <div
+          style={{
+            flex: '0 0 45%',
+            background: 'linear-gradient(135deg, #c8e0b8, #a8c898)',
+            padding: 48,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+          }}
+        >
+          <h2
+            style={{
+              fontSize: 32,
+              fontWeight: 700,
+              color: '#2d4a24',
+              marginBottom: 16,
+            }}
           >
-            {loading ? 'Creating account...' : 'Create Account'}
-          </button>
-        </form>
+            Join the Adventure! ✦
+          </h2>
+          <p style={{ fontSize: 15, color: '#5a6b4e', lineHeight: 1.7, marginBottom: 32 }}>
+            Create your account and start planning your perfect road trip.
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            {perks.map((item) => (
+              <div key={item} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div
+                  style={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: '50%',
+                    background: '#4a6741',
+                    flexShrink: 0,
+                  }}
+                />
+                <span style={{ fontSize: 15, color: '#2d4a24', fontWeight: 500 }}>{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
 
-        <p className="mt-4 text-sm text-center">
-          Already have an account?{' '}
-          <Link to="/login" className="text-blue-600 hover:underline">
-            Sign In
-          </Link>
-        </p>
+        {/* Right */}
+        <div
+          style={{
+            flex: 1,
+            background: '#fff',
+            padding: 48,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            maxWidth: 480,
+          }}
+        >
+          <h3 style={{ fontSize: 24, fontWeight: 700, color: '#2d4a24', marginBottom: 4 }}>
+            Create Account
+          </h3>
+          <p style={{ fontSize: 14, color: '#8a9e7c', marginBottom: 28 }}>
+            Start your journey today!
+          </p>
+
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <div>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#5a6b4e', display: 'block', marginBottom: 6 }}>
+                Full Name
+              </label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="John Doe"
+                style={{
+                  width: '100%',
+                  border: '1.5px solid #d4cfbf',
+                  borderRadius: 8,
+                  background: '#fafaf7',
+                  padding: '10px 14px',
+                  fontSize: 14,
+                  color: '#5a6b4e',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                }}
+              />
+            </div>
+
+            <div>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#5a6b4e', display: 'block', marginBottom: 6 }}>
+                Email Address
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                style={{
+                  width: '100%',
+                  border: '1.5px solid #d4cfbf',
+                  borderRadius: 8,
+                  background: '#fafaf7',
+                  padding: '10px 14px',
+                  fontSize: 14,
+                  color: '#5a6b4e',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                }}
+              />
+            </div>
+
+            <div>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#5a6b4e', display: 'block', marginBottom: 6 }}>
+                Password
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Min. 8 characters"
+                style={{
+                  width: '100%',
+                  border: '1.5px solid #d4cfbf',
+                  borderRadius: 8,
+                  background: '#fafaf7',
+                  padding: '10px 14px',
+                  fontSize: 14,
+                  color: '#5a6b4e',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                }}
+              />
+            </div>
+
+            <div>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#5a6b4e', display: 'block', marginBottom: 6 }}>
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                value={confirmPw}
+                onChange={(e) => setConfirmPw(e.target.value)}
+                placeholder="Re-enter your password"
+                style={{
+                  width: '100%',
+                  border: '1.5px solid #d4cfbf',
+                  borderRadius: 8,
+                  background: '#fafaf7',
+                  padding: '10px 14px',
+                  fontSize: 14,
+                  color: '#5a6b4e',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                }}
+              />
+            </div>
+
+            <div>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#5a6b4e', display: 'block', marginBottom: 6 }}>
+                Role
+              </label>
+              <select
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                style={{
+                  width: '100%',
+                  border: '1.5px solid #d4cfbf',
+                  borderRadius: 8,
+                  background: '#fafaf7',
+                  padding: '10px 14px',
+                  fontSize: 14,
+                  color: '#5a6b4e',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                }}
+              >
+                {roles.map((r) => (
+                  <option key={r.value} value={r.value}>
+                    {r.label} — {r.desc}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {error && (
+              <div
+                style={{
+                  background: '#fde8e8',
+                  border: '1px solid #f5c6c6',
+                  borderRadius: 8,
+                  padding: '10px 14px',
+                  fontSize: 13,
+                  color: '#c0392b',
+                }}
+              >
+                {error}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              style={{
+                width: '100%',
+                height: 48,
+                background: loading ? '#8a9e7c' : '#4a6741',
+                color: '#fff',
+                border: 'none',
+                borderRadius: 8,
+                fontSize: 15,
+                fontWeight: 600,
+                cursor: loading ? 'not-allowed' : 'pointer',
+                marginTop: 4,
+              }}
+            >
+              {loading ? 'Creating Account...' : 'Create Account →'}
+            </button>
+          </form>
+
+          <p style={{ textAlign: 'center', marginTop: 24, fontSize: 14, color: '#5a6b4e' }}>
+            Already have an account?{' '}
+            <Link to="/login" style={{ color: '#4a6741', fontWeight: 600, textDecoration: 'none' }}>
+              Log in →
+            </Link>
+          </p>
+        </div>
+      </div>
+
+      {/* Footer copyright only */}
+      <div
+        style={{
+          borderTop: '1px solid #e0ddd6',
+          background: '#fff',
+          padding: '16px 24px',
+          textAlign: 'center',
+          fontSize: 13,
+          color: '#8a9e7c',
+        }}
+      >
+        &copy; 2026 Via-Trip. All rights reserved.
       </div>
     </div>
   );

@@ -35,10 +35,14 @@ async function getDirections(origin, destination) {
 
 function fetchJson(url) {
   return new Promise((resolve, reject) => {
-    https.get(url, (res) => {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+
+    https.get(url, { signal: controller.signal }, (res) => {
       let data = '';
       res.on('data', (chunk) => { data += chunk; });
       res.on('end', () => {
+        clearTimeout(timeout);
         try {
           resolve(JSON.parse(data));
         } catch (e) {
@@ -46,7 +50,12 @@ function fetchJson(url) {
         }
       });
     }).on('error', (err) => {
-      reject(Object.assign(new Error(`Directions API request failed: ${err.message}`), { code: 'NETWORK_ERROR' }));
+      clearTimeout(timeout);
+      if (err.name === 'AbortError') {
+        reject(Object.assign(new Error('Directions API timed out'), { code: 'TIMEOUT' }));
+      } else {
+        reject(Object.assign(new Error(`Directions API request failed: ${err.message}`), { code: 'NETWORK_ERROR' }));
+      }
     });
   });
 }
