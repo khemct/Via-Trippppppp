@@ -155,11 +155,11 @@ export default function ItineraryPage() {
       <div className="w-full max-w-full mt-8 px-8" style={{ height: 'calc(100vh - 76px)' }}>
         <div className="h-full flex flex-col">
           <div className="animate-pulse space-y-4">
-            <div className="h-5 w-32 bg-[#e0ddd6] rounded" />
+            <div className="h-5 w-32 bg-[#3e3b2a] rounded" />
             <div className="flex gap-6 flex-1">
-              <div className="w-80 bg-[#e0ddd6] rounded-lg" />
-              <div className="flex-1 bg-[#e0ddd6] rounded-lg" />
-              <div className="w-72 bg-[#e0ddd6] rounded-lg" />
+              <div className="w-80 bg-[#3e3b2a] rounded-lg" />
+              <div className="flex-1 bg-[#3e3b2a] rounded-lg" />
+              <div className="w-72 bg-[#3e3b2a] rounded-lg" />
             </div>
           </div>
         </div>
@@ -173,7 +173,7 @@ export default function ItineraryPage() {
         <div className="bg-red-50 border border-red-200 rounded-lg px-5 py-4">
           <p className="text-sm text-red-700">Trip not found.</p>
         </div>
-        <Link to="/trips" className="inline-flex items-center gap-1.5 text-sm text-[#4a6741] font-medium hover:underline mt-4">
+        <Link to="/trips" className="inline-flex items-center gap-1.5 text-sm text-[#8aab7a] font-medium hover:underline mt-4">
           &larr; Back to My Trips
         </Link>
       </div>
@@ -187,13 +187,13 @@ export default function ItineraryPage() {
         <div className="flex items-center justify-between mb-4 shrink-0">
           <Link
             to={`/trips/${tripId}`}
-            className="inline-flex items-center gap-1.5 text-sm text-[#4a6741] font-medium hover:underline"
+            className="inline-flex items-center gap-1.5 text-sm text-[#8aab7a] font-medium hover:underline"
           >
             &larr; Back to Trip Detail
           </Link>
           <div className="flex items-center gap-3">
-            <span className="text-sm font-medium text-[#2d4a24]">{trip.name}</span>
-            <span className="text-xs text-[#8a9e7c] capitalize">{trip.travel_style}</span>
+            <span className="text-sm font-medium text-[#c8c4a0]">{trip.name}</span>
+            <span className="text-xs text-[#7a7558] capitalize">{trip.travel_style}</span>
           </div>
         </div>
 
@@ -216,7 +216,7 @@ export default function ItineraryPage() {
           </div>
 
           {/* Center: Map */}
-          <div className="flex-1 min-w-0 bg-white border border-[#e8e4da] rounded-lg overflow-hidden">
+          <div className="flex-1 min-w-0 bg-[#3e3b2a] border border-[#4a4738] rounded-lg overflow-hidden">
             <RouteMap
               origin={
                 trip.origin_coordinates
