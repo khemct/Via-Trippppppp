@@ -145,8 +145,8 @@ async function seedTripCache(tripId, polylineEncoded, travelStyle, pool) {
   for (let i = 0; i < placesArray.length; i += BATCH_INSERT_SIZE) {
     const batch = placesArray.slice(i, i + BATCH_INSERT_SIZE);
     const values = batch.map((p, idx) => {
-      const offset = idx * 11;
-      return `($${offset + 1},$${offset + 2},$${offset + 3},ST_SetSRID(ST_MakePoint($${offset + 4},$${offset + 5}),4326),$${offset + 6},$${offset + 7},$${offset + 8},$${offset + 9}::jsonb,$${offset + 10},$${offset + 11},$${offset + 12})`;
+      const offset = idx * 14;
+      return `($${offset + 1},$${offset + 2},$${offset + 3},ST_SetSRID(ST_MakePoint($${offset + 4},$${offset + 5}),4326),$${offset + 6},$${offset + 7},$${offset + 8}::jsonb,$${offset + 9},$${offset + 10}::jsonb,$${offset + 11},$${offset + 12},$${offset + 13},$${offset + 14})`;
     }).join(',');
 
     const params = [];
@@ -157,14 +157,17 @@ async function seedTripCache(tripId, polylineEncoded, travelStyle, pool) {
         p.category,
         p.rating,
         JSON.stringify([]),
-        p.photo_reference || null,
+        (p.photo_reference || '').substring(0, 500) || null,
         JSON.stringify(p.opening_hours || {}),
-        Math.round(p.distance_from_route)
+        Math.round(p.distance_from_route),
+        p.score,
+        (p.vicinity || '').substring(0, 500),
+        p.user_ratings_total || 0
       );
     }
 
     await pool.query(
-      `INSERT INTO trip_places_cache (trip_id, place_id, name, coordinates, category, rating, reviews, photo_reference, opening_hours, distance_from_route, score)
+      `INSERT INTO trip_places_cache (trip_id, place_id, name, coordinates, category, rating, reviews, photo_reference, opening_hours, distance_from_route, score, vicinity, review_count)
        VALUES ${values}
        ON CONFLICT (trip_id, place_id) DO UPDATE SET
          score = EXCLUDED.score,
@@ -258,8 +261,8 @@ async function getRecommendations(tripId, filters = {}, pool) {
   const sql = `
     SELECT c.cache_id, c.place_id, c.name,
            ST_X(c.coordinates::geometry) AS lng, ST_Y(c.coordinates::geometry) AS lat,
-           c.category, c.rating, c.user_ratings_total,
-           c.photo_reference, c.opening_hours, c.distance_from_route, c.score,
+           c.category, c.rating, c.review_count,
+           c.photo_reference, c.opening_hours, c.vicinity, c.distance_from_route, c.score,
            c.reviews
     FROM trip_places_cache c
     WHERE c.trip_id = $1 ${whereClause}
