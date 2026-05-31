@@ -34,7 +34,7 @@ export default function HomePage() {
       {/* Section 1 — Hero */}
       <section
         style={{
-          background: 'linear-gradient(135deg, #e8f0e0 0%, #f5f3ee 100%)',
+          background: 'linear-gradient(135deg, #2a2820 0%, #312f24 100%)',
           padding: '80px 24px',
         }}
       >
@@ -53,7 +53,7 @@ export default function HomePage() {
               style={{
                 fontSize: 42,
                 fontWeight: 800,
-                color: '#2d4a24',
+                color: '#c8c4a0',
                 lineHeight: 1.15,
                 marginBottom: 16,
               }}
@@ -63,7 +63,7 @@ export default function HomePage() {
             <p
               style={{
                 fontSize: 16,
-                color: '#5a6b4e',
+                color: '#9a9478',
                 lineHeight: 1.6,
                 marginBottom: 32,
                 maxWidth: 480,
@@ -75,7 +75,7 @@ export default function HomePage() {
             <form
               onSubmit={handleSearch}
               style={{
-                background: '#fff',
+                background: '#3e3b2a',
                 borderRadius: 14,
                 padding: 24,
                 boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
@@ -88,12 +88,12 @@ export default function HomePage() {
                   placeholder="Where are you starting?"
                   style={{
                     flex: 1,
-                    border: '1.5px solid #d4cfbf',
+                    border: '1.5px solid #4a4738',
                     borderRadius: 8,
-                    background: '#fafaf7',
+                    background: '#252318',
                     padding: '10px 14px',
                     fontSize: 14,
-                    color: '#5a6b4e',
+                    color: '#c8c4a0',
                     outline: 'none',
                   }}
                 />
@@ -103,12 +103,12 @@ export default function HomePage() {
                   placeholder="Where are you going?"
                   style={{
                     flex: 1,
-                    border: '1.5px solid #d4cfbf',
+                    border: '1.5px solid #4a4738',
                     borderRadius: 8,
-                    background: '#fafaf7',
+                    background: '#252318',
                     padding: '10px 14px',
                     fontSize: 14,
-                    color: '#5a6b4e',
+                    color: '#c8c4a0',
                     outline: 'none',
                   }}
                 />
@@ -118,7 +118,7 @@ export default function HomePage() {
                 style={{
                   width: '100%',
                   background: '#4a6741',
-                  color: '#fff',
+                  color: '#c8dbb8',
                   border: 'none',
                   borderRadius: 8,
                   padding: '12px 20px',
@@ -176,7 +176,7 @@ export default function HomePage() {
       </section>
 
       {/* Section 2 — Features */}
-      <section style={{ background: '#fff', padding: '56px 24px' }}>
+      <section style={{ background: '#3e3b2a', padding: '56px 24px' }}>
         <div
           style={{
             maxWidth: 1280,
@@ -193,7 +193,7 @@ export default function HomePage() {
                   width: 40,
                   height: 40,
                   borderRadius: '50%',
-                  background: '#eef4e8',
+                  background: '#3e3b2a',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -203,23 +203,23 @@ export default function HomePage() {
               >
                 {f.icon}
               </div>
-              <div style={{ fontSize: 13, fontWeight: 600, color: '#2d4a24', marginBottom: 6 }}>
+              <div style={{ fontSize: 13, fontWeight: 600, color: '#c8c4a0', marginBottom: 6 }}>
                 {f.title}
               </div>
-              <div style={{ fontSize: 12, color: '#8a9e7c', lineHeight: 1.5 }}>{f.desc}</div>
+              <div style={{ fontSize: 12, color: '#7a7558', lineHeight: 1.5 }}>{f.desc}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* Section 3 — Inspiration */}
-      <section style={{ background: '#f5f3ee', padding: '56px 24px' }}>
+      <section style={{ background: '#312f24', padding: '56px 24px' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto' }}>
           <h2
             style={{
               fontSize: 28,
               fontWeight: 700,
-              color: '#2d4a24',
+              color: '#c8c4a0',
               marginBottom: 32,
             }}
           >
@@ -236,8 +236,8 @@ export default function HomePage() {
               <div
                 key={item.name}
                 style={{
-                  background: '#fff',
-                  border: '1px solid #e8e4da',
+                  background: '#3e3b2a',
+                  border: '1px solid #4a4738',
                   borderRadius: 12,
                   overflow: 'hidden',
                 }}
@@ -260,8 +260,8 @@ export default function HomePage() {
                   <div
                     style={{
                       display: 'inline-block',
-                      background: '#eef4e8',
-                      color: '#4a6741',
+                  background: '#3e3b2a',
+                      color: '#8aab7a',
                       borderRadius: 12,
                       padding: '4px 10px',
                       fontSize: 11,
@@ -278,10 +278,10 @@ export default function HomePage() {
                       justifyContent: 'space-between',
                     }}
                   >
-                    <span style={{ fontSize: 14, fontWeight: 600, color: '#2d4a24' }}>
+                    <span style={{ fontSize: 14, fontWeight: 600, color: '#c8c4a0' }}>
                       {item.name}
                     </span>
-                    <span style={{ fontSize: 13, color: '#d4a843', fontWeight: 600 }}>
+                    <span style={{ fontSize: 13, color: '#c8a84a', fontWeight: 600 }}>
                       ★ {item.rating}
                     </span>
                   </div>

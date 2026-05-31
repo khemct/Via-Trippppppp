@@ -101,85 +101,85 @@ export default function TripSetupPage() {
           style={{
             width: 420,
             flexShrink: 0,
-            background: '#fafaf7',
+            background: '#2a2820',
             padding: 32,
-            borderRight: '1px solid #e0ddd6',
+            borderRight: '1px solid #3e3b2a',
             overflowY: 'auto',
           }}
         >
           <a
             href="/trips"
-            style={{ fontSize: 13, color: '#4a6741', fontWeight: 500, textDecoration: 'none', display: 'inline-block', marginBottom: 20 }}
+            style={{ fontSize: 13, color: '#8aab7a', fontWeight: 500, textDecoration: 'none', display: 'inline-block', marginBottom: 20 }}
           >
             &larr; My Trips
           </a>
 
-          <h2 style={{ fontSize: 24, fontWeight: 700, color: '#2d4a24', marginBottom: 4 }}>Plan Your Trip</h2>
-          <p style={{ fontSize: 14, color: '#8a9e7c', marginBottom: 24 }}>
+          <h2 style={{ fontSize: 24, fontWeight: 700, color: '#c8c4a0', marginBottom: 4 }}>Plan Your Trip</h2>
+          <p style={{ fontSize: 14, color: '#7a7558', marginBottom: 24 }}>
             Fill in the details below to start your road trip.
           </p>
 
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             {/* Trip Name */}
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#5a6b4e', display: 'block', marginBottom: 6 }}>Trip Name</label>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#9a9478', display: 'block', marginBottom: 6 }}>Trip Name</label>
               <input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Chiang Mai to Pai"
                 style={{
-                  width: '100%', border: '1.5px solid #d4cfbf', borderRadius: 8, background: '#fafaf7',
-                  padding: '10px 14px', fontSize: 14, color: '#5a6b4e', outline: 'none', boxSizing: 'border-box',
+                  width: '100%', border: '1.5px solid #4a4738', borderRadius: 8, background: '#252318',
+                  padding: '10px 14px', fontSize: 14, color: '#c8c4a0', outline: 'none', boxSizing: 'border-box',
                 }}
               />
             </div>
 
             {/* Origin */}
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#5a6b4e', display: 'block', marginBottom: 6 }}>Origin</label>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#9a9478', display: 'block', marginBottom: 6 }}>Origin</label>
               <input
                 value={origin}
                 onChange={(e) => setOrigin(e.target.value)}
                 placeholder="Where are you starting?"
                 style={{
-                  width: '100%', border: '1.5px solid #d4cfbf', borderRadius: 8, background: '#fafaf7',
-                  padding: '10px 14px', fontSize: 14, color: '#5a6b4e', outline: 'none', boxSizing: 'border-box',
+                  width: '100%', border: '1.5px solid #4a4738', borderRadius: 8, background: '#252318',
+                  padding: '10px 14px', fontSize: 14, color: '#c8c4a0', outline: 'none', boxSizing: 'border-box',
                 }}
               />
             </div>
 
             {/* Destination */}
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#5a6b4e', display: 'block', marginBottom: 6 }}>Destination</label>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#9a9478', display: 'block', marginBottom: 6 }}>Destination</label>
               <input
                 value={dest}
                 onChange={(e) => setDest(e.target.value)}
                 placeholder="Where are you going?"
                 style={{
-                  width: '100%', border: '1.5px solid #d4cfbf', borderRadius: 8, background: '#fafaf7',
-                  padding: '10px 14px', fontSize: 14, color: '#5a6b4e', outline: 'none', boxSizing: 'border-box',
+                  width: '100%', border: '1.5px solid #4a4738', borderRadius: 8, background: '#252318',
+                  padding: '10px 14px', fontSize: 14, color: '#c8c4a0', outline: 'none', boxSizing: 'border-box',
                 }}
               />
             </div>
 
             {/* Travel Date */}
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#5a6b4e', display: 'block', marginBottom: 6 }}>Travel Date</label>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#9a9478', display: 'block', marginBottom: 6 }}>Travel Date</label>
               <input
                 type="date"
                 value={travelDate}
                 min={todayStr()}
                 onChange={(e) => setTravelDate(e.target.value)}
                 style={{
-                  width: '100%', border: '1.5px solid #d4cfbf', borderRadius: 8, background: '#fafaf7',
-                  padding: '10px 14px', fontSize: 14, color: '#5a6b4e', outline: 'none', boxSizing: 'border-box',
+                  width: '100%', border: '1.5px solid #4a4738', borderRadius: 8, background: '#252318',
+                  padding: '10px 14px', fontSize: 14, color: '#c8c4a0', outline: 'none', boxSizing: 'border-box',
                 }}
               />
             </div>
 
             {/* Number of Days */}
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#5a6b4e', display: 'block', marginBottom: 6 }}>Number of Days</label>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#9a9478', display: 'block', marginBottom: 6 }}>Number of Days</label>
               <input
                 type="number"
                 min={1}
@@ -187,15 +187,15 @@ export default function TripSetupPage() {
                 value={numDays}
                 onChange={(e) => setNumDays(e.target.value)}
                 style={{
-                  width: '100%', border: '1.5px solid #d4cfbf', borderRadius: 8, background: '#fafaf7',
-                  padding: '10px 14px', fontSize: 14, color: '#5a6b4e', outline: 'none', boxSizing: 'border-box',
+                  width: '100%', border: '1.5px solid #4a4738', borderRadius: 8, background: '#252318',
+                  padding: '10px 14px', fontSize: 14, color: '#c8c4a0', outline: 'none', boxSizing: 'border-box',
                 }}
               />
             </div>
 
             {/* Daily Hours */}
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#5a6b4e', display: 'block', marginBottom: 6 }}>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#9a9478', display: 'block', marginBottom: 6 }}>
                 Daily Hours ({dailyHours} hours/day)
               </label>
               <input
@@ -206,7 +206,7 @@ export default function TripSetupPage() {
                 onChange={(e) => setDailyHours(parseInt(e.target.value, 10))}
                 style={{ width: '100%', accentColor: '#4a6741' }}
               />
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: '#8a9e7c' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: '#7a7558' }}>
                 <span>4 hrs</span>
                 <span>16 hrs</span>
               </div>
@@ -214,7 +214,7 @@ export default function TripSetupPage() {
 
             {/* Travel Style */}
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#5a6b4e', display: 'block', marginBottom: 8 }}>Travel Style</label>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#9a9478', display: 'block', marginBottom: 8 }}>Travel Style</label>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 8 }}>
                 {travelStyles.map((s) => {
                   const selected = travelStyle === s.id;
@@ -231,11 +231,11 @@ export default function TripSetupPage() {
                         padding: '10px 4px',
                         borderRadius: 8,
                         cursor: 'pointer',
-                        border: selected ? '2px solid #4a6741' : '1px solid #e0ddd6',
-                        background: selected ? '#eef4e8' : '#fff',
+                        border: selected ? '2px solid #4a6741' : '1px solid #3e3b2a',
+                        background: selected ? '#2a2820' : '#3e3b2a',
                         fontSize: 11,
                         fontWeight: selected ? 600 : 400,
-                        color: selected ? '#4a6741' : '#5a6b4e',
+                        color: selected ? '#8aab7a' : '#9a9478',
                       }}
                     >
                       <span style={{ fontSize: 20 }}>{s.emoji}</span>
@@ -248,7 +248,7 @@ export default function TripSetupPage() {
 
             {/* Stop Duration */}
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#5a6b4e', display: 'block', marginBottom: 6 }}>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#9a9478', display: 'block', marginBottom: 6 }}>
                 Minutes per stop
               </label>
               <input
@@ -258,8 +258,8 @@ export default function TripSetupPage() {
                 value={stopDuration}
                 onChange={(e) => setStopDuration(e.target.value)}
                 style={{
-                  width: '100%', border: '1.5px solid #d4cfbf', borderRadius: 8, background: '#fafaf7',
-                  padding: '10px 14px', fontSize: 14, color: '#5a6b4e', outline: 'none', boxSizing: 'border-box',
+                  width: '100%', border: '1.5px solid #4a4738', borderRadius: 8, background: '#252318',
+                  padding: '10px 14px', fontSize: 14, color: '#c8c4a0', outline: 'none', boxSizing: 'border-box',
                 }}
               />
             </div>
@@ -287,8 +287,8 @@ export default function TripSetupPage() {
               style={{
                 width: '100%',
                 height: 48,
-                background: loading ? '#8a9e7c' : '#4a6741',
-                color: '#fff',
+                background: loading ? '#7a7558' : '#4a6741',
+                color: '#c8dbb8',
                 border: 'none',
                 borderRadius: 8,
                 fontSize: 15,
@@ -306,7 +306,7 @@ export default function TripSetupPage() {
         <div
           style={{
             flex: 1,
-            background: '#e8f0e0',
+            background: '#2a2820',
             display: 'flex',
             flexDirection: 'column',
             position: 'relative',
@@ -320,7 +320,7 @@ export default function TripSetupPage() {
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#8a9e7c',
+                color: '#7a7558',
               }}
             >
               <div style={{ fontSize: 64, marginBottom: 16 }}>🗺️</div>
@@ -331,19 +331,19 @@ export default function TripSetupPage() {
               {/* Route summary bar */}
               <div
                 style={{
-                  background: 'rgba(255,255,255,0.95)',
+                  background: '#252318',
                   padding: '12px 20px',
                   display: 'flex',
                   alignItems: 'center',
                   gap: 16,
                   fontSize: 13,
-                  color: '#5a6b4e',
-                  borderBottom: '1px solid #e0ddd6',
+                  color: '#9a9478',
+                  borderBottom: '1px solid #3e3b2a',
                 }}
               >
-                <span style={{ fontWeight: 600, color: '#2d4a24' }}>{trip.origin}</span>
-                <span style={{ color: '#8a9e7c' }}>&rarr;</span>
-                <span style={{ fontWeight: 600, color: '#2d4a24' }}>{trip.destination}</span>
+<span style={{ fontWeight: 600, color: '#c8c4a0' }}>{trip.origin}</span>
+                <span style={{ color: '#7a7558' }}>&rarr;</span>
+                <span style={{ fontWeight: 600, color: '#c8c4a0' }}>{trip.destination}</span>
                 <span style={{ marginLeft: 'auto', display: 'flex', gap: 16 }}>
                   <span>Total: <strong>{trip.total_distance_km}</strong> km</span>
                   <span>Drive: <strong>{trip.total_duration_minutes}</strong> min</span>
@@ -403,7 +403,7 @@ export default function TripSetupPage() {
                     left: '50%',
                     transform: 'translateX(-50%)',
                     background: '#4a6741',
-                    color: '#fff',
+                    color: '#c8dbb8',
                     padding: '10px 20px',
                     borderRadius: 8,
                     fontSize: 14,
@@ -423,12 +423,12 @@ export default function TripSetupPage() {
       {/* Footer copyright */}
       <div
         style={{
-          borderTop: '1px solid #e0ddd6',
-          background: '#fff',
+          borderTop: '1px solid #3e3b2a',
+          background: '#1e1c14',
           padding: '16px 24px',
           textAlign: 'center',
           fontSize: 13,
-          color: '#8a9e7c',
+          color: '#7a7558',
         }}
       >
         &copy; 2026 Via-Trip. All rights reserved.
