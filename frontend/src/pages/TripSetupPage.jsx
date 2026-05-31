@@ -1,201 +1,429 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState, useCallback, useMemo } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { GoogleMap, LoadScriptNext, Marker, Polyline } from '@react-google-maps/api';
 import { useAuth } from '../hooks/useAuth';
 import { trips as tripsApi } from '../services/api';
+import { decodePolyline } from '../utils/polyline';
+import Navbar from '../components/Navbar';
 
-const STYLES = ['chill', 'foodie', 'photographer', 'adventure', 'budget'];
+const travelStyles = [
+  { id: 'chill', emoji: '😌', label: 'Chill' },
+  { id: 'foodie', emoji: '🍜', label: 'Foodie' },
+  { id: 'photographer', emoji: '📷', label: 'Photographer' },
+  { id: 'adventure', emoji: '🏔', label: 'Adventure' },
+  { id: 'budget', emoji: '💰', label: 'Budget' },
+];
+
+function todayStr() {
+  const d = new Date();
+  return d.toISOString().split('T')[0];
+}
 
 export default function TripSetupPage() {
-  const { token } = useAuth();
+  const { isAuthenticated, user, token, logout } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
-  const [form, setForm] = useState({
-    name: '',
-    origin: '',
-    destination: '',
-    travel_date: '',
-    number_of_days: 1,
-    daily_hours: 10,
-    travel_style: 'chill',
-    estimated_stop_duration: 30,
-  });
-  const [error, setError] = useState('');
+  const [name, setName] = useState('');
+  const [origin, setOrigin] = useState(searchParams.get('origin') || '');
+  const [dest, setDest] = useState(searchParams.get('destination') || '');
+  const [travelDate, setTravelDate] = useState('');
+  const [numDays, setNumDays] = useState(1);
+  const [dailyHours, setDailyHours] = useState(10);
+  const [travelStyle, setTravelStyle] = useState('chill');
+  const [stopDuration, setStopDuration] = useState(30);
+
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [errorType, setErrorType] = useState(''); // 'validation' | 'distance' | 'server'
 
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  }
+  const [trip, setTrip] = useState(null); // populated on success
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    setError('');
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      setError('');
+      setErrorType('');
+      setTrip(null);
 
-    if (!form.name || !form.origin || !form.destination || !form.travel_date) {
-      setError('Name, origin, destination, and travel date are required');
-      return;
-    }
+      if (!origin.trim()) { setError('Origin is required.'); setErrorType('validation'); return; }
+      if (!dest.trim()) { setError('Destination is required.'); setErrorType('validation'); return; }
+      if (!travelDate) { setError('Travel date is required.'); setErrorType('validation'); return; }
+      if (travelDate < todayStr()) { setError('Travel date must be today or later.'); setErrorType('validation'); return; }
+      if (!numDays || numDays < 1) { setError('Number of days must be at least 1.'); setErrorType('validation'); return; }
 
-    setLoading(true);
-    try {
-      const data = await tripsApi.create(
-        {
-          ...form,
-          number_of_days: parseInt(form.number_of_days, 10),
-          daily_hours: parseInt(form.daily_hours, 10),
-          estimated_stop_duration: parseInt(form.estimated_stop_duration, 10),
-        },
-        token
-      );
-      navigate(`/trips/${data.trip.trip_id}`, { replace: true });
-    } catch (err) {
-      setError(err.data?.error || err.data?.details?.[0] || err.message || 'Failed to create trip');
-    } finally {
-      setLoading(false);
-    }
-  }
+      setLoading(true);
+      try {
+        const data = await tripsApi.create(
+          {
+            name: name.trim() || `Trip to ${dest.trim()}`,
+            origin: origin.trim(),
+            destination: dest.trim(),
+            travel_date: travelDate,
+            number_of_days: parseInt(numDays, 10),
+            daily_hours: parseInt(dailyHours, 10),
+            travel_style: travelStyle,
+            estimated_stop_duration: parseInt(stopDuration, 10),
+          },
+          token
+        );
+        setTrip(data.trip);
+      } catch (err) {
+        if (err.status === 400) {
+          setError(err.data?.error || 'Route exceeds 300 km. Please choose closer destinations.');
+          setErrorType('distance');
+        } else if (err.status === 502) {
+          setError('Could not calculate route. Please try again.');
+          setErrorType('server');
+        } else {
+          setError(err.data?.error || err.message || 'Failed to create trip.');
+          setErrorType('server');
+        }
+      } finally {
+        setLoading(false);
+      }
+    },
+    [name, origin, dest, travelDate, numDays, dailyHours, travelStyle, stopDuration, token]
+  );
+
+  const polylinePath = useMemo(
+    () => (trip?.route_polyline ? decodePolyline(trip.route_polyline) : []),
+    [trip?.route_polyline]
+  );
 
   return (
-    <div className="max-w-lg mx-auto mt-8 p-6 bg-white rounded shadow">
-      <h1 className="text-2xl font-bold mb-6">Plan a New Trip</h1>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <Navbar isLoggedIn={isAuthenticated} userName={user?.name} onLogout={logout} />
 
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-sm">
-          {error}
-        </div>
-      )}
+      <div style={{ display: 'flex', flex: 1 }}>
+        {/* Left column — Form */}
+        <div
+          style={{
+            width: 420,
+            flexShrink: 0,
+            background: '#2a2820',
+            padding: 32,
+            borderRight: '1px solid #3e3b2a',
+            overflowY: 'auto',
+          }}
+        >
+          <a
+            href="/trips"
+            style={{ fontSize: 13, color: '#8aab7a', fontWeight: 500, textDecoration: 'none', display: 'inline-block', marginBottom: 20 }}
+          >
+            &larr; My Trips
+          </a>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium mb-1">Trip Name</label>
-          <input
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-            placeholder="e.g. Pacific Coast Highway"
-            autoFocus
-          />
-        </div>
+          <h2 style={{ fontSize: 24, fontWeight: 700, color: '#c8c4a0', marginBottom: 4 }}>Plan Your Trip</h2>
+          <p style={{ fontSize: 14, color: '#8a8468', marginBottom: 24 }}>
+            Fill in the details below to start your road trip.
+          </p>
 
-        <div>
-          <label className="block text-sm font-medium mb-1">Origin</label>
-          <input
-            name="origin"
-            value={form.origin}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-            placeholder="e.g. Los Angeles, CA"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-1">Destination</label>
-          <input
-            name="destination"
-            value={form.destination}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-            placeholder="e.g. San Francisco, CA"
-          />
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Travel Date</label>
-            <input
-              type="date"
-              name="travel_date"
-              value={form.travel_date}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Number of Days</label>
-            <input
-              type="number"
-              name="number_of_days"
-              min="1"
-              value={form.number_of_days}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-            />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              Daily Hours ({form.daily_hours}h)
-            </label>
-            <input
-              type="range"
-              name="daily_hours"
-              min="4"
-              max="16"
-              value={form.daily_hours}
-              onChange={handleChange}
-              className="w-full"
-            />
-            <div className="flex justify-between text-xs text-gray-400">
-              <span>4h</span>
-              <span>16h</span>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {/* Trip Name */}
+            <div>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#a8a080', display: 'block', marginBottom: 6 }}>Trip Name</label>
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="e.g. Chiang Mai to Pai"
+                style={{
+                  width: '100%', border: '1.5px solid #4a4738', borderRadius: 8, background: '#252318',
+                  padding: '10px 14px', fontSize: 14, color: '#c8c4a0', outline: 'none', boxSizing: 'border-box',
+                }}
+              />
             </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Travel Style</label>
-            <select
-              name="travel_style"
-              value={form.travel_style}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
+
+            {/* Origin */}
+            <div>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#a8a080', display: 'block', marginBottom: 6 }}>Origin</label>
+              <input
+                value={origin}
+                onChange={(e) => setOrigin(e.target.value)}
+                placeholder="Where are you starting?"
+                style={{
+                  width: '100%', border: '1.5px solid #4a4738', borderRadius: 8, background: '#252318',
+                  padding: '10px 14px', fontSize: 14, color: '#c8c4a0', outline: 'none', boxSizing: 'border-box',
+                }}
+              />
+            </div>
+
+            {/* Destination */}
+            <div>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#a8a080', display: 'block', marginBottom: 6 }}>Destination</label>
+              <input
+                value={dest}
+                onChange={(e) => setDest(e.target.value)}
+                placeholder="Where are you going?"
+                style={{
+                  width: '100%', border: '1.5px solid #4a4738', borderRadius: 8, background: '#252318',
+                  padding: '10px 14px', fontSize: 14, color: '#c8c4a0', outline: 'none', boxSizing: 'border-box',
+                }}
+              />
+            </div>
+
+            {/* Travel Date */}
+            <div>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#a8a080', display: 'block', marginBottom: 6 }}>Travel Date</label>
+              <input
+                type="date"
+                value={travelDate}
+                min={todayStr()}
+                onChange={(e) => setTravelDate(e.target.value)}
+                style={{
+                  width: '100%', border: '1.5px solid #4a4738', borderRadius: 8, background: '#252318',
+                  padding: '10px 14px', fontSize: 14, color: '#c8c4a0', outline: 'none', boxSizing: 'border-box',
+                }}
+              />
+            </div>
+
+            {/* Number of Days */}
+            <div>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#a8a080', display: 'block', marginBottom: 6 }}>Number of Days</label>
+              <input
+                type="number"
+                min={1}
+                max={30}
+                value={numDays}
+                onChange={(e) => setNumDays(e.target.value)}
+                style={{
+                  width: '100%', border: '1.5px solid #4a4738', borderRadius: 8, background: '#252318',
+                  padding: '10px 14px', fontSize: 14, color: '#c8c4a0', outline: 'none', boxSizing: 'border-box',
+                }}
+              />
+            </div>
+
+            {/* Daily Hours */}
+            <div>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#a8a080', display: 'block', marginBottom: 6 }}>
+                Daily Hours ({dailyHours} hours/day)
+              </label>
+              <input
+                type="range"
+                min={4}
+                max={16}
+                value={dailyHours}
+                onChange={(e) => setDailyHours(parseInt(e.target.value, 10))}
+                style={{ width: '100%', accentColor: '#4a6741' }}
+              />
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: '#8a8468' }}>
+                <span>4 hrs</span>
+                <span>16 hrs</span>
+              </div>
+            </div>
+
+            {/* Travel Style */}
+            <div>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#a8a080', display: 'block', marginBottom: 8 }}>Travel Style</label>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 8 }}>
+                {travelStyles.map((s) => {
+                  const selected = travelStyle === s.id;
+                  return (
+                    <button
+                      key={s.id}
+                      type="button"
+                      onClick={() => setTravelStyle(s.id)}
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: 4,
+                        padding: '10px 4px',
+                        borderRadius: 8,
+                        cursor: 'pointer',
+                        border: selected ? '2px solid #4a6741' : '1px solid #3e3b2a',
+                        background: selected ? '#2a2820' : '#3e3b2a',
+                        fontSize: 11,
+                        fontWeight: selected ? 600 : 400,
+                        color: selected ? '#8aab7a' : '#a8a080',
+                      }}
+                    >
+                      <span style={{ fontSize: 20 }}>{s.emoji}</span>
+                      <span>{s.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Stop Duration */}
+            <div>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#a8a080', display: 'block', marginBottom: 6 }}>
+                Minutes per stop
+              </label>
+              <input
+                type="number"
+                min={15}
+                max={120}
+                value={stopDuration}
+                onChange={(e) => setStopDuration(e.target.value)}
+                style={{
+                  width: '100%', border: '1.5px solid #4a4738', borderRadius: 8, background: '#252318',
+                  padding: '10px 14px', fontSize: 14, color: '#c8c4a0', outline: 'none', boxSizing: 'border-box',
+                }}
+              />
+            </div>
+
+            {/* Error banner */}
+            {error && (
+              <div
+                style={{
+                  background: errorType === 'distance' ? '#fde8e8' : '#fde8e8',
+                  border: '1px solid #f5c6c6',
+                  borderRadius: 8,
+                  padding: 12,
+                  fontSize: 13,
+                  color: '#c0392b',
+                }}
+              >
+                {error}
+              </div>
+            )}
+
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={loading}
+              style={{
+                width: '100%',
+                height: 48,
+                background: loading ? '#8a8468' : '#4a6741',
+                color: '#c8dbb8',
+                border: 'none',
+                borderRadius: 8,
+                fontSize: 15,
+                fontWeight: 600,
+                cursor: loading ? 'not-allowed' : 'pointer',
+                marginTop: 4,
+              }}
             >
-              {STYLES.map((s) => (
-                <option key={s} value={s}>
-                  {s.charAt(0).toUpperCase() + s.slice(1)}
-                </option>
-              ))}
-            </select>
-          </div>
+              {loading ? 'Calculating...' : '🗺️ Calculate Route'}
+            </button>
+          </form>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium mb-1">
-            Stop Duration ({form.estimated_stop_duration} min)
-          </label>
-          <input
-            type="range"
-            name="estimated_stop_duration"
-            min="5"
-            max="180"
-            step="5"
-            value={form.estimated_stop_duration}
-            onChange={handleChange}
-            className="w-full"
-          />
-          <div className="flex justify-between text-xs text-gray-400">
-            <span>5 min</span>
-            <span>180 min</span>
+        {/* Right column — Map */}
+        <div
+          style={{
+            flex: 1,
+            background: '#2a2820',
+            display: 'flex',
+            flexDirection: 'column',
+            position: 'relative',
+          }}
+        >
+          {/* Route summary bar - only when trip exists */}
+          {trip && (
+            <div
+              style={{
+                background: '#252318',
+                padding: '12px 20px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 16,
+                fontSize: 13,
+                color: '#a8a080',
+                borderBottom: '1px solid #3e3b2a',
+              }}
+            >
+<span style={{ fontWeight: 600, color: '#c8c4a0' }}>{trip.origin}</span>
+              <span style={{ color: '#8a8468' }}>&rarr;</span>
+              <span style={{ fontWeight: 600, color: '#c8c4a0' }}>{trip.destination}</span>
+              <span style={{ marginLeft: 'auto', display: 'flex', gap: 16 }}>
+                <span>Total: <strong>{trip.total_distance_km}</strong> km</span>
+                <span>Drive: <strong>{trip.total_duration_minutes}</strong> min</span>
+              </span>
+            </div>
+          )}
+
+          {/* Map - always visible */}
+          <div style={{ flex: 1, position: 'relative' }}>
+            <LoadScriptNext
+              googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
+            >
+              <GoogleMap
+                mapContainerStyle={{ width: '100%', height: '100%' }}
+                center={
+                  trip?.origin_coordinates
+                    ? { lat: trip.origin_coordinates.latitude, lng: trip.origin_coordinates.longitude }
+                    : { lat: 13.736717, lng: 100.523186 }
+                }
+                zoom={trip ? 8 : 6}
+                options={{
+                  mapTypeControl: false,
+                  streetViewControl: false,
+                  fullscreenControl: false,
+                  zoomControl: true,
+                  gestureHandling: 'greedy',
+                }}
+              >
+                {trip?.origin_coordinates && (
+                  <Marker
+                    position={{ lat: trip.origin_coordinates.latitude, lng: trip.origin_coordinates.longitude }}
+                    label="O"
+                  />
+                )}
+                {trip?.dest_coordinates && (
+                  <Marker
+                    position={{ lat: trip.dest_coordinates.latitude, lng: trip.dest_coordinates.longitude }}
+                    label="D"
+                  />
+                )}
+                <Polyline
+                  key={trip?.route_polyline || 'empty'}
+                  path={polylinePath}
+                  options={{
+                    strokeColor: '#2563eb',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 4,
+                  }}
+                />
+              </GoogleMap>
+            </LoadScriptNext>
+
+            {/* Success overlay - only when trip exists */}
+            {trip && (
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: 24,
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  background: '#4a6741',
+                  color: '#c8dbb8',
+                  padding: '10px 20px',
+                  borderRadius: 8,
+                  fontSize: 14,
+                  fontWeight: 500,
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                  whiteSpace: 'nowrap',
+                  cursor: 'pointer',
+                }}
+                onClick={() => navigate(`/trips/${trip.trip_id}`)}
+                onKeyDown={(e) => e.key === 'Enter' && navigate(`/trips/${trip.trip_id}`)}
+                role="button"
+                tabIndex={0}
+              >
+                Route calculated! {trip.total_distance_km} km &mdash; let&apos;s explore.
+              </div>
+            )}
           </div>
         </div>
+      </div>
 
-        <div className="flex gap-3 pt-2">
-          <button
-            type="submit"
-            disabled={loading}
-            className="bg-blue-600 text-white px-6 py-2 rounded text-sm hover:bg-blue-700 disabled:opacity-50"
-          >
-            {loading ? 'Planning...' : 'Plan Route'}
-          </button>
-          <Link
-            to="/trips"
-            className="text-gray-600 px-4 py-2 rounded text-sm border border-gray-300 hover:bg-gray-50"
-          >
-            Cancel
-          </Link>
-        </div>
-      </form>
+      {/* Footer copyright */}
+      <div
+        style={{
+          borderTop: '1px solid #3e3b2a',
+          background: '#1e1c14',
+          padding: '16px 24px',
+          textAlign: 'center',
+          fontSize: 13,
+          color: '#8a8468',
+        }}
+      >
+        &copy; 2026 Via-Trip. All rights reserved.
+      </div>
     </div>
   );
 }

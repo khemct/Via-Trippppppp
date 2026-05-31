@@ -12,7 +12,16 @@ async function request(method, path, body = null, token = null) {
     body: body ? JSON.stringify(body) : undefined,
   });
 
-  const data = await res.json();
+  let data;
+  try {
+    data = await res.json();
+  } catch {
+    const text = await res.text().catch(() => '');
+    const err = new Error(text || `Request failed (${res.status})`);
+    err.status = res.status;
+    err.data = null;
+    throw err;
+  }
 
   if (!res.ok) {
     const err = new Error(data.error || 'Request failed');
