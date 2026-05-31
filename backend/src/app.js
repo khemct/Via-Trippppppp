@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 
 const authRoutes = require('./routes/auth');
+const waypointRoutes = require('./routes/waypoints');
+const recommendationRoutes = require('./routes/recommendations');
 const tripRoutes = require('./routes/trips');
 
 const app = express();
@@ -14,6 +16,12 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+
+const { pool } = require('./config/database');
+app.locals.pool = pool;
+
+app.use('/api/trips', waypointRoutes);
+app.use('/api/trips', recommendationRoutes);
 app.use('/api/trips', tripRoutes);
 
 module.exports = app;

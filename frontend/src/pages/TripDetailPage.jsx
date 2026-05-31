@@ -1,9 +1,8 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { GoogleMap, LoadScriptNext } from '@react-google-maps/api';
 import { useAuth } from '../hooks/useAuth';
-import { trips as tripsApi } from '../services/api';
-import { decodePolyline } from '../utils/polyline';
+import { trips as tripsApi, itinerary as itineraryApi } from '../services/api';
+import RouteMap from '../components/RouteMap';
 
 const STYLES = ['chill', 'foodie', 'photographer', 'adventure', 'budget'];
 
@@ -253,38 +252,6 @@ export default function TripDetailPage() {
       .finally(() => setLoading(false));
   }, [tripId, token]);
 
-  const [map, setMap] = useState(null);
-  const onMapLoad = useCallback((m) => setMap(m), []);
-
-  useEffect(() => {
-    if (!map || !trip) return;
-    const overlays = [];
-    if (trip.origin_coordinates) {
-      overlays.push(new window.google.maps.Marker({
-        position: { lat: trip.origin_coordinates.latitude, lng: trip.origin_coordinates.longitude },
-        map,
-        label: 'O',
-      }));
-    }
-    if (trip.dest_coordinates) {
-      overlays.push(new window.google.maps.Marker({
-        position: { lat: trip.dest_coordinates.latitude, lng: trip.dest_coordinates.longitude },
-        map,
-        label: 'D',
-      }));
-    }
-    if (trip.route_polyline) {
-      overlays.push(new window.google.maps.Polyline({
-        path: decodePolyline(trip.route_polyline),
-        strokeColor: '#2563eb',
-        strokeOpacity: 0.8,
-        strokeWeight: 4,
-        map,
-      }));
-    }
-    return () => overlays.forEach((o) => o.setMap(null));
-  }, [map, trip]);
-
   function isOwner() {
     return trip && user && trip.user_id === user.id;
   }
@@ -314,6 +281,7 @@ export default function TripDetailPage() {
     }
 
     setSaving(true);
+    const styleChanged = editForm.travel_style !== trip.travel_style;
     try {
       const data = await tripsApi.update(
         tripId,
@@ -327,6 +295,10 @@ export default function TripDetailPage() {
       );
       setTrip(data.trip);
       setEditing(false);
+
+      if (styleChanged) {
+        itineraryApi.reseed(tripId, token).catch(() => {});
+      }
     } catch (err) {
       setSaveError(err.data?.error || err.data?.details?.[0] || err.message || 'Failed to save');
     } finally {
@@ -358,6 +330,8 @@ export default function TripDetailPage() {
     }
   }
 
+  if (loading) return <LoadingState />;
+
   if (error) {
     return (
       <div className="w-full max-w-lg mx-auto mt-12 p-6">
@@ -379,6 +353,8 @@ export default function TripDetailPage() {
       </div>
     );
   }
+
+  if (!trip) return null;
 
   // ---- EDIT MODE ----
   if (editing) {
@@ -559,7 +535,7 @@ export default function TripDetailPage() {
           >
             &larr; Back to My Trips
           </Link>
-          {trip && isOwner() && (
+          {isOwner() && (
             <button
               onClick={() => setEditing(true)}
               className="inline-flex items-center gap-1.5 text-sm font-medium text-[#8aab7a] border border-[#4a4738] rounded-lg px-3.5 py-2 hover:bg-[#252318] transition-colors"
@@ -573,134 +549,101 @@ export default function TripDetailPage() {
         <div className="flex gap-6 flex-1 min-h-0">
           {/* Left: Info */}
           <div className="w-[480px] shrink-0 bg-[#2a2820] border border-[#4a4738] rounded-lg p-6 overflow-y-auto">
-          {trip ? (
-            <>
-              <div className="flex items-start justify-between mb-6">
-                <h1 className="text-xl font-bold text-[#c8c4a0] leading-tight">{trip.name}</h1>
-                <span
-                  className={`shrink-0 ml-3 text-xs font-medium px-2.5 py-0.5 rounded-full ${
-                    trip.status === 'saved'
-                      ? 'bg-[#3e3b2a] text-[#8aab7a]'
-                      : 'bg-[#252318] text-[#8a8468]'
-                  }`}
-                >
-                  {trip.status}
-                </span>
-              </div>
+          <div className="flex items-start justify-between mb-6">
+            <h1 className="text-xl font-bold text-[#c8c4a0] leading-tight">{trip.name}</h1>
+            <span
+              className={`shrink-0 ml-3 text-xs font-medium px-2.5 py-0.5 rounded-full ${
+                trip.status === 'saved'
+                  ? 'bg-[#3e3b2a] text-[#8aab7a]'
+                  : 'bg-[#252318] text-[#8a8468]'
+              }`}
+            >
+              {trip.status}
+            </span>
+          </div>
 
-              <div className="space-y-6">
-                <div>
-                  <SectionHeading>Route</SectionHeading>
-                  <div className="space-y-3">
-                    <InfoRow icon={MapPinIcon} label="Origin" value={trip.origin} />
-                    <InfoRow icon={FlagIcon} label="Destination" value={trip.destination} />
-                    <InfoRow icon={RulerIcon} label="Total Distance" value={`${trip.total_distance_km} km`} />
-                    <InfoRow icon={ClockIcon} label="Driving Duration" value={`${trip.total_duration_minutes} min`} />
-                  </div>
-                </div>
-
-                <div className="border-t border-[#3e3b2a]" />
-
-                <div>
-                  <SectionHeading>Schedule</SectionHeading>
-                  <div className="space-y-3">
-                    <InfoRow icon={CalendarIcon} label="Travel Date" value={trip.travel_date} />
-                    <InfoRow icon={CalendarDaysIcon} label="Number of Days" value={trip.number_of_days} />
-                    <InfoRow icon={ClockIcon} label="Daily Hours" value={`${trip.daily_hours}h`} />
-                  </div>
-                </div>
-
-                <div className="border-t border-[#3e3b2a]" />
-
-                <div>
-                  <SectionHeading>Preferences</SectionHeading>
-                  <div className="space-y-3">
-                    <InfoRow icon={SparklesIcon} label="Travel Style" value={trip.travel_style} capitalize />
-                    <InfoRow icon={CoffeeIcon} label="Stop Duration" value={`${trip.estimated_stop_duration} min`} />
-                  </div>
-                </div>
-
-                <div className="border-t border-[#3e3b2a]" />
-
-                <div>
-                  <SectionHeading>Status</SectionHeading>
-                  <FeasibilityBadge status={trip.feasibility_status} />
-                </div>
-              </div>
-
-              {/* Actions */}
-              <div className="mt-6 pt-4 border-t border-[#3e3b2a] space-y-2.5">
-                <button
-                  disabled
-                  title="Coming in next update"
-                  className="w-full inline-flex items-center justify-center gap-2 bg-[#4a6741] text-white rounded-lg px-4 py-2.5 text-sm font-medium opacity-60 cursor-not-allowed"
-                >
-                  <RouteIcon />
-                  Plan Itinerary
-                </button>
-                {isOwner() && (
-                  <button
-                    onClick={handleDelete}
-                    className="w-full inline-flex items-center justify-center gap-2 border border-red-300 text-red-600 rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-red-50 transition-colors"
-                  >
-                    <TrashIcon />
-                    Delete Trip
-                  </button>
-                )}
-              </div>
-            </>
-          ) : (
-            <div className="animate-pulse space-y-4">
-              <Skeleton className="h-8 w-3/4" />
-              <Skeleton className="h-4 w-1/4" />
-              <div className="pt-4 space-y-3">
-                <Skeleton className="h-3 w-1/6" />
-                <Skeleton className="h-5 w-full" />
-                <Skeleton className="h-5 w-full" />
-                <Skeleton className="h-5 w-3/4" />
-                <Skeleton className="h-5 w-2/3" />
-              </div>
-              <div className="pt-4 space-y-3">
-                <Skeleton className="h-3 w-1/6" />
-                <Skeleton className="h-5 w-full" />
-                <Skeleton className="h-5 w-1/2" />
-                <Skeleton className="h-5 w-2/3" />
-              </div>
-              <div className="pt-4 space-y-3">
-                <Skeleton className="h-3 w-1/6" />
-                <Skeleton className="h-5 w-1/2" />
-                <Skeleton className="h-5 w-1/3" />
+          <div className="space-y-6">
+            <div>
+              <SectionHeading>Route</SectionHeading>
+              <div className="space-y-3">
+                <InfoRow icon={MapPinIcon} label="Origin" value={trip.origin} />
+                <InfoRow icon={FlagIcon} label="Destination" value={trip.destination} />
+                <InfoRow icon={RulerIcon} label="Total Distance" value={`${trip.total_distance_km} km`} />
+                <InfoRow icon={ClockIcon} label="Driving Duration" value={`${trip.total_duration_minutes} min`} />
               </div>
             </div>
-          )}
+
+            <div className="border-t border-[#3e3b2a]" />
+
+            <div>
+              <SectionHeading>Schedule</SectionHeading>
+              <div className="space-y-3">
+                <InfoRow icon={CalendarIcon} label="Travel Date" value={trip.travel_date} />
+                <InfoRow icon={CalendarDaysIcon} label="Number of Days" value={trip.number_of_days} />
+                <InfoRow icon={ClockIcon} label="Daily Hours" value={`${trip.daily_hours}h`} />
+              </div>
+            </div>
+
+            <div className="border-t border-[#3e3b2a]" />
+
+            <div>
+              <SectionHeading>Preferences</SectionHeading>
+              <div className="space-y-3">
+                <InfoRow icon={SparklesIcon} label="Travel Style" value={trip.travel_style} capitalize />
+                <InfoRow icon={CoffeeIcon} label="Stop Duration" value={`${trip.estimated_stop_duration} min`} />
+              </div>
+            </div>
+
+            <div className="border-t border-[#3e3b2a]" />
+
+            <div>
+              <SectionHeading>Status</SectionHeading>
+              <FeasibilityBadge status={trip.feasibility_status} />
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="mt-6 pt-4 border-t border-[#3e3b2a] space-y-2.5">
+            <Link
+              to={`/trips/${tripId}/itinerary`}
+              className="w-full inline-flex items-center justify-center gap-2 bg-[#4a6741] text-[#c8dbb8] rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-[#3d5a35] transition-colors"
+            >
+              <RouteIcon />
+              Plan Itinerary
+            </Link>
+            {isOwner() && (
+              <button
+                onClick={handleDelete}
+                className="w-full inline-flex items-center justify-center gap-2 border border-red-300 text-red-600 rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-red-50 transition-colors"
+              >
+                <TrashIcon />
+                Delete Trip
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Right: Map */}
-        <div className="flex-1 min-w-0 h-full flex flex-col">
-          <div className="flex-1 bg-[#2a2820] border border-[#4a4738] rounded-lg overflow-hidden" style={{ position: 'relative' }}>
-            <LoadScriptNext googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
-              <GoogleMap
-                key={trip?.trip_id || 'loading'}
-                mapContainerStyle={{ width: '100%', height: '100%' }}
-                center={
-                  trip?.origin_coordinates
+        {trip.route_polyline && (
+          <div className="flex-1 min-w-0 h-full flex flex-col">
+            <div className="flex-1 bg-[#2a2820] border border-[#4a4738] rounded-lg overflow-hidden">
+              <RouteMap
+                origin={
+                  trip.origin_coordinates
                     ? { lat: trip.origin_coordinates.latitude, lng: trip.origin_coordinates.longitude }
-                    : { lat: 13.736717, lng: 100.523186 }
+                    : null
                 }
-                zoom={trip ? 8 : 6}
-                onLoad={onMapLoad}
-                options={{
-                  mapTypeControl: false,
-                  streetViewControl: false,
-                  fullscreenControl: false,
-                  zoomControl: true,
-                  gestureHandling: 'greedy',
-                }}
-              >
-              </GoogleMap>
-            </LoadScriptNext>
+                destination={
+                  trip.dest_coordinates
+                    ? { lat: trip.dest_coordinates.latitude, lng: trip.dest_coordinates.longitude }
+                    : null
+                }
+                routePolyline={trip.route_polyline}
+                height="100%"
+              />
+            </div>
           </div>
-        </div>
+        )}
         </div>
       </div>
     </div>

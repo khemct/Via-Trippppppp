@@ -9,7 +9,31 @@ const defaultOptions = {
   fullscreenControl: false,
 };
 
-export default function RouteMap({ origin, destination, routePolyline, height }) {
+function waypointColor(dist) {
+  if (dist < 1000) return '#4a6741';
+  if (dist < 3000) return '#d97706';
+  return '#dc2626';
+}
+
+function WaypointMarker({ wp }) {
+  const col = waypointColor(wp.distance_from_route);
+  return (
+    <Marker
+      position={{ lat: wp.lat, lng: wp.lng }}
+      icon={{
+        path: window.google.maps.SymbolPath.CIRCLE,
+        scale: 8,
+        fillColor: col,
+        fillOpacity: 1,
+        strokeColor: '#fff',
+        strokeWeight: 2,
+      }}
+      title={wp.name}
+    />
+  );
+}
+
+export default function RouteMap({ origin, destination, routePolyline, waypoints, height }) {
   const path = routePolyline ? decodePolyline(routePolyline) : [];
 
   const center =
@@ -40,6 +64,9 @@ export default function RouteMap({ origin, destination, routePolyline, height })
             }}
           />
         )}
+        {waypoints && waypoints.map((wp) => (
+          <WaypointMarker key={wp.waypoint_id || wp.place_id} wp={wp} />
+        ))}
       </GoogleMap>
     </LoadScriptNext>
   );

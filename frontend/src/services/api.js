@@ -1,6 +1,6 @@
 const BASE_URL = '/api';
 
-async function request(method, path, body = null, token = null) {
+async function request(method, path, body = null, token = null, signal = null) {
   const headers = { 'Content-Type': 'application/json' };
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
@@ -10,21 +10,19 @@ async function request(method, path, body = null, token = null) {
     method,
     headers,
     body: body ? JSON.stringify(body) : undefined,
+    signal,
   });
 
+  const text = await res.text();
   let data;
   try {
-    data = await res.json();
+    data = JSON.parse(text);
   } catch {
-    const text = await res.text().catch(() => '');
-    const err = new Error(text || `Request failed (${res.status})`);
-    err.status = res.status;
-    err.data = null;
-    throw err;
+    data = text;
   }
 
   if (!res.ok) {
-    const err = new Error(data.error || 'Request failed');
+    const err = new Error(typeof data === 'string' ? data : data.error || 'Request failed');
     err.status = res.status;
     err.data = data;
     throw err;
@@ -60,4 +58,19 @@ export const trips = {
   update: (id, body, token) => request('PATCH', `/trips/${id}`, body, token),
 
   delete: (id, token) => request('DELETE', `/trips/${id}`, null, token),
+};
+
+export const itinerary = {
+  seed: (tripId, token) => request('POST', `/trips/${tripId}/recommendations/seed`, null, token),
+  reseed: (tripId, token) => request('POST', `/trips/${tripId}/recommendations/reseed`, null, token),
+  listRecommendations: (tripId, params, token) => {
+    const qs = params ? '?' + new URLSearchParams(params).toString() : '';
+    return request('GET', `/trips/${tripId}/recommendations${qs}`, null, token);
+  },
+  listWaypoints: (tripId, token) => request('GET', `/trips/${tripId}/waypoints`, null, token),
+  addWaypoint: (tripId, body, token) => request('POST', `/trips/${tripId}/waypoints`, body, token),
+  updateWaypoint: (tripId, waypointId, body, token, signal) => request('PATCH', `/trips/${tripId}/waypoints/${waypointId}`, body, token, signal),
+  deleteWaypoint: (tripId, waypointId, token) => request('DELETE', `/trips/${tripId}/waypoints/${waypointId}`, null, token),
+  reorderWaypoints: (tripId, body, token) => request('PUT', `/trips/${tripId}/waypoints/reorder`, body, token),
+  getFeasibility: (tripId, token) => request('GET', `/trips/${tripId}/feasibility`, null, token),
 };
