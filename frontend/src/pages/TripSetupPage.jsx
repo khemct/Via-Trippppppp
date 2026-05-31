@@ -115,14 +115,14 @@ export default function TripSetupPage() {
           </a>
 
           <h2 style={{ fontSize: 24, fontWeight: 700, color: '#c8c4a0', marginBottom: 4 }}>Plan Your Trip</h2>
-          <p style={{ fontSize: 14, color: '#7a7558', marginBottom: 24 }}>
+          <p style={{ fontSize: 14, color: '#8a8468', marginBottom: 24 }}>
             Fill in the details below to start your road trip.
           </p>
 
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             {/* Trip Name */}
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#9a9478', display: 'block', marginBottom: 6 }}>Trip Name</label>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#a8a080', display: 'block', marginBottom: 6 }}>Trip Name</label>
               <input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -136,7 +136,7 @@ export default function TripSetupPage() {
 
             {/* Origin */}
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#9a9478', display: 'block', marginBottom: 6 }}>Origin</label>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#a8a080', display: 'block', marginBottom: 6 }}>Origin</label>
               <input
                 value={origin}
                 onChange={(e) => setOrigin(e.target.value)}
@@ -150,7 +150,7 @@ export default function TripSetupPage() {
 
             {/* Destination */}
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#9a9478', display: 'block', marginBottom: 6 }}>Destination</label>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#a8a080', display: 'block', marginBottom: 6 }}>Destination</label>
               <input
                 value={dest}
                 onChange={(e) => setDest(e.target.value)}
@@ -164,7 +164,7 @@ export default function TripSetupPage() {
 
             {/* Travel Date */}
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#9a9478', display: 'block', marginBottom: 6 }}>Travel Date</label>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#a8a080', display: 'block', marginBottom: 6 }}>Travel Date</label>
               <input
                 type="date"
                 value={travelDate}
@@ -179,7 +179,7 @@ export default function TripSetupPage() {
 
             {/* Number of Days */}
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#9a9478', display: 'block', marginBottom: 6 }}>Number of Days</label>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#a8a080', display: 'block', marginBottom: 6 }}>Number of Days</label>
               <input
                 type="number"
                 min={1}
@@ -195,7 +195,7 @@ export default function TripSetupPage() {
 
             {/* Daily Hours */}
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#9a9478', display: 'block', marginBottom: 6 }}>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#a8a080', display: 'block', marginBottom: 6 }}>
                 Daily Hours ({dailyHours} hours/day)
               </label>
               <input
@@ -206,7 +206,7 @@ export default function TripSetupPage() {
                 onChange={(e) => setDailyHours(parseInt(e.target.value, 10))}
                 style={{ width: '100%', accentColor: '#4a6741' }}
               />
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: '#7a7558' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: '#8a8468' }}>
                 <span>4 hrs</span>
                 <span>16 hrs</span>
               </div>
@@ -214,7 +214,7 @@ export default function TripSetupPage() {
 
             {/* Travel Style */}
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#9a9478', display: 'block', marginBottom: 8 }}>Travel Style</label>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#a8a080', display: 'block', marginBottom: 8 }}>Travel Style</label>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 8 }}>
                 {travelStyles.map((s) => {
                   const selected = travelStyle === s.id;
@@ -235,7 +235,7 @@ export default function TripSetupPage() {
                         background: selected ? '#2a2820' : '#3e3b2a',
                         fontSize: 11,
                         fontWeight: selected ? 600 : 400,
-                        color: selected ? '#8aab7a' : '#9a9478',
+                        color: selected ? '#8aab7a' : '#a8a080',
                       }}
                     >
                       <span style={{ fontSize: 20 }}>{s.emoji}</span>
@@ -248,7 +248,7 @@ export default function TripSetupPage() {
 
             {/* Stop Duration */}
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#9a9478', display: 'block', marginBottom: 6 }}>
+              <label style={{ fontSize: 13, fontWeight: 500, color: '#a8a080', display: 'block', marginBottom: 6 }}>
                 Minutes per stop
               </label>
               <input
@@ -287,7 +287,7 @@ export default function TripSetupPage() {
               style={{
                 width: '100%',
                 height: 48,
-                background: loading ? '#7a7558' : '#4a6741',
+                background: loading ? '#8a8468' : '#4a6741',
                 color: '#c8dbb8',
                 border: 'none',
                 borderRadius: 8,
@@ -320,7 +320,7 @@ export default function TripSetupPage() {
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#7a7558',
+                color: '#8a8468',
               }}
             >
               <div style={{ fontSize: 64, marginBottom: 16 }}>🗺️</div>
@@ -337,12 +337,12 @@ export default function TripSetupPage() {
                   alignItems: 'center',
                   gap: 16,
                   fontSize: 13,
-                  color: '#9a9478',
+                  color: '#a8a080',
                   borderBottom: '1px solid #3e3b2a',
                 }}
               >
 <span style={{ fontWeight: 600, color: '#c8c4a0' }}>{trip.origin}</span>
-                <span style={{ color: '#7a7558' }}>&rarr;</span>
+                <span style={{ color: '#8a8468' }}>&rarr;</span>
                 <span style={{ fontWeight: 600, color: '#c8c4a0' }}>{trip.destination}</span>
                 <span style={{ marginLeft: 'auto', display: 'flex', gap: 16 }}>
                   <span>Total: <strong>{trip.total_distance_km}</strong> km</span>
@@ -428,7 +428,7 @@ export default function TripSetupPage() {
           padding: '16px 24px',
           textAlign: 'center',
           fontSize: 13,
-          color: '#7a7558',
+          color: '#8a8468',
         }}
       >
         &copy; 2026 Via-Trip. All rights reserved.

@@ -6,7 +6,7 @@ export default function RoleGuard({ roles, children }) {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#312f24]">
-        <p className="text-[#7a7558] text-sm">Loading...</p>
+        <p className="text-[#8a8468] text-sm">Loading...</p>
       </div>
     );
   }
@@ -16,7 +16,7 @@ export default function RoleGuard({ roles, children }) {
       <div className="min-h-screen flex items-center justify-center bg-[#312f24]">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-[#c8c4a0] mb-2">403 Forbidden</h1>
-          <p className="text-sm text-[#9a9478]">
+          <p className="text-sm text-[#a8a080]">
             You do not have permission to access this page.
           </p>
         </div>

@@ -131,11 +131,11 @@ function RouteIcon({ size = 16 }) {
 function InfoRow({ icon: Icon, label, value, capitalize }) {
   return (
     <div className="flex items-start gap-3">
-      <div className="mt-0.5 text-[#7a7558] shrink-0">
+      <div className="mt-0.5 text-[#8a8468] shrink-0">
         {Icon && <Icon />}
       </div>
       <div className="min-w-0">
-        <span className="text-xs text-[#7a7558]">{label}</span>
+        <span className="text-xs text-[#8a8468]">{label}</span>
         <p className={`text-sm font-medium text-[#c8c4a0] ${capitalize ? 'capitalize' : ''} truncate`}>
           {value}
         </p>
@@ -146,7 +146,7 @@ function InfoRow({ icon: Icon, label, value, capitalize }) {
 
 function SectionHeading({ children }) {
   return (
-    <h3 className="text-xs font-semibold text-[#7a7558] uppercase tracking-wider mb-3">
+    <h3 className="text-xs font-semibold text-[#8a8468] uppercase tracking-wider mb-3">
       {children}
     </h3>
   );
@@ -163,10 +163,10 @@ function FeasibilityBadge({ status }) {
     tight: '⚠',
     infeasible: '✕',
   };
-  const cls = styles[status] || 'bg-[#252318] text-[#7a7558]';
+  const cls = styles[status] || 'bg-[#252318] text-[#8a8468]';
   return (
     <div className="flex items-center gap-2">
-      <span className="text-xs text-[#7a7558]">Feasibility</span>
+      <span className="text-xs text-[#8a8468]">Feasibility</span>
       <span className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded ${cls}`}>
         <span>{icons[status] || '?'}</span>
         <span className="capitalize">{status}</span>
@@ -183,7 +183,7 @@ function LoadingState() {
   return (
     <div className="w-full max-w-full mt-8 px-8">
       <div className="flex gap-6">
-        <div className="w-[480px] shrink-0 bg-[#3e3b2a] border border-[#4a4738] rounded p-6 space-y-4">
+        <div className="w-[480px] shrink-0 bg-[#2a2820] border border-[#4a4738] rounded p-6 space-y-4">
           <Skeleton className="h-8 w-3/4" />
           <Skeleton className="h-4 w-1/4" />
           <div className="pt-4 space-y-3">
@@ -356,7 +356,7 @@ export default function TripDetailPage() {
     return (
       <div className="w-full max-w-4xl mx-auto mt-8 p-6">
         <div
-          className="bg-[#3e3b2a] rounded-lg shadow-sm border border-[#4a4738] overflow-hidden"
+          className="bg-[#2a2820] rounded-lg shadow-sm border border-[#4a4738] overflow-hidden"
           style={{ borderLeft: '4px solid #4a6741' }}
         >
           <div className="p-8">
@@ -373,7 +373,7 @@ export default function TripDetailPage() {
                 <SectionHeading>Trip Details</SectionHeading>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-[#9a9478] mb-1.5">Name</label>
+                    <label className="block text-sm font-medium text-[#a8a080] mb-1.5">Name</label>
                     <input
                       name="name"
                       value={editForm.name}
@@ -383,7 +383,7 @@ export default function TripDetailPage() {
                   </div>
                   <div className="flex gap-4">
                     <div className="flex-1">
-                      <label className="block text-sm font-medium text-[#9a9478] mb-1.5">Travel Date</label>
+                      <label className="block text-sm font-medium text-[#a8a080] mb-1.5">Travel Date</label>
                       <input
                         type="date"
                         name="travel_date"
@@ -393,7 +393,7 @@ export default function TripDetailPage() {
                       />
                     </div>
                     <div className="flex-1">
-                      <label className="block text-sm font-medium text-[#9a9478] mb-1.5">Status</label>
+                      <label className="block text-sm font-medium text-[#a8a080] mb-1.5">Status</label>
                       <select
                         name="status"
                         value={editForm.status}
@@ -415,7 +415,7 @@ export default function TripDetailPage() {
                 <div className="space-y-4">
                   <div className="flex gap-4">
                     <div className="flex-1">
-                      <label className="block text-sm font-medium text-[#9a9478] mb-1.5">Number of Days</label>
+                      <label className="block text-sm font-medium text-[#a8a080] mb-1.5">Number of Days</label>
                       <input
                         type="number"
                         name="number_of_days"
@@ -427,7 +427,7 @@ export default function TripDetailPage() {
                       />
                     </div>
                     <div className="flex-1">
-                      <label className="block text-sm font-medium text-[#9a9478] mb-1.5">
+                      <label className="block text-sm font-medium text-[#a8a080] mb-1.5">
                         Daily Hours: {editForm.daily_hours}h
                       </label>
                       <input
@@ -440,7 +440,7 @@ export default function TripDetailPage() {
                         className="w-full"
                         style={{ accentColor: '#4a6741' }}
                       />
-                      <div className="flex justify-between text-xs text-[#7a7558] mt-0.5">
+                      <div className="flex justify-between text-xs text-[#8a8468] mt-0.5">
                         <span>4h</span>
                         <span>16h</span>
                       </div>
@@ -455,7 +455,7 @@ export default function TripDetailPage() {
                 <SectionHeading>Preferences</SectionHeading>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-[#9a9478] mb-2">Travel Style</label>
+                    <label className="block text-sm font-medium text-[#a8a080] mb-2">Travel Style</label>
                     <div className="flex gap-2 flex-wrap">
                       {STYLES.map((s) => (
                         <button
@@ -466,7 +466,7 @@ export default function TripDetailPage() {
                           className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${
                             editForm.travel_style === s
                               ? 'bg-[#4a6741] text-[#c8dbb8] border-[#4a6741]'
-                              : 'bg-[#3e3b2a] text-[#9a9478] border-[#4a4738] hover:border-[#4a6741] hover:text-[#8aab7a]'
+                              : 'bg-[#3e3b2a] text-[#a8a080] border-[#4a4738] hover:border-[#4a6741] hover:text-[#8aab7a]'
                           }`}
                         >
                           {STYLE_LABELS[s]}
@@ -475,7 +475,7 @@ export default function TripDetailPage() {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-[#9a9478] mb-1.5">
+                    <label className="block text-sm font-medium text-[#a8a080] mb-1.5">
                       Stop Duration: {editForm.estimated_stop_duration} min
                     </label>
                     <input
@@ -489,7 +489,7 @@ export default function TripDetailPage() {
                       className="w-full"
                       style={{ accentColor: '#4a6741' }}
                     />
-                    <div className="flex justify-between text-xs text-[#7a7558] mt-0.5">
+                    <div className="flex justify-between text-xs text-[#8a8468] mt-0.5">
                       <span>5 min</span>
                       <span>180 min</span>
                     </div>
@@ -508,7 +508,7 @@ export default function TripDetailPage() {
               </button>
               <button
                 onClick={handleCancel}
-                className="text-[#9a9478] px-5 py-2.5 rounded-lg text-sm font-medium border border-[#4a4738] hover:bg-[#252318] transition-colors"
+                className="text-[#a8a080] px-5 py-2.5 rounded-lg text-sm font-medium border border-[#4a4738] hover:bg-[#252318] transition-colors"
               >
                 Cancel
               </button>
@@ -543,14 +543,14 @@ export default function TripDetailPage() {
 
         <div className="flex gap-6 flex-1 min-h-0">
           {/* Left: Info */}
-          <div className="w-[480px] shrink-0 bg-[#3e3b2a] border border-[#4a4738] rounded-lg p-6 overflow-y-auto">
+          <div className="w-[480px] shrink-0 bg-[#2a2820] border border-[#4a4738] rounded-lg p-6 overflow-y-auto">
           <div className="flex items-start justify-between mb-6">
             <h1 className="text-xl font-bold text-[#c8c4a0] leading-tight">{trip.name}</h1>
             <span
               className={`shrink-0 ml-3 text-xs font-medium px-2.5 py-0.5 rounded-full ${
                 trip.status === 'saved'
                   ? 'bg-[#3e3b2a] text-[#8aab7a]'
-                  : 'bg-[#252318] text-[#7a7558]'
+                  : 'bg-[#252318] text-[#8a8468]'
               }`}
             >
               {trip.status}
@@ -622,7 +622,7 @@ export default function TripDetailPage() {
         {/* Right: Map */}
         {trip.route_polyline && (
           <div className="flex-1 min-w-0 h-full flex flex-col">
-            <div className="flex-1 bg-[#3e3b2a] border border-[#4a4738] rounded-lg overflow-hidden">
+            <div className="flex-1 bg-[#2a2820] border border-[#4a4738] rounded-lg overflow-hidden">
               <RouteMap
                 origin={
                   trip.origin_coordinates

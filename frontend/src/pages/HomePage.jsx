@@ -63,7 +63,7 @@ export default function HomePage() {
             <p
               style={{
                 fontSize: 16,
-                color: '#9a9478',
+                color: '#a8a080',
                 lineHeight: 1.6,
                 marginBottom: 32,
                 maxWidth: 480,
@@ -75,7 +75,7 @@ export default function HomePage() {
             <form
               onSubmit={handleSearch}
               style={{
-                background: '#3e3b2a',
+                background: '#2a2820',
                 borderRadius: 14,
                 padding: 24,
                 boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
@@ -176,7 +176,7 @@ export default function HomePage() {
       </section>
 
       {/* Section 2 — Features */}
-      <section style={{ background: '#3e3b2a', padding: '56px 24px' }}>
+      <section style={{ background: '#2a2820', padding: '56px 24px' }}>
         <div
           style={{
             maxWidth: 1280,
@@ -206,7 +206,7 @@ export default function HomePage() {
               <div style={{ fontSize: 13, fontWeight: 600, color: '#c8c4a0', marginBottom: 6 }}>
                 {f.title}
               </div>
-              <div style={{ fontSize: 12, color: '#7a7558', lineHeight: 1.5 }}>{f.desc}</div>
+              <div style={{ fontSize: 12, color: '#8a8468', lineHeight: 1.5 }}>{f.desc}</div>
             </div>
           ))}
         </div>
@@ -236,7 +236,7 @@ export default function HomePage() {
               <div
                 key={item.name}
                 style={{
-                  background: '#3e3b2a',
+                  background: '#2a2820',
                   border: '1px solid #4a4738',
                   borderRadius: 12,
                   overflow: 'hidden',

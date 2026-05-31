@@ -78,7 +78,7 @@ export default function RegisterPage() {
           >
             Join the Adventure! ✦
           </h2>
-          <p style={{ fontSize: 15, color: '#9a9478', lineHeight: 1.7, marginBottom: 32 }}>
+          <p style={{ fontSize: 15, color: '#a8a080', lineHeight: 1.7, marginBottom: 32 }}>
             Create your account and start planning your perfect road trip.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -103,7 +103,7 @@ export default function RegisterPage() {
         <div
           style={{
             flex: 1,
-            background: '#3e3b2a',
+            background: '#2a2820',
             padding: 48,
             display: 'flex',
             flexDirection: 'column',
@@ -114,13 +114,13 @@ export default function RegisterPage() {
           <h3 style={{ fontSize: 24, fontWeight: 700, color: '#c8c4a0', marginBottom: 4 }}>
             Create Account
           </h3>
-          <p style={{ fontSize: 14, color: '#7a7558', marginBottom: 28 }}>
+          <p style={{ fontSize: 14, color: '#8a8468', marginBottom: 28 }}>
             Start your journey today!
           </p>
 
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500,                   color: '#9a9478', display: 'block', marginBottom: 6 }}>
+              <label style={{ fontSize: 13, fontWeight: 500,                   color: '#a8a080', display: 'block', marginBottom: 6 }}>
                 Full Name
               </label>
               <input
@@ -143,7 +143,7 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500,                   color: '#9a9478', display: 'block', marginBottom: 6 }}>
+              <label style={{ fontSize: 13, fontWeight: 500,                   color: '#a8a080', display: 'block', marginBottom: 6 }}>
                 Email Address
               </label>
               <input
@@ -166,7 +166,7 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500,                   color: '#9a9478', display: 'block', marginBottom: 6 }}>
+              <label style={{ fontSize: 13, fontWeight: 500,                   color: '#a8a080', display: 'block', marginBottom: 6 }}>
                 Password
               </label>
               <input
@@ -189,7 +189,7 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500,                   color: '#9a9478', display: 'block', marginBottom: 6 }}>
+              <label style={{ fontSize: 13, fontWeight: 500,                   color: '#a8a080', display: 'block', marginBottom: 6 }}>
                 Confirm Password
               </label>
               <input
@@ -212,7 +212,7 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500,                   color: '#9a9478', display: 'block', marginBottom: 6 }}>
+              <label style={{ fontSize: 13, fontWeight: 500,                   color: '#a8a080', display: 'block', marginBottom: 6 }}>
                 Role
               </label>
               <select
@@ -259,7 +259,7 @@ export default function RegisterPage() {
               style={{
                 width: '100%',
                 height: 48,
-                background: loading ? '#7a7558' : '#4a6741',
+                background: loading ? '#8a8468' : '#4a6741',
                 color: '#c8dbb8',
                 border: 'none',
                 borderRadius: 8,
@@ -273,7 +273,7 @@ export default function RegisterPage() {
             </button>
           </form>
 
-          <p style={{ textAlign: 'center', marginTop: 24, fontSize: 14, color: '#9a9478' }}>
+          <p style={{ textAlign: 'center', marginTop: 24, fontSize: 14, color: '#a8a080' }}>
             Already have an account?{' '}
             <Link to="/login" style={{ color: '#8aab7a', fontWeight: 600, textDecoration: 'none' }}>
               Log in →
@@ -290,7 +290,7 @@ export default function RegisterPage() {
           padding: '16px 24px',
           textAlign: 'center',
           fontSize: 13,
-          color: '#7a7558',
+          color: '#8a8468',
         }}
       >
         &copy; 2026 Via-Trip. All rights reserved.

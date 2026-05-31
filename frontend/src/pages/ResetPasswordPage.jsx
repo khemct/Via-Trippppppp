@@ -53,7 +53,7 @@ export default function ResetPasswordPage() {
   if (!token) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#312f24]">
-        <div className="w-full max-w-md bg-[#3e3b2a] p-8 rounded shadow text-center">
+        <div className="w-full max-w-md bg-[#2a2820] p-8 rounded shadow text-center">
           <h1 className="text-2xl font-bold mb-4 text-[#c8c4a0]">Invalid Link</h1>
           <p className="text-sm text-red-600 mb-4">
             Missing reset token. Use the link from your password reset email.
@@ -68,7 +68,7 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#312f24]">
-      <div className="w-full max-w-md bg-[#3e3b2a] p-8 rounded shadow">
+      <div className="w-full max-w-md bg-[#2a2820] p-8 rounded shadow">
         <h1 className="text-2xl font-bold mb-6 text-center text-[#c8c4a0]">Set New Password</h1>
 
         {message && (
@@ -85,7 +85,7 @@ export default function ResetPasswordPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1 text-[#9a9478]">New Password</label>
+            <label className="block text-sm font-medium mb-1 text-[#a8a080]">New Password</label>
             <input
               type="password"
               value={password}
@@ -97,7 +97,7 @@ export default function ResetPasswordPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1 text-[#9a9478]">Confirm New Password</label>
+            <label className="block text-sm font-medium mb-1 text-[#a8a080]">Confirm New Password</label>
             <input
               type="password"
               value={confirmPassword}
