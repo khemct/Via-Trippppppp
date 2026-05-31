@@ -1,6 +1,6 @@
 const https = require('https');
 
-const API_KEY = process.env.GOOGLE_MAPS_API_KEY;
+const API_KEY = process.env.GOOGLE_DIRECTIONS_API_KEY;
 const DIRECTIONS_URL = 'https://maps.googleapis.com/maps/api/directions/json';
 
 async function getDirections(origin, destination) {
