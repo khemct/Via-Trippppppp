@@ -29,8 +29,9 @@ export default function RouteMap({ origin, destination, routePolyline, height })
       >
         {origin && <Marker position={origin} label="O" />}
         {destination && <Marker position={destination} label="D" />}
-        {path.length > 0 && (
+        {routePolyline && path.length > 0 && (
           <Polyline
+            key={routePolyline}
             path={path}
             options={{
               strokeColor: '#2563eb',
