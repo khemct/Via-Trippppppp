@@ -191,7 +191,7 @@ export default function TripListPage() {
               <button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page <= 1}
-                className="inline-flex items-center gap-1 px-3 py-1.5 text-sm border border-line/40 rounded-xl bg-card text-body hover:bg-input disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                className="inline-flex items-center gap-1 px-3 py-1.5 text-sm border border-line-strong rounded-xl bg-card text-body hover:bg-input disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               >
                 <ArrowLeft size={14} />
                 Previous
@@ -207,7 +207,7 @@ export default function TripListPage() {
                     className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
                       p === page
                         ? 'bg-brand text-brand-light'
-                        : 'text-body hover:bg-input'
+                        : 'text-body border border-line-strong hover:bg-input'
                     }`}
                   >
                     {p}
@@ -217,7 +217,7 @@ export default function TripListPage() {
               <button
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={page >= totalPages}
-                className="inline-flex items-center gap-1 px-3 py-1.5 text-sm border border-line/40 rounded-xl bg-card text-body hover:bg-input disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                className="inline-flex items-center gap-1 px-3 py-1.5 text-sm border border-line-strong rounded-xl bg-card text-body hover:bg-input disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               >
                 Next
                 <ArrowRight size={14} />

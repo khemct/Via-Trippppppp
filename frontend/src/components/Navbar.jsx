@@ -19,9 +19,9 @@ export default function Navbar({ isLoggedIn, userName, onLogout }) {
 
           {isLoggedIn && (
             <div className="flex gap-2 md:gap-4 ml-4 md:ml-6">
-              <Link to="/" className="text-body text-sm font-medium no-underline border border-line/40 rounded-lg px-3 py-1.5 focus-visible:ring-2 ring-brand hover:border-line-strong transition-colors">Home</Link>
-              <Link to="/trips/new" className="text-body text-sm font-medium no-underline border border-line/40 rounded-lg px-3 py-1.5 focus-visible:ring-2 ring-brand hover:border-line-strong transition-colors">New Trip</Link>
-              <Link to="/trips" className="text-body text-sm font-medium no-underline border border-line/40 rounded-lg px-3 py-1.5 focus-visible:ring-2 ring-brand hover:border-line-strong transition-colors">My Trips</Link>
+              <Link to="/" className="text-heading text-sm font-medium no-underline border border-line-strong rounded-lg px-3 py-1.5 focus-visible:ring-2 ring-brand hover:bg-line transition-colors">Home</Link>
+              <Link to="/trips/new" className="text-heading text-sm font-medium no-underline border border-line-strong rounded-lg px-3 py-1.5 focus-visible:ring-2 ring-brand hover:bg-line transition-colors">New Trip</Link>
+              <Link to="/trips" className="text-heading text-sm font-medium no-underline border border-line-strong rounded-lg px-3 py-1.5 focus-visible:ring-2 ring-brand hover:bg-line transition-colors">My Trips</Link>
             </div>
           )}
 
@@ -30,14 +30,14 @@ export default function Navbar({ isLoggedIn, userName, onLogout }) {
             onClick={cycleColorTheme}
             aria-label={`Color theme: ${colorTheme}. Click to cycle.`}
             title={`Theme: ${colorTheme}`}
-            className="w-8 h-8 flex items-center justify-center rounded-lg text-muted hover:text-heading hover:bg-line transition-colors focus-visible:ring-2 ring-brand"
+            className="w-8 h-8 flex items-center justify-center rounded-lg text-muted hover:text-heading hover:bg-line/80 transition-colors focus-visible:ring-2 ring-brand"
           >
             <Palette size={18} />
           </button>
           <button
             onClick={toggle}
             aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-            className="w-8 h-8 flex items-center justify-center rounded-lg text-muted hover:text-heading hover:bg-line transition-colors focus-visible:ring-2 ring-brand"
+            className="w-8 h-8 flex items-center justify-center rounded-lg text-muted hover:text-heading hover:bg-line/80 transition-colors focus-visible:ring-2 ring-brand"
           >
             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
@@ -48,13 +48,13 @@ export default function Navbar({ isLoggedIn, userName, onLogout }) {
             <>
               <Link
                 to="/login"
-                className="border border-brand text-brand-text rounded-lg px-5 py-2 text-sm font-medium bg-transparent no-underline cursor-pointer focus-visible:ring-2 ring-brand"
+                className="border border-brand-hover text-brand-text rounded-lg px-5 py-2 text-sm font-medium bg-transparent no-underline cursor-pointer focus-visible:ring-2 ring-brand hover:bg-brand-light/40 transition-colors"
               >
                 Log In
               </Link>
               <Link
                 to="/register"
-                className="bg-brand text-brand-light rounded-lg px-5 py-2 text-sm font-medium border border-brand-hover no-underline cursor-pointer focus-visible:ring-2 ring-brand"
+                className="bg-brand text-brand-light rounded-lg px-5 py-2 text-sm font-medium border border-brand-hover no-underline cursor-pointer focus-visible:ring-2 ring-brand hover:brightness-110 transition-all"
               >
                 Register
               </Link>
