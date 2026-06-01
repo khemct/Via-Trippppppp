@@ -157,12 +157,12 @@ function FeasibilityBadge({ status }) {
   const styles = {
     feasible: 'bg-line text-brand-text',
     tight: 'bg-amber-50 text-amber-800',
-    infeasible: 'bg-red-50 text-red-800',
+    at_risk: 'bg-red-50 text-red-800',
   };
   const iconMap = {
     feasible: Check,
     tight: AlertTriangle,
-    infeasible: X,
+    at_risk: X,
   };
   const Icon = iconMap[status] || null;
   const cls = styles[status] || 'bg-input text-muted';

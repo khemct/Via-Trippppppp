@@ -13,7 +13,7 @@ const statusConfig = {
 const feasibilityConfig = {
   feasible: { icon: CheckCircle, cls: 'text-emerald-600', label: 'Feasible' },
   tight: { icon: AlertTriangle, cls: 'text-amber-600', label: 'Tight' },
-  infeasible: { icon: XCircle, cls: 'text-red-600', label: 'Infeasible' },
+  at_risk: { icon: XCircle, cls: 'text-red-600', label: 'At Risk' },
 };
 
 export default function TripListPage() {

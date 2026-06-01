@@ -2,6 +2,18 @@ const express = require('express');
 const { requireAuth } = require('../middleware/requireAuth');
 const { assessFeasibility, assessWaypointFeasibility } = require('../services/feasibilityService');
 
+async function refreshFeasibilityStatus(tripId, pool) {
+  try {
+    const result = await assessFeasibility(tripId, pool);
+    await pool.query(
+      'UPDATE trips SET feasibility_status = $1 WHERE trip_id = $2',
+      [result.status, tripId]
+    );
+  } catch (err) {
+    console.error('Failed to refresh feasibility:', err.message);
+  }
+}
+
 const router = express.Router();
 
 function getPool(req) {
@@ -106,6 +118,7 @@ router.post('/:tripId/waypoints', requireAuth, async (req, res) => {
       waypoint: { ...result.rows[0], ...place },
       feasibility: wpFeasibility,
     });
+    refreshFeasibilityStatus(tripId, pool);
   } catch (err) {
     console.error('Add waypoint error:', err);
     res.status(500).json({ error: 'Internal server error' });
@@ -163,6 +176,7 @@ router.patch('/:tripId/waypoints/:waypointId', requireAuth, async (req, res) => 
     }
 
     res.json({ waypoint: result.rows[0] });
+    refreshFeasibilityStatus(tripId, pool);
   } catch (err) {
     console.error('Update waypoint error:', err);
     res.status(500).json({ error: 'Internal server error' });
@@ -194,6 +208,7 @@ router.delete('/:tripId/waypoints/:waypointId', requireAuth, async (req, res) =>
     );
 
     res.json({ message: 'Waypoint removed' });
+    refreshFeasibilityStatus(tripId, pool);
   } catch (err) {
     console.error('Delete waypoint error:', err);
     res.status(500).json({ error: 'Internal server error' });
@@ -249,6 +264,7 @@ router.put('/:tripId/waypoints/reorder', requireAuth, async (req, res) => {
     );
 
     res.json({ waypoints: result.rows });
+    refreshFeasibilityStatus(tripId, pool);
   } catch (err) {
     console.error('Reorder waypoints error:', err);
     res.status(500).json({ error: 'Internal server error' });
