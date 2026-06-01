@@ -147,7 +147,7 @@ export default function ItineraryPage() {
 
   if (tripLoading) {
     return (
-    <div className="w-full max-w-full mt-8 px-4 md:px-8 h-[calc(100vh-76px)]">
+    <div className="w-full max-w-full mt-4 px-4 md:px-6 h-[calc(100vh-80px)]">
         <div className="h-full flex flex-col">
           <div className="animate-pulse space-y-4">
             <div className="h-5 w-32 bg-line rounded" />
@@ -164,7 +164,7 @@ export default function ItineraryPage() {
 
   if (!trip) {
     return (
-      <div className="w-full max-w-lg mx-auto mt-12 p-6">
+      <div className="w-full max-w-lg mx-auto mt-8 p-4">
         <div className="bg-red-50 border border-red-200 rounded-lg px-5 py-4">
           <p className="text-sm text-red-700">Trip not found.</p>
         </div>
@@ -176,16 +176,24 @@ export default function ItineraryPage() {
   }
 
   return (
-    <div className="w-full max-w-full mt-8 px-8 h-[calc(100vh-76px)]">
+    <div className="w-full max-w-full mt-4 px-4 md:px-6 h-[calc(100vh-80px)]">
       <div className="h-full flex flex-col">
         {/* Top bar */}
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 shrink-0">
-          <Link
-            to={`/trips/${tripId}`}
-            className="inline-flex items-center gap-1.5 text-sm text-brand-text font-medium hover:underline"
-          >
-            &larr; Back to Trip Detail
-          </Link>
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-3 shrink-0">
+          <div className="flex gap-2">
+            <Link
+              to={`/trips/${tripId}`}
+              className="text-heading text-sm font-medium no-underline border border-line-strong rounded-lg px-3 py-1.5 hover:bg-line transition-colors"
+            >
+              Back to Trip Detail
+            </Link>
+            <Link
+              to="/trips"
+              className="text-heading text-sm font-medium no-underline border border-line-strong rounded-lg px-3 py-1.5 hover:bg-line transition-colors"
+            >
+              Back to My Trips
+            </Link>
+          </div>
           <div className="flex items-center gap-3">
             <span className="text-sm font-medium text-heading">{trip.name}</span>
             <span className="text-xs text-muted capitalize">{trip.travel_style}</span>
@@ -193,7 +201,7 @@ export default function ItineraryPage() {
         </div>
 
         {/* 3-column layout */}
-        <div className="flex gap-5 flex-1 min-h-0 flex-col md:flex-row">
+        <div className="flex gap-3 flex-1 min-h-0 flex-col md:flex-row">
           {/* Left: Recommendations */}
           <div className="w-full md:w-80 shrink-0 min-h-0">
             <RecommendationPanel

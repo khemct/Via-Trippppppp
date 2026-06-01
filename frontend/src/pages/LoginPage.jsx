@@ -53,11 +53,11 @@ export default function LoginPage() {
 
       <div className="flex flex-1 flex-col lg:flex-row">
         {/* Left */}
-        <div className="w-full lg:w-[45%] bg-gradient-to-br from-card to-deep px-6 md:px-12 py-8 md:py-12 flex flex-col justify-center">
-          <h2 className="text-[32px] font-bold text-heading mb-4">
+        <div className="w-full lg:w-[45%] bg-gradient-to-br from-card to-deep px-6 md:px-8 py-6 md:py-8 flex flex-col justify-center">
+          <h2 className="text-[28px] font-bold text-heading mb-3">
             Welcome Back Explorer!
           </h2>
-          <p className="text-[15px] text-body leading-relaxed mb-8">
+          <p className="text-[14px] text-body leading-relaxed mb-5">
             Log in to continue your journey. Access your saved trips, discover new routes, and pick up right where you left off.
           </p>
           <div className="flex flex-col gap-3.5">
@@ -71,9 +71,9 @@ export default function LoginPage() {
         </div>
 
         {/* Right */}
-        <div className="flex-1 bg-card px-6 md:px-12 py-8 md:py-12 flex flex-col justify-center w-full lg:max-w-[480px]">
-          <h3 className="text-2xl font-bold text-heading mb-1">Log In</h3>
-          <p className="text-sm text-muted mb-7">Welcome back, explorer!</p>
+        <div className="flex-1 bg-card px-6 md:px-8 py-6 md:py-8 flex flex-col justify-center w-full lg:max-w-[480px]">
+          <h3 className="text-xl font-bold text-heading mb-1">Log In</h3>
+          <p className="text-sm text-muted mb-4">Welcome back, explorer!</p>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div>
@@ -138,7 +138,7 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="flex items-center gap-3 my-6">
+            <div className="flex items-center gap-3 my-4">
             <div className="flex-1 h-px bg-line" />
             <span className="text-[13px] text-muted whitespace-nowrap">or continue with</span>
             <div className="flex-1 h-px bg-line" />
@@ -158,7 +158,7 @@ export default function LoginPage() {
             ))}
           </div>
 
-          <p className="text-center mt-6 text-sm text-body">
+          <p className="text-center mt-4 text-sm text-body">
             Don&apos;t have an account?{' '}
             <Link to="/register" className="text-brand-text font-semibold no-underline">
               Register now →
@@ -168,7 +168,7 @@ export default function LoginPage() {
       </div>
 
       {/* Footer copyright only */}
-      <div className="border-t border-line bg-deep py-4 px-6 text-center text-[13px] text-muted">
+      <div className="border-t border-line bg-deep py-3 px-6 text-center text-[12px] text-muted">
         &copy; 2026 Via-Trip. All rights reserved.
       </div>
     </div>

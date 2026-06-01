@@ -59,11 +59,11 @@ export default function RegisterPage() {
 
       <div className="flex flex-1 flex-col lg:flex-row">
         {/* Left */}
-        <div className="w-full lg:w-[45%] bg-gradient-to-br from-card to-deep px-6 md:px-12 py-8 md:py-12 flex flex-col justify-center">
-          <h2 className="text-[32px] font-bold text-heading mb-4">
+        <div className="w-full lg:w-[45%] bg-gradient-to-br from-card to-deep px-6 md:px-8 py-6 md:py-8 flex flex-col justify-center">
+          <h2 className="text-[28px] font-bold text-heading mb-3">
             Join the Adventure! <Sparkles size={20} className="inline text-brand" />
           </h2>
-          <p className="text-[15px] text-body leading-relaxed mb-8">
+          <p className="text-[14px] text-body leading-relaxed mb-5">
             Create your account and start planning your perfect road trip.
           </p>
           <div className="flex flex-col gap-3.5">
@@ -77,9 +77,9 @@ export default function RegisterPage() {
         </div>
 
         {/* Right */}
-        <div className="flex-1 bg-card px-6 md:px-12 py-8 md:py-12 flex flex-col justify-center w-full lg:max-w-[480px]">
-          <h3 className="text-2xl font-bold text-heading mb-1">Create Account</h3>
-          <p className="text-sm text-muted mb-7">Start your journey today!</p>
+        <div className="flex-1 bg-card px-6 md:px-8 py-6 md:py-8 flex flex-col justify-center w-full lg:max-w-[480px]">
+          <h3 className="text-xl font-bold text-heading mb-1">Create Account</h3>
+          <p className="text-sm text-muted mb-4">Start your journey today!</p>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
             <div>
@@ -159,7 +159,7 @@ export default function RegisterPage() {
             </button>
           </form>
 
-          <p className="text-center mt-6 text-sm text-body">
+          <p className="text-center mt-4 text-sm text-body">
             Already have an account?{' '}
             <Link to="/login" className="text-brand-text font-semibold no-underline">
               Log in →
@@ -169,7 +169,7 @@ export default function RegisterPage() {
       </div>
 
       {/* Footer copyright only */}
-      <div className="border-t border-line bg-deep py-4 px-6 text-center text-[13px] text-muted">
+      <div className="border-t border-line bg-deep py-3 px-6 text-center text-[12px] text-muted">
         &copy; 2026 Via-Trip. All rights reserved.
       </div>
     </div>

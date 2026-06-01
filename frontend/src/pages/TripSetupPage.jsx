@@ -87,9 +87,7 @@ export default function TripSetupPage() {
           token
         );
         setTrip(data.trip);
-        setTimeout(() => {
-          navigate(`/trips/${data.trip.trip_id}`);
-        }, 1500);
+        navigate(`/trips/${data.trip.trip_id}/itinerary`);
       } catch (err) {
         if (err.status === 400) {
           setError(err.data?.error || 'Route exceeds 300 km. Please choose closer destinations.');
@@ -137,13 +135,13 @@ export default function TripSetupPage() {
         <div className="w-full lg:w-[420px] shrink-0 bg-card px-4 md:px-8 py-6 md:py-8 border-r border-line overflow-y-auto">
           <a
             href="/trips"
-            className="text-[13px] text-brand-text font-medium no-underline inline-block mb-5"
+            className="text-[13px] text-brand-text font-medium no-underline inline-block mb-3"
           >
             &larr; My Trips
           </a>
 
-          <h2 className="text-2xl font-bold text-heading mb-1">Plan Your Trip</h2>
-          <p className="text-sm text-muted mb-6">
+          <h2 className="text-xl font-bold text-heading mb-1">Plan Your Trip</h2>
+          <p className="text-sm text-muted mb-4">
             Fill in the details below to start your road trip.
           </p>
 

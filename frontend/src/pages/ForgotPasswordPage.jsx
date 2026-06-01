@@ -31,25 +31,25 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-base">
-      <div className="w-full max-w-md bg-card p-8 rounded shadow">
-        <h1 className="text-2xl font-bold mb-2 text-center text-heading">Reset Password</h1>
-        <p className="text-sm text-body mb-6 text-center">
+      <div className="w-full max-w-md bg-card p-6 rounded shadow">
+        <h1 className="text-xl font-bold mb-2 text-center text-heading">Reset Password</h1>
+        <p className="text-sm text-body mb-4 text-center">
           Enter your email and we&apos;ll send you a reset link.
         </p>
 
         {message && (
-          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-sm">
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-3 text-sm">
             {message}
           </div>
         )}
 
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-sm">
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-3 text-sm">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3">
           <div>
             <label className="block text-sm font-medium mb-1 text-body">Email</label>
             <input
@@ -76,7 +76,7 @@ export default function ForgotPasswordPage() {
           </button>
         </form>
 
-        <p className="mt-4 text-sm text-center">
+        <p className="mt-3 text-sm text-center">
           <Link to="/login" className="text-brand-text hover:underline">
             Back to Sign In
           </Link>
