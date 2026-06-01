@@ -330,6 +330,19 @@ export default function TripDetailPage() {
     }
   }
 
+  const originCoords = useMemo(
+    () => trip?.origin_coordinates
+      ? { lat: trip.origin_coordinates.latitude, lng: trip.origin_coordinates.longitude }
+      : null,
+    [trip?.origin_coordinates?.latitude, trip?.origin_coordinates?.longitude]
+  );
+  const destCoords = useMemo(
+    () => trip?.dest_coordinates
+      ? { lat: trip.dest_coordinates.latitude, lng: trip.dest_coordinates.longitude }
+      : null,
+    [trip?.dest_coordinates?.latitude, trip?.dest_coordinates?.longitude]
+  );
+
   if (loading) return <LoadingState />;
 
   if (error) {
@@ -523,19 +536,6 @@ export default function TripDetailPage() {
       </div>
   );
 }
-
-  const originCoords = useMemo(
-    () => trip.origin_coordinates
-      ? { lat: trip.origin_coordinates.latitude, lng: trip.origin_coordinates.longitude }
-      : null,
-    [trip.origin_coordinates?.latitude, trip.origin_coordinates?.longitude]
-  );
-  const destCoords = useMemo(
-    () => trip.dest_coordinates
-      ? { lat: trip.dest_coordinates.latitude, lng: trip.dest_coordinates.longitude }
-      : null,
-    [trip.dest_coordinates?.latitude, trip.dest_coordinates?.longitude]
-  );
 
   // ---- VIEW MODE ----
   return (
