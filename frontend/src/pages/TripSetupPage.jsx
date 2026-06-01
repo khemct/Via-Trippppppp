@@ -87,9 +87,7 @@ export default function TripSetupPage() {
           token
         );
         setTrip(data.trip);
-        setTimeout(() => {
-          navigate(`/trips/${data.trip.trip_id}`);
-        }, 1500);
+        navigate(`/trips/${data.trip.trip_id}/itinerary`);
       } catch (err) {
         if (err.status === 400) {
           setError(err.data?.error || 'Route exceeds 300 km. Please choose closer destinations.');
