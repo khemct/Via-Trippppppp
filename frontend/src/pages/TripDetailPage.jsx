@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { trips as tripsApi, itinerary as itineraryApi } from '../services/api';
@@ -524,6 +524,19 @@ export default function TripDetailPage() {
   );
 }
 
+  const originCoords = useMemo(
+    () => trip.origin_coordinates
+      ? { lat: trip.origin_coordinates.latitude, lng: trip.origin_coordinates.longitude }
+      : null,
+    [trip.origin_coordinates?.latitude, trip.origin_coordinates?.longitude]
+  );
+  const destCoords = useMemo(
+    () => trip.dest_coordinates
+      ? { lat: trip.dest_coordinates.latitude, lng: trip.dest_coordinates.longitude }
+      : null,
+    [trip.dest_coordinates?.latitude, trip.dest_coordinates?.longitude]
+  );
+
   // ---- VIEW MODE ----
   return (
     <div className="w-full max-w-full mt-8 px-8" style={{ height: 'calc(100vh - 76px)' }}>
@@ -627,16 +640,8 @@ export default function TripDetailPage() {
           <div className="flex-1 min-w-0 h-full flex flex-col">
             <div className="flex-1 bg-[#2a2820] border border-[#4a4738] rounded-lg overflow-hidden">
               <RouteMap
-                origin={
-                  trip.origin_coordinates
-                    ? { lat: trip.origin_coordinates.latitude, lng: trip.origin_coordinates.longitude }
-                    : null
-                }
-                destination={
-                  trip.dest_coordinates
-                    ? { lat: trip.dest_coordinates.latitude, lng: trip.dest_coordinates.longitude }
-                    : null
-                }
+                origin={originCoords}
+                destination={destCoords}
                 routePolyline={trip?.route_polyline}
                 height="100%"
               />

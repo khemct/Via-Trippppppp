@@ -51,7 +51,7 @@ function RouteMap({ origin, destination, routePolyline, waypoints, height }) {
     [path, origin]
   );
 
-  const mapStyle = height ? { width: '100%', height } : containerStyle;
+  const mapStyle = useMemo(() => height ? { width: '100%', height } : containerStyle, [height]);
 
   return (
     <LoadScriptNext googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
