@@ -49,19 +49,19 @@ export default function RecommendationPanel({
   }
 
   return (
-    <div className="h-full flex flex-col bg-[#2a2820] border border-[#4a4738] rounded-lg overflow-hidden">
+    <div className="h-full flex flex-col bg-card border border-line-strong rounded-lg overflow-hidden">
       {/* Header */}
-      <div className="shrink-0 px-4 pt-4 pb-3 border-b border-[#3e3b2a]">
-        <h2 className="text-sm font-semibold text-[#c8c4a0]">Recommendations</h2>
+      <div className="shrink-0 px-4 pt-4 pb-3 border-b border-line">
+        <h2 className="text-sm font-semibold text-heading">Recommendations</h2>
       </div>
 
       {/* Filters */}
-      <div className="shrink-0 px-4 py-3 border-b border-[#3e3b2a] space-y-2">
+      <div className="shrink-0 px-4 py-3 border-b border-line space-y-2">
         <div className="flex gap-2">
           <select
             value={filters.category}
             onChange={(e) => onFilterChange({ ...filters, category: e.target.value, cursor: null })}
-            className="flex-1 border border-[#4a4738] rounded px-2 py-1.5 text-xs text-[#c8c4a0] bg-[#252318] focus:outline-none focus:ring-1 focus:ring-[#4a6741]"
+            className="flex-1 border border-line-strong rounded px-2 py-1.5 text-xs text-heading bg-input focus:outline-none focus:ring-1 focus:ring-brand"
           >
             {CATEGORIES.map((c) => (
               <option key={c} value={c}>
@@ -72,14 +72,14 @@ export default function RecommendationPanel({
           <select
             value={filters.sort_by}
             onChange={(e) => onFilterChange({ ...filters, sort_by: e.target.value, cursor: null })}
-            className="border border-[#4a4738] rounded px-2 py-1.5 text-xs text-[#c8c4a0] bg-[#252318] focus:outline-none focus:ring-1 focus:ring-[#4a6741]"
+            className="border border-line-strong rounded px-2 py-1.5 text-xs text-heading bg-input focus:outline-none focus:ring-1 focus:ring-brand"
           >
             <option value="score">Best Match</option>
             <option value="distance">Nearest</option>
           </select>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs text-[#8a8468] shrink-0">Min rating:</span>
+          <span className="text-xs text-muted shrink-0">Min rating:</span>
           <input
             type="range"
             min="0"
@@ -89,14 +89,14 @@ export default function RecommendationPanel({
             onChange={(e) => onFilterChange({ ...filters, rating_min: parseFloat(e.target.value), cursor: null })}
             className="flex-1 accent-brand h-1"
           />
-          <span className="text-xs text-[#a8a080] w-6 text-right">{filters.rating_min}</span>
+          <span className="text-xs text-body w-6 text-right">{filters.rating_min}</span>
         </div>
       </div>
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto min-h-0">
         {seeding && (
-          <div className="p-6 text-center text-sm text-[#8a8468]">Seeding recommendations...</div>
+          <div className="p-6 text-center text-sm text-muted">Seeding recommendations...</div>
         )}
 
         {!seeding && error && (
@@ -104,11 +104,11 @@ export default function RecommendationPanel({
         )}
 
         {!seeding && !error && places.length === 0 && (
-          <div className="p-6 text-center text-sm text-[#8a8468] space-y-2">
+          <div className="p-6 text-center text-sm text-muted space-y-2">
             <p>No recommendations found.</p>
             <button
               onClick={onReseed}
-              className="text-[#8aab7a] font-medium hover:underline"
+              className="text-brand-text font-medium hover:underline"
             >
               Re-seed from route
             </button>
@@ -116,16 +116,16 @@ export default function RecommendationPanel({
         )}
 
         {!seeding && places.length > 0 && (
-          <div className="divide-y divide-[#3e3b2a]">
+          <div className="divide-y divide-line">
             {places.map((place) => (
-              <div key={place.place_id} className="px-4 py-3 hover:bg-[#1e1c14] transition-colors">
+              <div key={place.place_id} className="px-4 py-3 hover:bg-deep transition-colors">
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5 mb-0.5">
-                      <span className="text-xs text-[#8a8468]">{CATEGORY_ICONS[place.category] || '📍'}</span>
-                      <span className="text-xs font-medium text-[#c8c4a0] truncate">{place.name}</span>
+                      <span className="text-xs text-muted">{CATEGORY_ICONS[place.category] || '📍'}</span>
+                      <span className="text-xs font-medium text-heading truncate">{place.name}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-xs text-[#8a8468]">
+                    <div className="flex items-center gap-2 text-xs text-muted">
                       {renderRating(place.rating)}
                       <span>({place.user_ratings_total || 0})</span>
                     </div>
@@ -133,7 +133,7 @@ export default function RecommendationPanel({
                   <div className="flex items-center gap-1.5 shrink-0">
                     <span
                       className={`text-xs font-medium px-1.5 py-0.5 rounded ${
-                        place.score >= 70 ? 'bg-[#3e3b2a] text-[#8aab7a]' : place.score >= 50 ? 'bg-[#fef3c7] text-[#92400e]' : 'bg-[#252318] text-[#8a8468]'
+                        place.score >= 70 ? 'bg-line text-brand-text' : place.score >= 50 ? 'bg-amber-50 text-amber-800' : 'bg-input text-muted'
                       }`}
                     >
                       {place.score}
@@ -141,7 +141,7 @@ export default function RecommendationPanel({
                   </div>
                 </div>
                 <div className="flex items-center justify-between mt-1.5">
-                  <span className="text-xs text-[#8a8468]">
+                  <span className="text-xs text-muted">
                     {place.distance_from_route < 1000
                       ? `${place.distance_from_route}m from route`
                       : `${(place.distance_from_route / 1000).toFixed(1)}km detour`}
@@ -149,7 +149,7 @@ export default function RecommendationPanel({
                   <button
                     onClick={() => handleAdd(place)}
                     disabled={adding[place.place_id]}
-                    className="text-xs font-medium text-[#8aab7a] hover:bg-[#252318] px-2 py-0.5 rounded transition-colors disabled:opacity-50"
+                    className="text-xs font-medium text-brand-text hover:bg-input px-2 py-0.5 rounded transition-colors disabled:opacity-50"
                   >
                     {adding[place.place_id] ? 'Adding...' : '+ Add'}
                   </button>
@@ -163,8 +163,8 @@ export default function RecommendationPanel({
           <div className="p-4 space-y-3">
             {[1, 2, 3, 4, 5].map((i) => (
               <div key={i} className="animate-pulse space-y-1.5">
-                <div className="h-3 bg-[#3e3b2a] rounded w-3/4" />
-                <div className="h-2 bg-[#3e3b2a] rounded w-1/2" />
+                <div className="h-3 bg-line rounded w-3/4" />
+                <div className="h-2 bg-line rounded w-1/2" />
               </div>
             ))}
           </div>
@@ -173,10 +173,10 @@ export default function RecommendationPanel({
 
       {/* Load More */}
       {hasMore && !loading && (
-        <div className="shrink-0 p-3 border-t border-[#3e3b2a]">
+        <div className="shrink-0 p-3 border-t border-line">
           <button
             onClick={onLoadMore}
-            className="w-full text-xs font-medium text-[#8aab7a] py-2 border border-[#4a4738] rounded hover:bg-[#252318] transition-colors"
+            className="w-full text-xs font-medium text-brand-text py-2 border border-line-strong rounded hover:bg-input transition-colors"
           >
             Load more
           </button>
@@ -184,7 +184,7 @@ export default function RecommendationPanel({
       )}
 
       {!hasMore && places.length > 0 && !loading && (
-        <div className="shrink-0 p-3 border-t border-[#3e3b2a] text-center text-xs text-[#8a8468]">
+        <div className="shrink-0 p-3 border-t border-line text-center text-xs text-muted">
           All recommendations loaded
         </div>
       )}

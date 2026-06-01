@@ -155,8 +155,8 @@ function SectionHeading({ children }) {
 function FeasibilityBadge({ status }) {
   const styles = {
     feasible: 'bg-line text-brand-text',
-    tight: 'bg-[#fef3c7] text-[#92400e]',
-    infeasible: 'bg-[#fee2e2] text-[#991b1b]',
+    tight: 'bg-amber-50 text-amber-800',
+    infeasible: 'bg-red-50 text-red-800',
   };
   const icons = {
     feasible: '✓',
@@ -348,7 +348,7 @@ export default function TripDetailPage() {
   if (error) {
     return (
       <div className="w-full max-w-lg mx-auto mt-12 p-6">
-        <div className="bg-red-50 border border-red-200 rounded-lg px-5 py-4 mb-4">
+        <div className="bg-red-50 border border-red-200 rounded-lg px-5 py-4 mb-4" role="alert">
           <div className="flex items-center gap-3">
             <span className="text-red-500 text-lg">✕</span>
             <div>
@@ -515,9 +515,14 @@ export default function TripDetailPage() {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="bg-brand text-brand-light px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-brand-hover disabled:opacity-50 transition-colors"
+                className="bg-brand text-brand-light px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-brand-hover disabled:opacity-50 transition-all active:scale-[0.98]"
               >
-                {saving ? 'Saving...' : 'Save Changes'}
+                {saving ? (
+                  <span className="inline-flex items-center gap-2">
+                    <span className="w-4 h-4 border-2 border-brand-light border-t-transparent rounded-full animate-spin" />
+                    Saving...
+                  </span>
+                ) : 'Save Changes'}
               </button>
               <button
                 onClick={handleCancel}
@@ -554,9 +559,9 @@ export default function TripDetailPage() {
           )}
         </div>
 
-        <div className="flex gap-6 flex-1 min-h-0">
+        <div className="flex gap-6 flex-1 min-h-0 flex-col lg:flex-row">
           {/* Left: Info */}
-          <div className="w-[480px] shrink-0 bg-card border border-line-strong rounded-lg p-6 overflow-y-auto">
+          <div className="w-full lg:w-[480px] shrink-0 bg-card border border-line-strong rounded-lg p-6 overflow-y-auto">
           <div className="flex items-start justify-between mb-6">
             <h1 className="text-xl font-bold text-heading leading-tight">{trip.name}</h1>
             <span

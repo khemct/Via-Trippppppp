@@ -21,25 +21,25 @@ function SortableWaypoint({ wp, onRemove, onUpdateDuration }) {
     <div
       ref={setNodeRef}
       style={style}
-      className="flex items-center gap-1.5 px-3 py-2.5 border-b border-[#3e3b2a] hover:bg-[#1e1c14] transition-colors"
+      className="flex items-center gap-1.5 px-3 py-2.5 border-b border-line hover:bg-deep transition-colors"
     >
-      <button {...attributes} {...listeners} className="cursor-grab text-[#6b6650] hover:text-[#a8a080] shrink-0 px-1">
+      <button {...attributes} {...listeners} aria-label="Drag to reorder" className="cursor-grab text-[#6b6650] hover:text-body shrink-0 px-1">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
           <circle cx="9" cy="5" r="1.5" /><circle cx="15" cy="5" r="1.5" />
           <circle cx="9" cy="12" r="1.5" /><circle cx="15" cy="12" r="1.5" />
           <circle cx="9" cy="19" r="1.5" /><circle cx="15" cy="19" r="1.5" />
         </svg>
       </button>
-      <span className="text-xs font-bold text-[#8a8468] w-5 shrink-0">{wp.order}</span>
+      <span className="text-xs font-bold text-muted w-5 shrink-0">{wp.order}</span>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1">
           <span className="text-xs">{CATEGORY_ICONS[wp.category] || '📍'}</span>
-          <span className="text-xs font-medium text-[#c8c4a0] truncate">{wp.name}</span>
+          <span className="text-xs font-medium text-heading truncate">{wp.name}</span>
         </div>
         <div className="flex items-center gap-2 mt-1">
-          <span className="text-xs text-[#8a8468]">{wp.score}</span>
+          <span className="text-xs text-muted">{wp.score}</span>
           {wp.distance_from_route >= 1000 && (
-            <span className="text-xs text-[#d97706]">{(wp.distance_from_route / 1000).toFixed(1)}km detour</span>
+            <span className="text-xs text-amber-600">{(wp.distance_from_route / 1000).toFixed(1)}km detour</span>
           )}
         </div>
       </div>
@@ -51,11 +51,12 @@ function SortableWaypoint({ wp, onRemove, onUpdateDuration }) {
           step="5"
           value={wp.stop_duration_minutes || 30}
           onChange={(e) => onUpdateDuration(wp.waypoint_id, parseInt(e.target.value, 10) || 30)}
-          className="w-12 text-xs text-center border border-[#4a4738] rounded px-1 py-0.5 text-[#c8c4a0] focus:outline-none focus:ring-1 focus:ring-[#4a6741]"
+          className="w-12 text-xs text-center border border-line-strong rounded px-1 py-0.5 text-heading focus:outline-none focus:ring-1 focus:ring-brand"
         />
-        <span className="text-xs text-[#8a8468]">min</span>
+        <span className="text-xs text-muted">min</span>
         <button
           onClick={() => onRemove(wp.waypoint_id)}
+          aria-label={`Remove ${wp.name}`}
           className="ml-1 text-[#5a5540] hover:text-red-500 transition-colors"
           title="Remove"
         >
@@ -99,7 +100,7 @@ export default function ItinerarySidebar({
   }
 
   const feasiStyles = {
-    feasible: { container: 'bg-[#3e3b2a]', text: 'text-brand', bar: 'bg-brand', label: 'Feasible' },
+    feasible: { container: 'bg-line', text: 'text-brand', bar: 'bg-brand', label: 'Feasible' },
     tight: { container: 'bg-amber-50', text: 'text-amber-800', bar: 'bg-amber-500', label: 'Tight' },
     at_risk: { container: 'bg-red-50', text: 'text-red-800', bar: 'bg-red-600', label: 'At Risk' },
   };
@@ -107,10 +108,10 @@ export default function ItinerarySidebar({
   const feasi = feasibility ? feasiStyles[feasibility.status] || feasiStyles.feasible : null;
 
   return (
-    <div className="h-full flex flex-col bg-[#2a2820] border border-[#4a4738] rounded-lg overflow-hidden">
-      <div className="shrink-0 px-4 pt-4 pb-3 border-b border-[#3e3b2a] flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-[#c8c4a0]">Itinerary</h2>
-        <span className="text-xs text-[#8a8468]">{waypoints.length} stop{waypoints.length !== 1 ? 's' : ''}</span>
+    <div className="h-full flex flex-col bg-card border border-line-strong rounded-lg overflow-hidden">
+      <div className="shrink-0 px-4 pt-4 pb-3 border-b border-line flex items-center justify-between">
+        <h2 className="text-sm font-semibold text-heading">Itinerary</h2>
+        <span className="text-xs text-muted">{waypoints.length} stop{waypoints.length !== 1 ? 's' : ''}</span>
       </div>
 
       <div className="flex-1 overflow-y-auto min-h-0">
@@ -118,19 +119,19 @@ export default function ItinerarySidebar({
           <div className="p-4 space-y-3">
             {[1, 2, 3].map((i) => (
               <div key={i} className="animate-pulse flex gap-2 items-center">
-                <div className="h-3 w-4 bg-[#3e3b2a] rounded" />
-                <div className="flex-1 h-4 bg-[#3e3b2a] rounded" />
+                <div className="h-3 w-4 bg-line rounded" />
+                <div className="flex-1 h-4 bg-line rounded" />
               </div>
             ))}
           </div>
         )}
 
         {!loading && waypoints.length === 0 && (
-          <div className="p-6 text-center text-sm text-[#8a8468] space-y-2">
+          <div className="p-6 text-center text-sm text-muted space-y-2">
             <p>No waypoints yet.</p>
-            <p className="text-xs">Click <span className="text-[#8aab7a]">+ Add</span> on a recommendation to add it here.</p>
+            <p className="text-xs">Click <span className="text-brand-text">+ Add</span> on a recommendation to add it here.</p>
             {onReset && (
-              <button onClick={onReset} className="block mx-auto mt-3 text-xs text-[#8aab7a] font-medium hover:underline">
+              <button onClick={onReset} className="block mx-auto mt-3 text-xs text-brand-text font-medium hover:underline">
                 Reset & re-seed
               </button>
             )}
@@ -149,14 +150,14 @@ export default function ItinerarySidebar({
       </div>
 
       {feasi && (
-        <div className={`shrink-0 p-4 border-t border-[#3e3b2a] ${feasi.container}`}>
+        <div className={`shrink-0 p-4 border-t border-line ${feasi.container}`}>
           <div className="flex items-center justify-between mb-1.5">
             <span className={`text-xs font-medium ${feasi.text}`}>{feasi.label}</span>
             <span className={`text-xs ${feasi.text}`}>
               {feasibility.details.utilization_pct}% utilized
             </span>
           </div>
-          <div className="h-1.5 bg-[#252318] rounded-full overflow-hidden">
+          <div className="h-1.5 bg-input rounded-full overflow-hidden">
             <div
               className={`h-full rounded-full transition-all duration-300 ${feasi.bar}`}
               style={{ width: `${Math.min(feasibility.details.utilization_pct, 100)}%` }}

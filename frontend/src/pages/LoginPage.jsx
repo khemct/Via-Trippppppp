@@ -50,9 +50,9 @@ export default function LoginPage() {
     <div className="min-h-screen flex flex-col">
       <Navbar isLoggedIn={false} />
 
-      <div className="flex flex-1">
+      <div className="flex flex-1 flex-col lg:flex-row">
         {/* Left */}
-        <div className="flex-[0_0_45%] bg-gradient-to-br from-[#2a2820] to-[#1e1c14] px-12 py-12 flex flex-col justify-center">
+        <div className="w-full lg:w-[45%] bg-gradient-to-br from-card to-deep px-6 md:px-12 py-8 md:py-12 flex flex-col justify-center">
           <h2 className="text-[32px] font-bold text-heading mb-4">
             Welcome Back Explorer! ✦
           </h2>
@@ -70,7 +70,7 @@ export default function LoginPage() {
         </div>
 
         {/* Right */}
-        <div className="flex-1 bg-card px-12 py-12 flex flex-col justify-center max-w-[480px]">
+        <div className="flex-1 bg-card px-6 md:px-12 py-8 md:py-12 flex flex-col justify-center w-full lg:max-w-[480px]">
           <h3 className="text-2xl font-bold text-heading mb-1">Log In</h3>
           <p className="text-sm text-muted mb-7">Welcome back, explorer!</p>
 
@@ -99,6 +99,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPw(!showPw)}
+                  aria-label={showPw ? 'Hide password' : 'Show password'}
                   className="absolute right-3 top-1/2 -translate-y-1/2 bg-none border-none cursor-pointer text-base text-muted p-0"
                 >
                   {showPw ? '🙈' : '👁️'}
@@ -117,7 +118,7 @@ export default function LoginPage() {
             </div>
 
             {error && (
-              <div className="bg-[#fde8e8] border border-[#f5c6c6] rounded-lg px-3.5 py-2.5 text-[13px] text-[#c0392b]">
+              <div className="bg-red-50 border border-red-200 rounded-lg px-3.5 py-2.5 text-[13px] text-red-700">
                 {error}
               </div>
             )}
@@ -125,9 +126,14 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-12 bg-brand disabled:bg-muted text-brand-light border-none rounded-lg text-[15px] font-semibold disabled:cursor-not-allowed cursor-pointer"
+              className="w-full h-12 bg-brand disabled:bg-muted text-brand-light border-none rounded-lg text-[15px] font-semibold disabled:cursor-not-allowed cursor-pointer active:scale-[0.98] transition-transform"
             >
-              {loading ? 'Logging in...' : 'Log In →'}
+              {loading ? (
+                <span className="inline-flex items-center gap-2">
+                  <span className="w-4 h-4 border-2 border-brand-light border-t-transparent rounded-full animate-spin" />
+                  Logging in...
+                </span>
+              ) : 'Log In →'}
             </button>
           </form>
 
@@ -137,12 +143,13 @@ export default function LoginPage() {
             <div className="flex-1 h-px bg-line" />
           </div>
 
-          <div className="flex gap-3">
+            <div className="flex gap-3" role="group" aria-label="Social login options">
             {['Google', 'Facebook', 'Apple'].map((provider) => (
               <button
                 key={provider}
                 type="button"
                 title="Coming soon"
+                aria-label={`Sign in with ${provider} (coming soon)`}
                 className="flex-1 h-11 border border-line rounded-lg bg-input text-[13px] font-medium text-muted cursor-not-allowed opacity-60"
               >
                 {provider}

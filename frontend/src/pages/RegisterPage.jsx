@@ -56,9 +56,9 @@ export default function RegisterPage() {
     <div className="min-h-screen flex flex-col">
       <Navbar isLoggedIn={false} />
 
-      <div className="flex flex-1">
+      <div className="flex flex-1 flex-col lg:flex-row">
         {/* Left */}
-        <div className="flex-[0_0_45%] bg-gradient-to-br from-[#2a2820] to-[#1e1c14] px-12 py-12 flex flex-col justify-center">
+        <div className="w-full lg:w-[45%] bg-gradient-to-br from-card to-deep px-6 md:px-12 py-8 md:py-12 flex flex-col justify-center">
           <h2 className="text-[32px] font-bold text-heading mb-4">
             Join the Adventure! ✦
           </h2>
@@ -76,7 +76,7 @@ export default function RegisterPage() {
         </div>
 
         {/* Right */}
-        <div className="flex-1 bg-card px-12 py-12 flex flex-col justify-center max-w-[480px]">
+        <div className="flex-1 bg-card px-6 md:px-12 py-8 md:py-12 flex flex-col justify-center w-full lg:max-w-[480px]">
           <h3 className="text-2xl font-bold text-heading mb-1">Create Account</h3>
           <p className="text-sm text-muted mb-7">Start your journey today!</p>
 
@@ -139,7 +139,7 @@ export default function RegisterPage() {
             </div>
 
             {error && (
-              <div className="bg-[#fde8e8] border border-[#f5c6c6] rounded-lg px-3.5 py-2.5 text-[13px] text-[#c0392b]">
+              <div className="bg-red-50 border border-red-200 rounded-lg px-3.5 py-2.5 text-[13px] text-red-700">
                 {error}
               </div>
             )}
@@ -147,9 +147,14 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-12 bg-brand disabled:bg-muted text-brand-light border-none rounded-lg text-[15px] font-semibold disabled:cursor-not-allowed cursor-pointer mt-1"
+              className="w-full h-12 bg-brand disabled:bg-muted text-brand-light border-none rounded-lg text-[15px] font-semibold disabled:cursor-not-allowed cursor-pointer mt-1 active:scale-[0.98] transition-transform"
             >
-              {loading ? 'Creating Account...' : 'Create Account →'}
+              {loading ? (
+                <span className="inline-flex items-center gap-2">
+                  <span className="w-4 h-4 border-2 border-brand-light border-t-transparent rounded-full animate-spin" />
+                  Creating Account...
+                </span>
+              ) : 'Create Account →'}
             </button>
           </form>
 

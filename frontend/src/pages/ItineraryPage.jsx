@@ -152,14 +152,14 @@ export default function ItineraryPage() {
 
   if (tripLoading) {
     return (
-      <div className="w-full max-w-full mt-8 px-8 h-[calc(100vh-76px)]">
+    <div className="w-full max-w-full mt-8 px-4 md:px-8 h-[calc(100vh-76px)]">
         <div className="h-full flex flex-col">
           <div className="animate-pulse space-y-4">
-            <div className="h-5 w-32 bg-[#3e3b2a] rounded" />
+            <div className="h-5 w-32 bg-line rounded" />
             <div className="flex gap-6 flex-1">
-              <div className="w-80 bg-[#3e3b2a] rounded-lg" />
-              <div className="flex-1 bg-[#3e3b2a] rounded-lg" />
-              <div className="w-72 bg-[#3e3b2a] rounded-lg" />
+              <div className="w-80 bg-line rounded-lg" />
+              <div className="flex-1 bg-line rounded-lg" />
+              <div className="w-72 bg-line rounded-lg" />
             </div>
           </div>
         </div>
@@ -173,7 +173,7 @@ export default function ItineraryPage() {
         <div className="bg-red-50 border border-red-200 rounded-lg px-5 py-4">
           <p className="text-sm text-red-700">Trip not found.</p>
         </div>
-        <Link to="/trips" className="inline-flex items-center gap-1.5 text-sm text-[#8aab7a] font-medium hover:underline mt-4">
+        <Link to="/trips" className="inline-flex items-center gap-1.5 text-sm text-brand-text font-medium hover:underline mt-4">
           &larr; Back to My Trips
         </Link>
       </div>
@@ -184,23 +184,23 @@ export default function ItineraryPage() {
     <div className="w-full max-w-full mt-8 px-8 h-[calc(100vh-76px)]">
       <div className="h-full flex flex-col">
         {/* Top bar */}
-        <div className="flex items-center justify-between mb-4 shrink-0">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 shrink-0">
           <Link
             to={`/trips/${tripId}`}
-            className="inline-flex items-center gap-1.5 text-sm text-[#8aab7a] font-medium hover:underline"
+            className="inline-flex items-center gap-1.5 text-sm text-brand-text font-medium hover:underline"
           >
             &larr; Back to Trip Detail
           </Link>
           <div className="flex items-center gap-3">
-            <span className="text-sm font-medium text-[#c8c4a0]">{trip.name}</span>
-            <span className="text-xs text-[#8a8468] capitalize">{trip.travel_style}</span>
+            <span className="text-sm font-medium text-heading">{trip.name}</span>
+            <span className="text-xs text-muted capitalize">{trip.travel_style}</span>
           </div>
         </div>
 
         {/* 3-column layout */}
-        <div className="flex gap-5 flex-1 min-h-0">
+        <div className="flex gap-5 flex-1 min-h-0 flex-col md:flex-row">
           {/* Left: Recommendations */}
-          <div className="w-80 shrink-0 min-h-0">
+          <div className="w-full md:w-80 shrink-0 min-h-0">
             <RecommendationPanel
               places={places}
               loading={recsLoading}
@@ -216,7 +216,7 @@ export default function ItineraryPage() {
           </div>
 
           {/* Center: Map */}
-          <div className="flex-1 min-w-0 bg-[#2a2820] border border-[#4a4738] rounded-lg overflow-hidden">
+          <div className="flex-1 min-w-0 bg-card border border-line-strong rounded-lg overflow-hidden">
             <RouteMap
               origin={
                 trip.origin_coordinates
@@ -235,7 +235,7 @@ export default function ItineraryPage() {
           </div>
 
           {/* Right: Itinerary Sidebar */}
-          <div className="w-72 shrink-0 min-h-0">
+          <div className="w-full md:w-72 shrink-0 min-h-0">
             <ItinerarySidebar
               waypoints={waypoints}
               loading={waypointsLoading}

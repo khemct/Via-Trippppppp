@@ -28,12 +28,12 @@ export default function TripListPage() {
   const totalPages = Math.ceil(total / limit);
 
   return (
-    <div className="max-w-3xl mx-auto mt-8 p-6">
+    <div className="max-w-3xl mx-auto mt-8 px-4 md:px-6 py-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-heading">My Trips</h1>
         <Link
           to="/trips/new"
-          className="bg-brand text-brand-light px-4 py-2 rounded text-sm hover:bg-brand-hover"
+          className="bg-brand text-brand-light px-4 py-2 rounded text-sm hover:bg-brand-hover active:scale-95 transition-transform"
         >
           + New Trip
         </Link>
@@ -45,14 +45,29 @@ export default function TripListPage() {
         </div>
       )}
 
-      {loading && <p className="text-muted text-sm">Loading...</p>}
+      {loading && (
+        <div className="space-y-3">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="bg-card border border-line-strong rounded p-4 animate-pulse">
+              <div className="flex items-start justify-between">
+                <div className="flex-1 space-y-2">
+                  <div className="h-5 bg-line rounded w-3/4" />
+                  <div className="h-4 bg-line rounded w-1/2" />
+                  <div className="h-3 bg-line rounded w-2/3" />
+                </div>
+                <div className="h-5 bg-line rounded w-14" />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {!loading && !error && trips.length === 0 && (
         <div className="text-center py-12">
           <p className="text-muted mb-4">No trips yet. Plan your first road trip!</p>
           <Link
             to="/trips/new"
-            className="bg-brand text-brand-light px-6 py-2 rounded text-sm hover:bg-brand-hover"
+            className="bg-brand text-brand-light px-6 py-2 rounded text-sm hover:bg-brand-hover active:scale-95 transition-transform"
           >
             Plan a Trip
           </Link>

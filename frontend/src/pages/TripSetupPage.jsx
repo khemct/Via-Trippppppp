@@ -127,9 +127,9 @@ export default function TripSetupPage() {
     <div className="min-h-screen flex flex-col">
       <Navbar isLoggedIn={isAuthenticated} userName={user?.name} onLogout={logout} />
 
-      <div className="flex flex-1">
+      <div className="flex flex-1 flex-col lg:flex-row">
         {/* Left column — Form */}
-        <div className="w-[420px] shrink-0 bg-card px-8 py-8 border-r border-line overflow-y-auto">
+        <div className="w-full lg:w-[420px] shrink-0 bg-card px-4 md:px-8 py-6 md:py-8 border-r border-line overflow-y-auto">
           <a
             href="/trips"
             className="text-[13px] text-brand-text font-medium no-underline inline-block mb-5"
@@ -262,7 +262,7 @@ export default function TripSetupPage() {
 
             {/* Error banner */}
             {error && (
-              <div className="bg-[#fde8e8] border border-[#f5c6c6] rounded-lg px-3 py-3 text-[13px] text-[#c0392b]">
+              <div className="bg-red-50 border border-red-200 rounded-lg px-3 py-3 text-[13px] text-red-700">
                 {error}
               </div>
             )}
@@ -271,9 +271,14 @@ export default function TripSetupPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-12 bg-brand disabled:bg-muted text-brand-light border-none rounded-lg text-[15px] font-semibold disabled:cursor-not-allowed cursor-pointer mt-1"
+              className="w-full h-12 bg-brand disabled:bg-muted text-brand-light border-none rounded-lg text-[15px] font-semibold disabled:cursor-not-allowed cursor-pointer mt-1 active:scale-[0.98] transition-transform"
             >
-              {loading ? 'Calculating...' : '🗺️ Calculate Route'}
+              {loading ? (
+                <span className="inline-flex items-center gap-2">
+                  <span className="w-4 h-4 border-2 border-brand-light border-t-transparent rounded-full animate-spin" />
+                  Calculating...
+                </span>
+              ) : '🗺️ Calculate Route'}
             </button>
           </form>
         </div>

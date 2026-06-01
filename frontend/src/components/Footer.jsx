@@ -35,7 +35,7 @@ const columns = [
 export default function Footer() {
   return (
     <footer className="bg-input border-t border-line mt-auto">
-      <div className="max-w-[1280px] mx-auto px-6 py-12 pb-8 grid grid-cols-[280px_1fr_1fr_1fr] gap-10">
+      <div className="max-w-[1280px] mx-auto px-6 py-12 pb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[280px_1fr_1fr_1fr] gap-6 lg:gap-10">
         {columns.map((col) => (
           <div key={col.key}>
             {col.content ? (
