@@ -7,6 +7,7 @@ const defaultOptions = {
   mapTypeControl: false,
   streetViewControl: false,
   fullscreenControl: false,
+  gestureHandling: 'greedy',
 };
 
 function waypointColor(dist) {

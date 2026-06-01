@@ -312,111 +312,99 @@ export default function TripSetupPage() {
             position: 'relative',
           }}
         >
-          {!trip ? (
+          {/* Route summary bar — only when trip exists */}
+          {trip && (
             <div
               style={{
-                flex: 1,
+                background: '#252318',
+                padding: '12px 20px',
                 display: 'flex',
-                flexDirection: 'column',
                 alignItems: 'center',
-                justifyContent: 'center',
-                color: '#8a8468',
+                gap: 16,
+                fontSize: 13,
+                color: '#a8a080',
+                borderBottom: '1px solid #3e3b2a',
               }}
             >
-              <div style={{ fontSize: 64, marginBottom: 16 }}>🗺️</div>
-              <div style={{ fontSize: 16 }}>Your route will appear here</div>
+<span style={{ fontWeight: 600, color: '#c8c4a0' }}>{trip.origin}</span>
+              <span style={{ color: '#8a8468' }}>&rarr;</span>
+              <span style={{ fontWeight: 600, color: '#c8c4a0' }}>{trip.destination}</span>
+              <span style={{ marginLeft: 'auto', display: 'flex', gap: 16 }}>
+                <span>Total: <strong>{trip.total_distance_km}</strong> km</span>
+                <span>Drive: <strong>{trip.total_duration_minutes}</strong> min</span>
+              </span>
             </div>
-          ) : (
-            <>
-              {/* Route summary bar */}
-              <div
-                style={{
-                  background: '#252318',
-                  padding: '12px 20px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 16,
-                  fontSize: 13,
-                  color: '#a8a080',
-                  borderBottom: '1px solid #3e3b2a',
+          )}
+
+          {/* Map — always visible */}
+          <div style={{ flex: 1, position: 'relative' }}>
+            <LoadScriptNext
+              googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
+            >
+              <GoogleMap
+                mapContainerStyle={{ width: '100%', height: '100%' }}
+                center={
+                  trip?.origin_coordinates
+                    ? { lat: trip.origin_coordinates.latitude, lng: trip.origin_coordinates.longitude }
+                    : { lat: 13.736717, lng: 100.523186 }
+                }
+                zoom={trip ? 8 : 6}
+                options={{
+                  mapTypeControl: false,
+                  streetViewControl: false,
+                  fullscreenControl: false,
+                  zoomControl: true,
+                  gestureHandling: 'greedy',
                 }}
               >
-<span style={{ fontWeight: 600, color: '#c8c4a0' }}>{trip.origin}</span>
-                <span style={{ color: '#8a8468' }}>&rarr;</span>
-                <span style={{ fontWeight: 600, color: '#c8c4a0' }}>{trip.destination}</span>
-                <span style={{ marginLeft: 'auto', display: 'flex', gap: 16 }}>
-                  <span>Total: <strong>{trip.total_distance_km}</strong> km</span>
-                  <span>Drive: <strong>{trip.total_duration_minutes}</strong> min</span>
-                </span>
-              </div>
-
-              {/* Map */}
-              <div style={{ flex: 1, position: 'relative' }}>
-                <LoadScriptNext
-                  googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
-                >
-                  <GoogleMap
-                    mapContainerStyle={{ width: '100%', height: '100%' }}
-                    center={
-                      trip.origin_coordinates
-                        ? { lat: trip.origin_coordinates.latitude, lng: trip.origin_coordinates.longitude }
-                        : { lat: 0, lng: 0 }
-                    }
-                    zoom={8}
+                {trip?.origin_coordinates && (
+                  <Marker
+                    position={{ lat: trip.origin_coordinates.latitude, lng: trip.origin_coordinates.longitude }}
+                    label="O"
+                  />
+                )}
+                {trip?.dest_coordinates && (
+                  <Marker
+                    position={{ lat: trip.dest_coordinates.latitude, lng: trip.dest_coordinates.longitude }}
+                    label="D"
+                  />
+                )}
+                {trip?.route_polyline && (
+                  <Polyline
+                    key={trip.route_polyline}
+                    path={decodePolyline(trip.route_polyline)}
                     options={{
-                      mapTypeControl: false,
-                      streetViewControl: false,
-                      fullscreenControl: false,
-                      zoomControl: true,
+                      strokeColor: '#2563eb',
+                      strokeOpacity: 0.8,
+                      strokeWeight: 4,
                     }}
-                  >
-                    {trip.origin_coordinates && (
-                      <Marker
-                        position={{ lat: trip.origin_coordinates.latitude, lng: trip.origin_coordinates.longitude }}
-                        label="O"
-                      />
-                    )}
-                    {trip.dest_coordinates && (
-                      <Marker
-                        position={{ lat: trip.dest_coordinates.latitude, lng: trip.dest_coordinates.longitude }}
-                        label="D"
-                      />
-                    )}
-                    {trip.route_polyline && (
-                      <Polyline
-                        path={decodePolyline(trip.route_polyline)}
-                        options={{
-                          strokeColor: '#2563eb',
-                          strokeOpacity: 0.8,
-                          strokeWeight: 4,
-                        }}
-                      />
-                    )}
-                  </GoogleMap>
-                </LoadScriptNext>
+                  />
+                )}
+              </GoogleMap>
+            </LoadScriptNext>
 
-                {/* Success overlay */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    bottom: 24,
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    background: '#4a6741',
-                    color: '#c8dbb8',
-                    padding: '10px 20px',
-                    borderRadius: 8,
-                    fontSize: 14,
-                    fontWeight: 500,
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  Route calculated! {trip.total_distance_km} km &mdash; let&apos;s explore.
-                </div>
+            {/* Success overlay — only when trip exists */}
+            {trip && (
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: 24,
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  background: '#4a6741',
+                  color: '#c8dbb8',
+                  padding: '10px 20px',
+                  borderRadius: 8,
+                  fontSize: 14,
+                  fontWeight: 500,
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                Route calculated! {trip.total_distance_km} km &mdash; let&apos;s explore.
               </div>
-            </>
-          )}
+            )}
+          </div>
         </div>
       </div>
 

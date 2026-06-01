@@ -623,8 +623,7 @@ export default function TripDetailPage() {
           </div>
         </div>
 
-        {/* Right: Map */}
-        {trip.route_polyline && (
+        {/* Right: Map — always visible */}
           <div className="flex-1 min-w-0 h-full flex flex-col">
             <div className="flex-1 bg-[#2a2820] border border-[#4a4738] rounded-lg overflow-hidden">
               <RouteMap
@@ -638,12 +637,11 @@ export default function TripDetailPage() {
                     ? { lat: trip.dest_coordinates.latitude, lng: trip.dest_coordinates.longitude }
                     : null
                 }
-                routePolyline={trip.route_polyline}
+                routePolyline={trip?.route_polyline}
                 height="100%"
               />
             </div>
           </div>
-        )}
         </div>
       </div>
     </div>
