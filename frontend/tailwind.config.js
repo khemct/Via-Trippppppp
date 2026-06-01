@@ -1,18 +1,19 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
     extend: {
       colors: {
-        base: '#312f24',
-        card: '#2a2820',
-        input: '#252318',
-        deep: '#1e1c14',
-        heading: '#c8c4a0',
-        body: '#a8a080',
-        muted: '#8a8468',
-        line: '#3e3b2a',
-        'line-strong': '#4a4738',
+        base: 'var(--color-base)',
+        card: 'var(--color-card)',
+        input: 'var(--color-input)',
+        deep: 'var(--color-deep)',
+        heading: 'var(--color-heading)',
+        body: 'var(--color-body)',
+        muted: 'var(--color-muted)',
+        line: 'var(--color-line)',
+        'line-strong': 'var(--color-line-strong)',
         brand: '#4a6741',
         'brand-hover': '#3d5a35',
         'brand-text': '#8aab7a',

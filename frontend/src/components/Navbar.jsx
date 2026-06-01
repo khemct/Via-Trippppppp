@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
+import { useTheme } from '../context/ThemeContext';
 
 export default function Navbar({ isLoggedIn, userName, onLogout }) {
+  const { theme, toggle } = useTheme();
   return (
     <nav className="h-[60px] bg-input border-b border-line sticky top-0 z-50">
       <div className="flex items-center h-full px-4 md:px-6 max-w-[1280px] mx-auto">
@@ -31,7 +33,15 @@ export default function Navbar({ isLoggedIn, userName, onLogout }) {
             )}
           </div>
 
-        <div className="ml-auto flex items-center gap-2 md:gap-3">
+        <button
+          onClick={toggle}
+          aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          className="ml-auto mr-3 w-8 h-8 flex items-center justify-center rounded-lg text-muted hover:text-heading hover:bg-line transition-colors focus-visible:ring-2 ring-brand"
+        >
+          {theme === 'dark' ? '☀️' : '🌙'}
+        </button>
+
+        <div className="flex items-center gap-2 md:gap-3">
           {!isLoggedIn ? (
             <>
               <Link
