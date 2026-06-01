@@ -52,13 +52,13 @@ export default function ResetPasswordPage() {
 
   if (!token) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#312f24]">
-        <div className="w-full max-w-md bg-[#2a2820] p-8 rounded shadow text-center">
-          <h1 className="text-2xl font-bold mb-4 text-[#c8c4a0]">Invalid Link</h1>
+      <div className="min-h-screen flex items-center justify-center bg-base">
+        <div className="w-full max-w-md bg-card p-8 rounded shadow text-center">
+          <h1 className="text-2xl font-bold mb-4 text-heading">Invalid Link</h1>
           <p className="text-sm text-red-600 mb-4">
             Missing reset token. Use the link from your password reset email.
           </p>
-          <Link to="/forgot-password" className="text-[#8aab7a] hover:underline text-sm">
+          <Link to="/forgot-password" className="text-brand-text hover:underline text-sm">
             Request a new reset link
           </Link>
         </div>
@@ -67,9 +67,9 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#312f24]">
-      <div className="w-full max-w-md bg-[#2a2820] p-8 rounded shadow">
-        <h1 className="text-2xl font-bold mb-6 text-center text-[#c8c4a0]">Set New Password</h1>
+    <div className="min-h-screen flex items-center justify-center bg-base">
+      <div className="w-full max-w-md bg-card p-8 rounded shadow">
+        <h1 className="text-2xl font-bold mb-6 text-center text-heading">Set New Password</h1>
 
         {message && (
           <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-sm">
@@ -85,24 +85,24 @@ export default function ResetPasswordPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1 text-[#a8a080]">New Password</label>
+            <label className="block text-sm font-medium mb-1 text-body">New Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full border border-[#4a4738] rounded px-3 py-2 text-sm bg-[#252318] text-[#c8c4a0]"
+              className="w-full border border-line-strong rounded px-3 py-2 text-sm bg-input text-heading"
               placeholder="At least 8 characters"
               autoFocus
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1 text-[#a8a080]">Confirm New Password</label>
+            <label className="block text-sm font-medium mb-1 text-body">Confirm New Password</label>
             <input
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full border border-[#4a4738] rounded px-3 py-2 text-sm bg-[#252318] text-[#c8c4a0]"
+              className="w-full border border-line-strong rounded px-3 py-2 text-sm bg-input text-heading"
               placeholder="Repeat your new password"
             />
           </div>
@@ -110,14 +110,14 @@ export default function ResetPasswordPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#4a6741] text-[#c8dbb8] py-2 rounded text-sm font-medium hover:bg-[#3d5a35] disabled:opacity-50"
+            className="w-full bg-brand text-brand-light py-2 rounded text-sm font-medium hover:bg-brand-hover disabled:opacity-50"
           >
             {loading ? 'Resetting...' : 'Reset Password'}
           </button>
         </form>
 
         <p className="mt-4 text-sm text-center">
-          <Link to="/login" className="text-[#8aab7a] hover:underline">
+          <Link to="/login" className="text-brand-text hover:underline">
             Back to Sign In
           </Link>
         </p>

@@ -53,202 +53,93 @@ export default function RegisterPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div className="min-h-screen flex flex-col">
       <Navbar isLoggedIn={false} />
 
-      <div style={{ display: 'flex', flex: 1 }}>
+      <div className="flex flex-1">
         {/* Left */}
-        <div
-          style={{
-            flex: '0 0 45%',
-            background: 'linear-gradient(135deg, #2a2820, #1e1c14)',
-            padding: 48,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-          }}
-        >
-          <h2
-            style={{
-              fontSize: 32,
-              fontWeight: 700,
-              color: '#c8c4a0',
-              marginBottom: 16,
-            }}
-          >
+        <div className="flex-[0_0_45%] bg-gradient-to-br from-[#2a2820] to-[#1e1c14] px-12 py-12 flex flex-col justify-center">
+          <h2 className="text-[32px] font-bold text-heading mb-4">
             Join the Adventure! ✦
           </h2>
-          <p style={{ fontSize: 15, color: '#a8a080', lineHeight: 1.7, marginBottom: 32 }}>
+          <p className="text-[15px] text-body leading-relaxed mb-8">
             Create your account and start planning your perfect road trip.
           </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div className="flex flex-col gap-3.5">
             {perks.map((item) => (
-              <div key={item} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <div
-                  style={{
-                    width: 10,
-                    height: 10,
-                    borderRadius: '50%',
-                    background: '#4a6741',
-                    flexShrink: 0,
-                  }}
-                />
-                <span style={{ fontSize: 15, color: '#c8c4a0', fontWeight: 500 }}>{item}</span>
+              <div key={item} className="flex items-center gap-3">
+                <div className="w-2.5 h-2.5 rounded-full bg-brand shrink-0" />
+                <span className="text-[15px] text-heading font-medium">{item}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Right */}
-        <div
-          style={{
-            flex: 1,
-            background: '#2a2820',
-            padding: 48,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            maxWidth: 480,
-          }}
-        >
-          <h3 style={{ fontSize: 24, fontWeight: 700, color: '#c8c4a0', marginBottom: 4 }}>
-            Create Account
-          </h3>
-          <p style={{ fontSize: 14, color: '#8a8468', marginBottom: 28 }}>
-            Start your journey today!
-          </p>
+        <div className="flex-1 bg-card px-12 py-12 flex flex-col justify-center max-w-[480px]">
+          <h3 className="text-2xl font-bold text-heading mb-1">Create Account</h3>
+          <p className="text-sm text-muted mb-7">Start your journey today!</p>
 
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500,                   color: '#a8a080', display: 'block', marginBottom: 6 }}>
-                Full Name
-              </label>
+              <label className="text-[13px] font-medium text-body block mb-1.5">Full Name</label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="John Doe"
-                style={{
-                  width: '100%',
-                    border: '1.5px solid #4a4738',
-                    borderRadius: 8,
-                    background: '#252318',
-                    padding: '10px 14px',
-                    fontSize: 14,
-                    color: '#c8c4a0',
-                  outline: 'none',
-                  boxSizing: 'border-box',
-                }}
+                className="w-full border border-line-strong rounded-lg bg-input px-3.5 py-2.5 text-sm text-heading outline-none box-border"
               />
             </div>
 
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500,                   color: '#a8a080', display: 'block', marginBottom: 6 }}>
-                Email Address
-              </label>
+              <label className="text-[13px] font-medium text-body block mb-1.5">Email Address</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                style={{
-                  width: '100%',
-                    border: '1.5px solid #4a4738',
-                    borderRadius: 8,
-                    background: '#252318',
-                    padding: '10px 14px',
-                    fontSize: 14,
-                    color: '#c8c4a0',
-                  outline: 'none',
-                  boxSizing: 'border-box',
-                }}
+                className="w-full border border-line-strong rounded-lg bg-input px-3.5 py-2.5 text-sm text-heading outline-none box-border"
               />
             </div>
 
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500,                   color: '#a8a080', display: 'block', marginBottom: 6 }}>
-                Password
-              </label>
+              <label className="text-[13px] font-medium text-body block mb-1.5">Password</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Min. 8 characters"
-                style={{
-                  width: '100%',
-                    border: '1.5px solid #4a4738',
-                    borderRadius: 8,
-                    background: '#252318',
-                    padding: '10px 14px',
-                    fontSize: 14,
-                    color: '#c8c4a0',
-                  outline: 'none',
-                  boxSizing: 'border-box',
-                }}
+                className="w-full border border-line-strong rounded-lg bg-input px-3.5 py-2.5 text-sm text-heading outline-none box-border"
               />
             </div>
 
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500,                   color: '#a8a080', display: 'block', marginBottom: 6 }}>
-                Confirm Password
-              </label>
+              <label className="text-[13px] font-medium text-body block mb-1.5">Confirm Password</label>
               <input
                 type="password"
                 value={confirmPw}
                 onChange={(e) => setConfirmPw(e.target.value)}
                 placeholder="Re-enter your password"
-                style={{
-                  width: '100%',
-                    border: '1.5px solid #4a4738',
-                    borderRadius: 8,
-                    background: '#252318',
-                    padding: '10px 14px',
-                    fontSize: 14,
-                    color: '#c8c4a0',
-                  outline: 'none',
-                  boxSizing: 'border-box',
-                }}
+                className="w-full border border-line-strong rounded-lg bg-input px-3.5 py-2.5 text-sm text-heading outline-none box-border"
               />
             </div>
 
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500,                   color: '#a8a080', display: 'block', marginBottom: 6 }}>
-                Role
-              </label>
+              <label className="text-[13px] font-medium text-body block mb-1.5">Role</label>
               <select
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                style={{
-                  width: '100%',
-                    border: '1.5px solid #4a4738',
-                    borderRadius: 8,
-                    background: '#252318',
-                    padding: '10px 14px',
-                    fontSize: 14,
-                    color: '#c8c4a0',
-                  outline: 'none',
-                  boxSizing: 'border-box',
-                }}
+                className="w-full border border-line-strong rounded-lg bg-input px-3.5 py-2.5 text-sm text-heading outline-none box-border"
               >
                 {roles.map((r) => (
-                  <option key={r.value} value={r.value}>
-                    {r.label} — {r.desc}
-                  </option>
+                  <option key={r.value} value={r.value}>{r.label} — {r.desc}</option>
                 ))}
               </select>
             </div>
 
             {error && (
-              <div
-                style={{
-                  background: '#fde8e8',
-                  border: '1px solid #f5c6c6',
-                  borderRadius: 8,
-                  padding: '10px 14px',
-                  fontSize: 13,
-                  color: '#c0392b',
-                }}
-              >
+              <div className="bg-[#fde8e8] border border-[#f5c6c6] rounded-lg px-3.5 py-2.5 text-[13px] text-[#c0392b]">
                 {error}
               </div>
             )}
@@ -256,26 +147,15 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              style={{
-                width: '100%',
-                height: 48,
-                background: loading ? '#8a8468' : '#4a6741',
-                color: '#c8dbb8',
-                border: 'none',
-                borderRadius: 8,
-                fontSize: 15,
-                fontWeight: 600,
-                cursor: loading ? 'not-allowed' : 'pointer',
-                marginTop: 4,
-              }}
+              className="w-full h-12 bg-brand disabled:bg-muted text-brand-light border-none rounded-lg text-[15px] font-semibold disabled:cursor-not-allowed cursor-pointer mt-1"
             >
               {loading ? 'Creating Account...' : 'Create Account →'}
             </button>
           </form>
 
-          <p style={{ textAlign: 'center', marginTop: 24, fontSize: 14, color: '#a8a080' }}>
+          <p className="text-center mt-6 text-sm text-body">
             Already have an account?{' '}
-            <Link to="/login" style={{ color: '#8aab7a', fontWeight: 600, textDecoration: 'none' }}>
+            <Link to="/login" className="text-brand-text font-semibold no-underline">
               Log in →
             </Link>
           </p>
@@ -283,16 +163,7 @@ export default function RegisterPage() {
       </div>
 
       {/* Footer copyright only */}
-      <div
-        style={{
-          borderTop: '1px solid #3e3b2a',
-          background: '#1e1c14',
-          padding: '16px 24px',
-          textAlign: 'center',
-          fontSize: 13,
-          color: '#8a8468',
-        }}
-      >
+      <div className="border-t border-line bg-deep py-4 px-6 text-center text-[13px] text-muted">
         &copy; 2026 Via-Trip. All rights reserved.
       </div>
     </div>

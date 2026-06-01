@@ -87,8 +87,7 @@ export default function RecommendationPanel({
             step="0.5"
             value={filters.rating_min}
             onChange={(e) => onFilterChange({ ...filters, rating_min: parseFloat(e.target.value), cursor: null })}
-            className="flex-1"
-            style={{ accentColor: '#4a6741', height: 4 }}
+            className="flex-1 accent-brand h-1"
           />
           <span className="text-xs text-[#a8a080] w-6 text-right">{filters.rating_min}</span>
         </div>

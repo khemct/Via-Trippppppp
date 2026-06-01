@@ -5,26 +5,11 @@ const columns = [
     key: 'brand',
     content: (
       <div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-          <div
-            style={{
-              width: 32,
-              height: 32,
-              borderRadius: '50%',
-              background: '#4a6741',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#fff',
-              fontSize: 16,
-              lineHeight: 1,
-            }}
-          >
-            🏔
-          </div>
-          <span style={{ fontSize: 16, fontWeight: 700, color: '#c8c4a0' }}>Via-Trip</span>
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-8 h-8 rounded-full bg-brand flex items-center justify-center text-white text-base leading-none">🏔</div>
+          <span className="text-base font-bold text-heading">Via-Trip</span>
         </div>
-        <p style={{ fontSize: 13, color: '#8a8468', lineHeight: 1.6, maxWidth: 240 }}>
+        <p className="text-[13px] text-muted leading-relaxed max-w-[240px]">
           Plan your perfect road trip, discover hidden gems, and collect memories along the way.
         </p>
       </div>
@@ -49,53 +34,18 @@ const columns = [
 
 export default function Footer() {
   return (
-    <footer
-      style={{
-        background: '#252318',
-        borderTop: '1px solid #3e3b2a',
-        marginTop: 'auto',
-      }}
-    >
-      <div
-        style={{
-          maxWidth: 1280,
-          margin: '0 auto',
-          padding: '48px 24px 32px',
-          display: 'grid',
-          gridTemplateColumns: '280px 1fr 1fr 1fr',
-          gap: 40,
-        }}
-      >
+    <footer className="bg-input border-t border-line mt-auto">
+      <div className="max-w-[1280px] mx-auto px-6 py-12 pb-8 grid grid-cols-[280px_1fr_1fr_1fr] gap-10">
         {columns.map((col) => (
           <div key={col.key}>
             {col.content ? (
               col.content
             ) : (
               <>
-                <div
-                  style={{
-                    fontSize: 12,
-                    fontWeight: 600,
-                    color: '#8a8468',
-                    letterSpacing: '0.5px',
-                    marginBottom: 16,
-                  }}
-                >
-                  {col.title}
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <div className="text-xs font-semibold text-muted tracking-wider mb-4">{col.title}</div>
+                <div className="flex flex-col gap-2.5">
                   {col.links.map((link) => (
-                    <Link
-                      key={link}
-                      to="/"
-                      style={{
-                        fontSize: 13,
-                        color: '#a8a080',
-                        textDecoration: 'none',
-                      }}
-                    >
-                      {link}
-                    </Link>
+                    <Link key={link} to="/" className="text-[13px] text-body no-underline">{link}</Link>
                   ))}
                 </div>
               </>
@@ -104,16 +54,7 @@ export default function Footer() {
         ))}
       </div>
 
-      <div
-        style={{
-          borderTop: '1px solid #3e3b2a',
-          padding: '16px 24px',
-          textAlign: 'center',
-          fontSize: 13,
-          color: '#8a8468',
-          background: '#1e1c14',
-        }}
-      >
+      <div className="border-t border-line py-4 px-6 text-center text-[13px] text-muted bg-deep">
         &copy; 2026 Via-Trip. All rights reserved.
       </div>
     </footer>

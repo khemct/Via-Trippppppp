@@ -98,13 +98,13 @@ export default function ItinerarySidebar({
     onReorder(withOrder);
   }
 
-  const feasiColors = {
-    feasible: { bg: '#3e3b2a', text: '#8aab7a', bar: '#4a6741', label: 'Feasible' },
-    tight: { bg: '#fef3c7', text: '#92400e', bar: '#c8a84a', label: 'Tight' },
-    at_risk: { bg: '#fee2e2', text: '#991b1b', bar: '#dc2626', label: 'At Risk' },
+  const feasiStyles = {
+    feasible: { container: 'bg-[#3e3b2a]', text: 'text-brand', bar: 'bg-brand', label: 'Feasible' },
+    tight: { container: 'bg-amber-50', text: 'text-amber-800', bar: 'bg-amber-500', label: 'Tight' },
+    at_risk: { container: 'bg-red-50', text: 'text-red-800', bar: 'bg-red-600', label: 'At Risk' },
   };
 
-  const feasi = feasibility ? feasiColors[feasibility.status] || feasiColors.feasible : null;
+  const feasi = feasibility ? feasiStyles[feasibility.status] || feasiStyles.feasible : null;
 
   return (
     <div className="h-full flex flex-col bg-[#2a2820] border border-[#4a4738] rounded-lg overflow-hidden">
@@ -149,24 +149,21 @@ export default function ItinerarySidebar({
       </div>
 
       {feasi && (
-        <div className="shrink-0 p-4 border-t border-[#3e3b2a]" style={{ background: feasi.bg }}>
+        <div className={`shrink-0 p-4 border-t border-[#3e3b2a] ${feasi.container}`}>
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-xs font-medium" style={{ color: feasi.text }}>{feasi.label}</span>
-            <span className="text-xs" style={{ color: feasi.text }}>
+            <span className={`text-xs font-medium ${feasi.text}`}>{feasi.label}</span>
+            <span className={`text-xs ${feasi.text}`}>
               {feasibility.details.utilization_pct}% utilized
             </span>
           </div>
           <div className="h-1.5 bg-[#252318] rounded-full overflow-hidden">
             <div
-              className="h-full rounded-full transition-all duration-300"
-              style={{
-                width: `${Math.min(feasibility.details.utilization_pct, 100)}%`,
-                background: feasi.bar,
-              }}
+              className={`h-full rounded-full transition-all duration-300 ${feasi.bar}`}
+              style={{ width: `${Math.min(feasibility.details.utilization_pct, 100)}%` }}
             />
           </div>
           {feasibility.details.detours > 0 && (
-            <div className="mt-1.5 text-xs" style={{ color: feasi.text }}>
+            <div className={`mt-1.5 text-xs ${feasi.text}`}>
               {feasibility.details.detours} detour{feasibility.details.detours !== 1 ? 's' : ''} · {feasibility.details.total_detour_distance_m}m extra
             </div>
           )}

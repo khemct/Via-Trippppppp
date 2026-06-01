@@ -131,12 +131,12 @@ function RouteIcon({ size = 16 }) {
 function InfoRow({ icon: Icon, label, value, capitalize }) {
   return (
     <div className="flex items-start gap-3">
-      <div className="mt-0.5 text-[#8a8468] shrink-0">
+      <div className="mt-0.5 text-muted shrink-0">
         {Icon && <Icon />}
       </div>
       <div className="min-w-0">
-        <span className="text-xs text-[#8a8468]">{label}</span>
-        <p className={`text-sm font-medium text-[#c8c4a0] ${capitalize ? 'capitalize' : ''} truncate`}>
+        <span className="text-xs text-muted">{label}</span>
+        <p className={`text-sm font-medium text-heading ${capitalize ? 'capitalize' : ''} truncate`}>
           {value}
         </p>
       </div>
@@ -146,7 +146,7 @@ function InfoRow({ icon: Icon, label, value, capitalize }) {
 
 function SectionHeading({ children }) {
   return (
-    <h3 className="text-xs font-semibold text-[#8a8468] uppercase tracking-wider mb-3">
+    <h3 className="text-xs font-semibold text-muted uppercase tracking-wider mb-3">
       {children}
     </h3>
   );
@@ -154,7 +154,7 @@ function SectionHeading({ children }) {
 
 function FeasibilityBadge({ status }) {
   const styles = {
-    feasible: 'bg-[#3e3b2a] text-[#8aab7a]',
+    feasible: 'bg-line text-brand-text',
     tight: 'bg-[#fef3c7] text-[#92400e]',
     infeasible: 'bg-[#fee2e2] text-[#991b1b]',
   };
@@ -163,10 +163,10 @@ function FeasibilityBadge({ status }) {
     tight: '⚠',
     infeasible: '✕',
   };
-  const cls = styles[status] || 'bg-[#252318] text-[#8a8468]';
+  const cls = styles[status] || 'bg-input text-muted';
   return (
     <div className="flex items-center gap-2">
-      <span className="text-xs text-[#8a8468]">Feasibility</span>
+      <span className="text-xs text-muted">Feasibility</span>
       <span className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded ${cls}`}>
         <span>{icons[status] || '?'}</span>
         <span className="capitalize">{status}</span>
@@ -176,14 +176,14 @@ function FeasibilityBadge({ status }) {
 }
 
 function Skeleton({ className = '' }) {
-  return <div className={`animate-pulse bg-[#3e3b2a] rounded ${className}`} />;
+  return <div className={`animate-pulse bg-line rounded ${className}`} />;
 }
 
 function LoadingState() {
   return (
     <div className="w-full max-w-full mt-8 px-8">
       <div className="flex gap-6">
-        <div className="w-[480px] shrink-0 bg-[#2a2820] border border-[#4a4738] rounded p-6 space-y-4">
+        <div className="w-[480px] shrink-0 bg-card border border-line-strong rounded p-6 space-y-4">
           <Skeleton className="h-8 w-3/4" />
           <Skeleton className="h-4 w-1/4" />
           <div className="pt-4 space-y-3">
@@ -359,7 +359,7 @@ export default function TripDetailPage() {
         </div>
         <Link
           to="/trips"
-          className="inline-flex items-center gap-1.5 text-sm text-[#8aab7a] font-medium hover:underline"
+          className="inline-flex items-center gap-1.5 text-sm text-brand-text font-medium hover:underline"
         >
           &larr; Back to My Trips
         </Link>
@@ -373,12 +373,9 @@ export default function TripDetailPage() {
   if (editing) {
     return (
       <div className="w-full max-w-4xl mx-auto mt-8 p-6">
-        <div
-          className="bg-[#2a2820] rounded-lg shadow-sm border border-[#4a4738] overflow-hidden"
-          style={{ borderLeft: '4px solid #4a6741' }}
-        >
+        <div className="bg-card rounded-lg shadow-sm border border-line-strong overflow-hidden border-l-4 border-brand">
           <div className="p-8">
-            <h1 className="text-xl font-bold text-[#c8c4a0] mb-6">Edit Trip</h1>
+            <h1 className="text-xl font-bold text-heading mb-6">Edit Trip</h1>
 
             {saveError && (
               <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3 mb-5">
@@ -391,32 +388,32 @@ export default function TripDetailPage() {
                 <SectionHeading>Trip Details</SectionHeading>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-[#a8a080] mb-1.5">Name</label>
+                    <label className="block text-sm font-medium text-body mb-1.5">Name</label>
                     <input
                       name="name"
                       value={editForm.name}
                       onChange={handleEditChange}
-                      className="w-full border border-[#4a4738] rounded-lg px-3 py-2 text-sm text-[#c8c4a0] focus:outline-none focus:ring-2 focus:ring-[#4a6741] focus:border-transparent"
+                      className="w-full border border-line-strong rounded-lg px-3 py-2 text-sm text-heading focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
                     />
                   </div>
                   <div className="flex gap-4">
                     <div className="flex-1">
-                      <label className="block text-sm font-medium text-[#a8a080] mb-1.5">Travel Date</label>
+                      <label className="block text-sm font-medium text-body mb-1.5">Travel Date</label>
                       <input
                         type="date"
                         name="travel_date"
                         value={editForm.travel_date}
                         onChange={handleEditChange}
-                        className="w-full border border-[#4a4738] rounded-lg px-3 py-2 text-sm text-[#c8c4a0] focus:outline-none focus:ring-2 focus:ring-[#4a6741] focus:border-transparent"
+                        className="w-full border border-line-strong rounded-lg px-3 py-2 text-sm text-heading focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
                       />
                     </div>
                     <div className="flex-1">
-                      <label className="block text-sm font-medium text-[#a8a080] mb-1.5">Status</label>
+                      <label className="block text-sm font-medium text-body mb-1.5">Status</label>
                       <select
                         name="status"
                         value={editForm.status}
                         onChange={handleEditChange}
-                        className="w-full border border-[#4a4738] rounded-lg px-3 py-2 text-sm text-[#c8c4a0] focus:outline-none focus:ring-2 focus:ring-[#4a6741] focus:border-transparent"
+                        className="w-full border border-line-strong rounded-lg px-3 py-2 text-sm text-heading focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
                       >
                         <option value="draft">Draft</option>
                         <option value="saved">Saved</option>
@@ -426,14 +423,14 @@ export default function TripDetailPage() {
                 </div>
               </div>
 
-              <div className="border-t border-[#3e3b2a]" />
+              <div className="border-t border-line" />
 
               <div>
                 <SectionHeading>Schedule</SectionHeading>
                 <div className="space-y-4">
                   <div className="flex gap-4">
                     <div className="flex-1">
-                      <label className="block text-sm font-medium text-[#a8a080] mb-1.5">Number of Days</label>
+                      <label className="block text-sm font-medium text-body mb-1.5">Number of Days</label>
                       <input
                         type="number"
                         name="number_of_days"
@@ -441,11 +438,11 @@ export default function TripDetailPage() {
                         max="30"
                         value={editForm.number_of_days}
                         onChange={handleEditChange}
-                        className="w-full border border-[#4a4738] rounded-lg px-3 py-2 text-sm text-[#c8c4a0] focus:outline-none focus:ring-2 focus:ring-[#4a6741] focus:border-transparent"
+                        className="w-full border border-line-strong rounded-lg px-3 py-2 text-sm text-heading focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
                       />
                     </div>
                     <div className="flex-1">
-                      <label className="block text-sm font-medium text-[#a8a080] mb-1.5">
+                      <label className="block text-sm font-medium text-body mb-1.5">
                         Daily Hours: {editForm.daily_hours}h
                       </label>
                       <input
@@ -455,10 +452,9 @@ export default function TripDetailPage() {
                         max="16"
                         value={editForm.daily_hours}
                         onChange={handleEditChange}
-                        className="w-full"
-                        style={{ accentColor: '#4a6741' }}
+                        className="w-full accent-brand"
                       />
-                      <div className="flex justify-between text-xs text-[#8a8468] mt-0.5">
+                      <div className="flex justify-between text-xs text-muted mt-0.5">
                         <span>4h</span>
                         <span>16h</span>
                       </div>
@@ -467,13 +463,13 @@ export default function TripDetailPage() {
                 </div>
               </div>
 
-              <div className="border-t border-[#3e3b2a]" />
+              <div className="border-t border-line" />
 
               <div>
                 <SectionHeading>Preferences</SectionHeading>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-[#a8a080] mb-2">Travel Style</label>
+                    <label className="block text-sm font-medium text-body mb-2">Travel Style</label>
                     <div className="flex gap-2 flex-wrap">
                       {STYLES.map((s) => (
                         <button
@@ -483,8 +479,8 @@ export default function TripDetailPage() {
                           onClick={() => setEditForm((prev) => ({ ...prev, travel_style: s }))}
                           className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${
                             editForm.travel_style === s
-                              ? 'bg-[#4a6741] text-[#c8dbb8] border-[#4a6741]'
-                              : 'bg-[#3e3b2a] text-[#a8a080] border-[#4a4738] hover:border-[#4a6741] hover:text-[#8aab7a]'
+                              ? 'bg-brand text-brand-light border-brand'
+                              : 'bg-line text-body border-line-strong hover:border-brand hover:text-brand-text'
                           }`}
                         >
                           {STYLE_LABELS[s]}
@@ -493,7 +489,7 @@ export default function TripDetailPage() {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-[#a8a080] mb-1.5">
+                    <label className="block text-sm font-medium text-body mb-1.5">
                       Stop Duration: {editForm.estimated_stop_duration} min
                     </label>
                     <input
@@ -504,10 +500,9 @@ export default function TripDetailPage() {
                       step="5"
                       value={editForm.estimated_stop_duration}
                       onChange={handleEditChange}
-                      className="w-full"
-                      style={{ accentColor: '#4a6741' }}
+                      className="w-full accent-brand"
                     />
-                    <div className="flex justify-between text-xs text-[#8a8468] mt-0.5">
+                    <div className="flex justify-between text-xs text-muted mt-0.5">
                       <span>5 min</span>
                       <span>180 min</span>
                     </div>
@@ -516,17 +511,17 @@ export default function TripDetailPage() {
               </div>
             </div>
 
-            <div className="mt-8 pt-5 border-t border-[#3e3b2a] flex items-center gap-3">
+            <div className="mt-8 pt-5 border-t border-line flex items-center gap-3">
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="bg-[#4a6741] text-[#c8dbb8] px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-[#3d5a35] disabled:opacity-50 transition-colors"
+                className="bg-brand text-brand-light px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-brand-hover disabled:opacity-50 transition-colors"
               >
                 {saving ? 'Saving...' : 'Save Changes'}
               </button>
               <button
                 onClick={handleCancel}
-                className="text-[#a8a080] px-5 py-2.5 rounded-lg text-sm font-medium border border-[#4a4738] hover:bg-[#252318] transition-colors"
+                className="text-body px-5 py-2.5 rounded-lg text-sm font-medium border border-line-strong hover:bg-input transition-colors"
               >
                 Cancel
               </button>
@@ -539,19 +534,19 @@ export default function TripDetailPage() {
 
   // ---- VIEW MODE ----
   return (
-    <div className="w-full max-w-full mt-8 px-8" style={{ height: 'calc(100vh - 76px)' }}>
+    <div className="w-full max-w-full mt-8 px-8 h-[calc(100vh-76px)]">
       <div className="h-full flex flex-col">
         <div className="flex items-center justify-between mb-4 shrink-0">
           <Link
             to="/trips"
-            className="inline-flex items-center gap-1.5 text-sm text-[#8aab7a] font-medium hover:underline"
+            className="inline-flex items-center gap-1.5 text-sm text-brand-text font-medium hover:underline"
           >
             &larr; Back to My Trips
           </Link>
           {isOwner() && (
             <button
               onClick={() => setEditing(true)}
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-[#8aab7a] border border-[#4a4738] rounded-lg px-3.5 py-2 hover:bg-[#252318] transition-colors"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-brand-text border border-line-strong rounded-lg px-3.5 py-2 hover:bg-input transition-colors"
             >
               <PencilIcon />
               Edit
@@ -561,14 +556,14 @@ export default function TripDetailPage() {
 
         <div className="flex gap-6 flex-1 min-h-0">
           {/* Left: Info */}
-          <div className="w-[480px] shrink-0 bg-[#2a2820] border border-[#4a4738] rounded-lg p-6 overflow-y-auto">
+          <div className="w-[480px] shrink-0 bg-card border border-line-strong rounded-lg p-6 overflow-y-auto">
           <div className="flex items-start justify-between mb-6">
-            <h1 className="text-xl font-bold text-[#c8c4a0] leading-tight">{trip.name}</h1>
+            <h1 className="text-xl font-bold text-heading leading-tight">{trip.name}</h1>
             <span
               className={`shrink-0 ml-3 text-xs font-medium px-2.5 py-0.5 rounded-full ${
                 trip.status === 'saved'
-                  ? 'bg-[#3e3b2a] text-[#8aab7a]'
-                  : 'bg-[#252318] text-[#8a8468]'
+                  ? 'bg-line text-brand-text'
+                  : 'bg-input text-muted'
               }`}
             >
               {trip.status}
@@ -586,7 +581,7 @@ export default function TripDetailPage() {
               </div>
             </div>
 
-            <div className="border-t border-[#3e3b2a]" />
+            <div className="border-t border-line" />
 
             <div>
               <SectionHeading>Schedule</SectionHeading>
@@ -597,7 +592,7 @@ export default function TripDetailPage() {
               </div>
             </div>
 
-            <div className="border-t border-[#3e3b2a]" />
+            <div className="border-t border-line" />
 
             <div>
               <SectionHeading>Preferences</SectionHeading>
@@ -607,7 +602,7 @@ export default function TripDetailPage() {
               </div>
             </div>
 
-            <div className="border-t border-[#3e3b2a]" />
+            <div className="border-t border-line" />
 
             <div>
               <SectionHeading>Status</SectionHeading>
@@ -616,10 +611,10 @@ export default function TripDetailPage() {
           </div>
 
           {/* Actions */}
-          <div className="mt-6 pt-4 border-t border-[#3e3b2a] space-y-2.5">
+          <div className="mt-6 pt-4 border-t border-line space-y-2.5">
             <Link
               to={`/trips/${tripId}/itinerary`}
-              className="w-full inline-flex items-center justify-center gap-2 bg-[#4a6741] text-[#c8dbb8] rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-[#3d5a35] transition-colors"
+              className="w-full inline-flex items-center justify-center gap-2 bg-brand text-brand-light rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-brand-hover transition-colors"
             >
               <RouteIcon />
               Plan Itinerary
@@ -636,9 +631,9 @@ export default function TripDetailPage() {
           </div>
         </div>
 
-        {/* Right: Map — always visible */}
+        {/* Right: Map */}
           <div className="flex-1 min-w-0 h-full flex flex-col">
-            <div className="flex-1 bg-[#2a2820] border border-[#4a4738] rounded-lg overflow-hidden">
+            <div className="flex-1 bg-card border border-line-strong rounded-lg overflow-hidden">
               <RouteMap
                 origin={originCoords}
                 destination={destCoords}

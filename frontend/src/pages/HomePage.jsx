@@ -32,100 +32,35 @@ export default function HomePage() {
   return (
     <div>
       {/* Section 1 — Hero */}
-      <section
-        style={{
-          background: 'linear-gradient(135deg, #2a2820 0%, #312f24 100%)',
-          padding: '80px 24px',
-        }}
-      >
-        <div
-          style={{
-            maxWidth: 1280,
-            margin: '0 auto',
-            display: 'flex',
-            gap: 60,
-            alignItems: 'center',
-          }}
-        >
+      <section className="bg-gradient-to-br from-[#2a2820] to-[#312f24] px-6 py-20">
+        <div className="max-w-[1280px] mx-auto flex gap-15 items-center">
           {/* Left */}
-          <div style={{ flex: '0 0 55%' }}>
-            <h1
-              style={{
-                fontSize: 42,
-                fontWeight: 800,
-                color: '#c8c4a0',
-                lineHeight: 1.15,
-                marginBottom: 16,
-              }}
-            >
+          <div className="flex-[0_0_55%]">
+            <h1 className="text-[42px] font-extrabold text-heading leading-tight mb-4">
               Every Route Has a Story
             </h1>
-            <p
-              style={{
-                fontSize: 16,
-                color: '#a8a080',
-                lineHeight: 1.6,
-                marginBottom: 32,
-                maxWidth: 480,
-              }}
-            >
+            <p className="text-base text-body leading-relaxed mb-8 max-w-[480px]">
               Plan your trip, discover hidden gems, and collect memories along the way.
             </p>
 
-            <form
-              onSubmit={handleSearch}
-              style={{
-                background: '#2a2820',
-                borderRadius: 14,
-                padding: 24,
-                boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
-              }}
-            >
-              <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
+            <form onSubmit={handleSearch} className="bg-[#2a2820] rounded-xl p-6 shadow-lg">
+              <div className="flex gap-3 mb-4">
                 <input
                   value={origin}
                   onChange={(e) => setOrigin(e.target.value)}
                   placeholder="Where are you starting?"
-                  style={{
-                    flex: 1,
-                    border: '1.5px solid #4a4738',
-                    borderRadius: 8,
-                    background: '#252318',
-                    padding: '10px 14px',
-                    fontSize: 14,
-                    color: '#c8c4a0',
-                    outline: 'none',
-                  }}
+                  className="flex-1 border border-line-strong rounded-lg bg-input px-3.5 py-2.5 text-sm text-heading outline-none"
                 />
                 <input
                   value={dest}
                   onChange={(e) => setDest(e.target.value)}
                   placeholder="Where are you going?"
-                  style={{
-                    flex: 1,
-                    border: '1.5px solid #4a4738',
-                    borderRadius: 8,
-                    background: '#252318',
-                    padding: '10px 14px',
-                    fontSize: 14,
-                    color: '#c8c4a0',
-                    outline: 'none',
-                  }}
+                  className="flex-1 border border-line-strong rounded-lg bg-input px-3.5 py-2.5 text-sm text-heading outline-none"
                 />
               </div>
               <button
                 type="submit"
-                style={{
-                  width: '100%',
-                  background: '#4a6741',
-                  color: '#c8dbb8',
-                  border: 'none',
-                  borderRadius: 8,
-                  padding: '12px 20px',
-                  fontSize: 15,
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                }}
+                className="w-full bg-brand text-brand-light border-none rounded-lg py-3 text-[15px] font-semibold cursor-pointer"
               >
                 ✨ Start Planning
               </button>
@@ -133,39 +68,13 @@ export default function HomePage() {
           </div>
 
           {/* Right */}
-          <div style={{ flex: '0 0 40%' }}>
-            <div
-              style={{
-                background: 'linear-gradient(135deg, #4a6741, #6b8f5e)',
-                borderRadius: 16,
-                padding: 40,
-                color: '#fff',
-                textAlign: 'center',
-              }}
-            >
-              <div style={{ fontSize: 64, marginBottom: 12 }}>🚐</div>
-              <div style={{ fontSize: 22, fontWeight: 700, marginBottom: 24 }}>
-                Adventure Awaits
-              </div>
-              <div
-                style={{
-                  display: 'flex',
-                  gap: 8,
-                  justifyContent: 'center',
-                  flexWrap: 'wrap',
-                }}
-              >
+          <div className="flex-[0_0_40%]">
+            <div className="bg-gradient-to-br from-[#4a6741] to-[#6b8f5e] rounded-xl p-10 text-white text-center">
+              <div className="text-[64px] mb-3">🚐</div>
+              <div className="text-[22px] font-bold mb-6">Adventure Awaits</div>
+              <div className="flex gap-2 justify-center flex-wrap">
                 {['Mountains', 'Waterfalls', 'Cafés', 'Good Vibes ♡'].map((tag) => (
-                  <span
-                    key={tag}
-                    style={{
-                      background: 'rgba(255,255,255,0.2)',
-                      borderRadius: 12,
-                      padding: '6px 14px',
-                      fontSize: 13,
-                      fontWeight: 500,
-                    }}
-                  >
+                  <span key={tag} className="bg-white/20 rounded-xl px-3.5 py-1.5 text-[13px] font-medium">
                     {tag}
                   </span>
                 ))}
@@ -176,114 +85,40 @@ export default function HomePage() {
       </section>
 
       {/* Section 2 — Features */}
-      <section style={{ background: '#2a2820', padding: '56px 24px' }}>
-        <div
-          style={{
-            maxWidth: 1280,
-            margin: '0 auto',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: 32,
-          }}
-        >
+      <section className="bg-[#2a2820] px-6 py-14">
+        <div className="max-w-[1280px] mx-auto grid grid-cols-4 gap-8">
           {features.map((f) => (
             <div key={f.title}>
-              <div
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: '50%',
-                  background: '#3e3b2a',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: 18,
-                  marginBottom: 12,
-                }}
-              >
-                {f.icon}
-              </div>
-              <div style={{ fontSize: 13, fontWeight: 600, color: '#c8c4a0', marginBottom: 6 }}>
-                {f.title}
-              </div>
-              <div style={{ fontSize: 12, color: '#8a8468', lineHeight: 1.5 }}>{f.desc}</div>
+              <div className="w-10 h-10 rounded-full bg-line flex items-center justify-center text-lg mb-3">{f.icon}</div>
+              <div className="text-[13px] font-semibold text-heading mb-1.5">{f.title}</div>
+              <div className="text-xs text-muted leading-relaxed">{f.desc}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* Section 3 — Inspiration */}
-      <section style={{ background: '#312f24', padding: '56px 24px' }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-          <h2
-            style={{
-              fontSize: 28,
-              fontWeight: 700,
-              color: '#c8c4a0',
-              marginBottom: 32,
-            }}
-          >
+      <section className="bg-base px-6 py-14">
+        <div className="max-w-[1280px] mx-auto">
+          <h2 className="text-[28px] font-bold text-heading mb-8">
             Inspiration for Your Next Trip ✦
           </h2>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(4, 1fr)',
-              gap: 20,
-            }}
-          >
+          <div className="grid grid-cols-4 gap-5">
             {inspirations.map((item) => (
-              <div
-                key={item.name}
-                style={{
-                  background: '#2a2820',
-                  border: '1px solid #4a4738',
-                  borderRadius: 12,
-                  overflow: 'hidden',
-                }}
-              >
+              <div key={item.name} className="bg-[#2a2820] border border-line-strong rounded-xl overflow-hidden">
                 <div
-                  style={{
-                    height: 120,
-                    background: item.gradient,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#fff',
-                    fontSize: 32,
-                    fontWeight: 700,
-                  }}
+                  className="h-[120px] flex items-center justify-center text-white text-[32px] font-bold"
+                  style={{ background: item.gradient }}
                 >
                   {item.name.split(' ')[0]}
                 </div>
-                <div style={{ padding: 16 }}>
-                  <div
-                    style={{
-                      display: 'inline-block',
-                  background: '#3e3b2a',
-                      color: '#8aab7a',
-                      borderRadius: 12,
-                      padding: '4px 10px',
-                      fontSize: 11,
-                      fontWeight: 500,
-                      marginBottom: 8,
-                    }}
-                  >
+                <div className="p-4">
+                  <div className="inline-block bg-line text-brand-text rounded-xl px-2.5 py-1 text-[11px] font-medium mb-2">
                     {item.tags}
                   </div>
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                    }}
-                  >
-                    <span style={{ fontSize: 14, fontWeight: 600, color: '#c8c4a0' }}>
-                      {item.name}
-                    </span>
-                    <span style={{ fontSize: 13, color: '#c8a84a', fontWeight: 600 }}>
-                      ★ {item.rating}
-                    </span>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-semibold text-heading">{item.name}</span>
+                    <span className="text-[13px] text-[#c8a84a] font-semibold">★ {item.rating}</span>
                   </div>
                 </div>
               </div>

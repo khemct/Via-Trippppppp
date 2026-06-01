@@ -49,9 +49,9 @@ export default function TripSetupPage() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [errorType, setErrorType] = useState(''); // 'validation' | 'distance' | 'server'
+  const [errorType, setErrorType] = useState('');
 
-  const [trip, setTrip] = useState(null); // populated on success
+  const [trip, setTrip] = useState(null);
 
   const handleSubmit = useCallback(
     async (e) => {
@@ -124,110 +124,86 @@ export default function TripSetupPage() {
   }, [trip?.dest_coordinates?.latitude, trip?.dest_coordinates?.longitude]);
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div className="min-h-screen flex flex-col">
       <Navbar isLoggedIn={isAuthenticated} userName={user?.name} onLogout={logout} />
 
-      <div style={{ display: 'flex', flex: 1 }}>
+      <div className="flex flex-1">
         {/* Left column — Form */}
-        <div
-          style={{
-            width: 420,
-            flexShrink: 0,
-            background: '#2a2820',
-            padding: 32,
-            borderRight: '1px solid #3e3b2a',
-            overflowY: 'auto',
-          }}
-        >
+        <div className="w-[420px] shrink-0 bg-card px-8 py-8 border-r border-line overflow-y-auto">
           <a
             href="/trips"
-            style={{ fontSize: 13, color: '#8aab7a', fontWeight: 500, textDecoration: 'none', display: 'inline-block', marginBottom: 20 }}
+            className="text-[13px] text-brand-text font-medium no-underline inline-block mb-5"
           >
             &larr; My Trips
           </a>
 
-          <h2 style={{ fontSize: 24, fontWeight: 700, color: '#c8c4a0', marginBottom: 4 }}>Plan Your Trip</h2>
-          <p style={{ fontSize: 14, color: '#8a8468', marginBottom: 24 }}>
+          <h2 className="text-2xl font-bold text-heading mb-1">Plan Your Trip</h2>
+          <p className="text-sm text-muted mb-6">
             Fill in the details below to start your road trip.
           </p>
 
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             {/* Trip Name */}
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#a8a080', display: 'block', marginBottom: 6 }}>Trip Name</label>
+              <label className="text-[13px] font-medium text-body block mb-1.5">Trip Name</label>
               <input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Chiang Mai to Pai"
-                style={{
-                  width: '100%', border: '1.5px solid #4a4738', borderRadius: 8, background: '#252318',
-                  padding: '10px 14px', fontSize: 14, color: '#c8c4a0', outline: 'none', boxSizing: 'border-box',
-                }}
+                className="w-full border border-line-strong rounded-lg bg-input px-3.5 py-2.5 text-sm text-heading outline-none box-border"
               />
             </div>
 
             {/* Origin */}
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#a8a080', display: 'block', marginBottom: 6 }}>Origin</label>
+              <label className="text-[13px] font-medium text-body block mb-1.5">Origin</label>
               <input
                 value={origin}
                 onChange={(e) => setOrigin(e.target.value)}
                 placeholder="Where are you starting?"
-                style={{
-                  width: '100%', border: '1.5px solid #4a4738', borderRadius: 8, background: '#252318',
-                  padding: '10px 14px', fontSize: 14, color: '#c8c4a0', outline: 'none', boxSizing: 'border-box',
-                }}
+                className="w-full border border-line-strong rounded-lg bg-input px-3.5 py-2.5 text-sm text-heading outline-none box-border"
               />
             </div>
 
             {/* Destination */}
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#a8a080', display: 'block', marginBottom: 6 }}>Destination</label>
+              <label className="text-[13px] font-medium text-body block mb-1.5">Destination</label>
               <input
                 value={dest}
                 onChange={(e) => setDest(e.target.value)}
                 placeholder="Where are you going?"
-                style={{
-                  width: '100%', border: '1.5px solid #4a4738', borderRadius: 8, background: '#252318',
-                  padding: '10px 14px', fontSize: 14, color: '#c8c4a0', outline: 'none', boxSizing: 'border-box',
-                }}
+                className="w-full border border-line-strong rounded-lg bg-input px-3.5 py-2.5 text-sm text-heading outline-none box-border"
               />
             </div>
 
             {/* Travel Date */}
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#a8a080', display: 'block', marginBottom: 6 }}>Travel Date</label>
+              <label className="text-[13px] font-medium text-body block mb-1.5">Travel Date</label>
               <input
                 type="date"
                 value={travelDate}
                 min={todayStr()}
                 onChange={(e) => setTravelDate(e.target.value)}
-                style={{
-                  width: '100%', border: '1.5px solid #4a4738', borderRadius: 8, background: '#252318',
-                  padding: '10px 14px', fontSize: 14, color: '#c8c4a0', outline: 'none', boxSizing: 'border-box',
-                }}
+                className="w-full border border-line-strong rounded-lg bg-input px-3.5 py-2.5 text-sm text-heading outline-none box-border"
               />
             </div>
 
             {/* Number of Days */}
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#a8a080', display: 'block', marginBottom: 6 }}>Number of Days</label>
+              <label className="text-[13px] font-medium text-body block mb-1.5">Number of Days</label>
               <input
                 type="number"
                 min={1}
                 max={30}
                 value={numDays}
                 onChange={(e) => setNumDays(e.target.value)}
-                style={{
-                  width: '100%', border: '1.5px solid #4a4738', borderRadius: 8, background: '#252318',
-                  padding: '10px 14px', fontSize: 14, color: '#c8c4a0', outline: 'none', boxSizing: 'border-box',
-                }}
+                className="w-full border border-line-strong rounded-lg bg-input px-3.5 py-2.5 text-sm text-heading outline-none box-border"
               />
             </div>
 
             {/* Daily Hours */}
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#a8a080', display: 'block', marginBottom: 6 }}>
+              <label className="text-[13px] font-medium text-body block mb-1.5">
                 Daily Hours ({dailyHours} hours/day)
               </label>
               <input
@@ -236,9 +212,9 @@ export default function TripSetupPage() {
                 max={16}
                 value={dailyHours}
                 onChange={(e) => setDailyHours(parseInt(e.target.value, 10))}
-                style={{ width: '100%', accentColor: '#4a6741' }}
+                className="w-full accent-brand"
               />
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: '#8a8468' }}>
+              <div className="flex justify-between text-[11px] text-muted">
                 <span>4 hrs</span>
                 <span>16 hrs</span>
               </div>
@@ -246,8 +222,8 @@ export default function TripSetupPage() {
 
             {/* Travel Style */}
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#a8a080', display: 'block', marginBottom: 8 }}>Travel Style</label>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 8 }}>
+              <label className="text-[13px] font-medium text-body block mb-2">Travel Style</label>
+              <div className="grid grid-cols-5 gap-2">
                 {travelStyles.map((s) => {
                   const selected = travelStyle === s.id;
                   return (
@@ -255,22 +231,13 @@ export default function TripSetupPage() {
                       key={s.id}
                       type="button"
                       onClick={() => setTravelStyle(s.id)}
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        gap: 4,
-                        padding: '10px 4px',
-                        borderRadius: 8,
-                        cursor: 'pointer',
-                        border: selected ? '2px solid #4a6741' : '1px solid #3e3b2a',
-                        background: selected ? '#2a2820' : '#3e3b2a',
-                        fontSize: 11,
-                        fontWeight: selected ? 600 : 400,
-                        color: selected ? '#8aab7a' : '#a8a080',
-                      }}
+                      className={`flex flex-col items-center gap-1 px-2.5 py-2.5 rounded-lg cursor-pointer text-[11px] ${
+                        selected
+                          ? 'border-2 border-brand bg-card text-brand-text font-semibold'
+                          : 'border border-line bg-line text-body'
+                      }`}
                     >
-                      <span style={{ fontSize: 20 }}>{s.emoji}</span>
+                      <span className="text-xl">{s.emoji}</span>
                       <span>{s.label}</span>
                     </button>
                   );
@@ -280,7 +247,7 @@ export default function TripSetupPage() {
 
             {/* Stop Duration */}
             <div>
-              <label style={{ fontSize: 13, fontWeight: 500, color: '#a8a080', display: 'block', marginBottom: 6 }}>
+              <label className="text-[13px] font-medium text-body block mb-1.5">
                 Minutes per stop
               </label>
               <input
@@ -289,25 +256,13 @@ export default function TripSetupPage() {
                 max={120}
                 value={stopDuration}
                 onChange={(e) => setStopDuration(e.target.value)}
-                style={{
-                  width: '100%', border: '1.5px solid #4a4738', borderRadius: 8, background: '#252318',
-                  padding: '10px 14px', fontSize: 14, color: '#c8c4a0', outline: 'none', boxSizing: 'border-box',
-                }}
+                className="w-full border border-line-strong rounded-lg bg-input px-3.5 py-2.5 text-sm text-heading outline-none box-border"
               />
             </div>
 
             {/* Error banner */}
             {error && (
-              <div
-                style={{
-                  background: errorType === 'distance' ? '#fde8e8' : '#fde8e8',
-                  border: '1px solid #f5c6c6',
-                  borderRadius: 8,
-                  padding: 12,
-                  fontSize: 13,
-                  color: '#c0392b',
-                }}
-              >
+              <div className="bg-[#fde8e8] border border-[#f5c6c6] rounded-lg px-3 py-3 text-[13px] text-[#c0392b]">
                 {error}
               </div>
             )}
@@ -316,18 +271,7 @@ export default function TripSetupPage() {
             <button
               type="submit"
               disabled={loading}
-              style={{
-                width: '100%',
-                height: 48,
-                background: loading ? '#8a8468' : '#4a6741',
-                color: '#c8dbb8',
-                border: 'none',
-                borderRadius: 8,
-                fontSize: 15,
-                fontWeight: 600,
-                cursor: loading ? 'not-allowed' : 'pointer',
-                marginTop: 4,
-              }}
+              className="w-full h-12 bg-brand disabled:bg-muted text-brand-light border-none rounded-lg text-[15px] font-semibold disabled:cursor-not-allowed cursor-pointer mt-1"
             >
               {loading ? 'Calculating...' : '🗺️ Calculate Route'}
             </button>
@@ -335,41 +279,22 @@ export default function TripSetupPage() {
         </div>
 
         {/* Right column — Map */}
-        <div
-          style={{
-            flex: 1,
-            background: '#2a2820',
-            display: 'flex',
-            flexDirection: 'column',
-            position: 'relative',
-          }}
-        >
-          {/* Route summary bar — only when trip exists */}
+        <div className="flex-1 bg-card flex flex-col relative">
+          {/* Route summary bar */}
           {trip && (
-            <div
-              style={{
-                background: '#252318',
-                padding: '12px 20px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 16,
-                fontSize: 13,
-                color: '#a8a080',
-                borderBottom: '1px solid #3e3b2a',
-              }}
-            >
-<span style={{ fontWeight: 600, color: '#c8c4a0' }}>{trip.origin}</span>
-              <span style={{ color: '#8a8468' }}>&rarr;</span>
-              <span style={{ fontWeight: 600, color: '#c8c4a0' }}>{trip.destination}</span>
-              <span style={{ marginLeft: 'auto', display: 'flex', gap: 16 }}>
+            <div className="bg-input px-5 py-3 flex items-center gap-4 text-[13px] text-body border-b border-line">
+              <span className="font-semibold text-heading">{trip.origin}</span>
+              <span className="text-muted">&rarr;</span>
+              <span className="font-semibold text-heading">{trip.destination}</span>
+              <span className="ml-auto flex gap-4">
                 <span>Total: <strong>{trip.total_distance_km}</strong> km</span>
                 <span>Drive: <strong>{trip.total_duration_minutes}</strong> min</span>
               </span>
             </div>
           )}
 
-          {/* Map — always visible */}
-          <div style={{ flex: 1, position: 'relative' }}>
+          {/* Map */}
+          <div className="flex-1 relative">
             <LoadScriptNext
               googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
             >
@@ -391,24 +316,9 @@ export default function TripSetupPage() {
               </GoogleMap>
             </LoadScriptNext>
 
-            {/* Success overlay — only when trip exists */}
+            {/* Success overlay */}
             {trip && (
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: 24,
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  background: '#4a6741',
-                  color: '#c8dbb8',
-                  padding: '10px 20px',
-                  borderRadius: 8,
-                  fontSize: 14,
-                  fontWeight: 500,
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-                  whiteSpace: 'nowrap',
-                }}
-              >
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-brand text-brand-light px-5 py-2.5 rounded-lg text-sm font-medium shadow-lg whitespace-nowrap">
                 Route calculated! {trip.total_distance_km} km &mdash; let&apos;s explore.
               </div>
             )}
@@ -417,16 +327,7 @@ export default function TripSetupPage() {
       </div>
 
       {/* Footer copyright */}
-      <div
-        style={{
-          borderTop: '1px solid #3e3b2a',
-          background: '#1e1c14',
-          padding: '16px 24px',
-          textAlign: 'center',
-          fontSize: 13,
-          color: '#8a8468',
-        }}
-      >
+      <div className="border-t border-line bg-deep py-4 px-6 text-center text-[13px] text-muted">
         &copy; 2026 Via-Trip. All rights reserved.
       </div>
     </div>

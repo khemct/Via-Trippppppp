@@ -152,7 +152,7 @@ export default function ItineraryPage() {
 
   if (tripLoading) {
     return (
-      <div className="w-full max-w-full mt-8 px-8" style={{ height: 'calc(100vh - 76px)' }}>
+      <div className="w-full max-w-full mt-8 px-8 h-[calc(100vh-76px)]">
         <div className="h-full flex flex-col">
           <div className="animate-pulse space-y-4">
             <div className="h-5 w-32 bg-[#3e3b2a] rounded" />
@@ -181,7 +181,7 @@ export default function ItineraryPage() {
   }
 
   return (
-    <div className="w-full max-w-full mt-8 px-8" style={{ height: 'calc(100vh - 76px)' }}>
+    <div className="w-full max-w-full mt-8 px-8 h-[calc(100vh-76px)]">
       <div className="h-full flex flex-col">
         {/* Top bar */}
         <div className="flex items-center justify-between mb-4 shrink-0">
