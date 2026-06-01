@@ -19,9 +19,9 @@ export default function Navbar({ isLoggedIn, userName, onLogout }) {
 
           {isLoggedIn && (
             <div className="flex gap-2 md:gap-4 ml-4 md:ml-6">
-              <Link to="/" className="text-body text-sm font-medium no-underline focus-visible:ring-2 ring-brand">Home</Link>
-              <Link to="/trips/new" className="text-body text-sm font-medium no-underline focus-visible:ring-2 ring-brand">New Trip</Link>
-              <Link to="/trips" className="text-body text-sm font-medium no-underline focus-visible:ring-2 ring-brand">My Trips</Link>
+              <Link to="/" className="text-body text-sm font-medium no-underline border border-line/40 rounded-lg px-3 py-1.5 focus-visible:ring-2 ring-brand hover:border-line-strong transition-colors">Home</Link>
+              <Link to="/trips/new" className="text-body text-sm font-medium no-underline border border-line/40 rounded-lg px-3 py-1.5 focus-visible:ring-2 ring-brand hover:border-line-strong transition-colors">New Trip</Link>
+              <Link to="/trips" className="text-body text-sm font-medium no-underline border border-line/40 rounded-lg px-3 py-1.5 focus-visible:ring-2 ring-brand hover:border-line-strong transition-colors">My Trips</Link>
             </div>
           )}
 
