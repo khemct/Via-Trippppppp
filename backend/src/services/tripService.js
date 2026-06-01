@@ -41,6 +41,7 @@ function rowToTrip(row) {
     total_duration_estimate: row.total_duration_estimate,
     status: row.status,
     feasibility_status: row.feasibility_status,
+    waypoint_count: parseInt(row.waypoint_count, 10) || 0,
     created_at: row.created_at,
     updated_at: row.updated_at,
   };
@@ -112,8 +113,9 @@ async function listTrips(userId, page = 1, limit = 20, status) {
   const total = parseInt(countResult.rows[0].count, 10);
 
   const result = await query(
-    `SELECT ${TRIP_SELECT}
-     FROM trips
+    `SELECT ${TRIP_SELECT},
+            (SELECT COUNT(*) FROM trip_waypoints WHERE trip_id = t.trip_id) AS waypoint_count
+     FROM trips t
      WHERE ${where}
      ORDER BY created_at DESC
      LIMIT $${paramIdx} OFFSET $${paramIdx + 1}`,
@@ -130,7 +132,9 @@ async function listTrips(userId, page = 1, limit = 20, status) {
 
 async function getTrip(tripId, userId) {
   const result = await query(
-    `SELECT ${TRIP_SELECT} FROM trips WHERE trip_id = $1`,
+    `SELECT ${TRIP_SELECT},
+            (SELECT COUNT(*) FROM trip_waypoints WHERE trip_id = $1) AS waypoint_count
+     FROM trips WHERE trip_id = $1`,
     [tripId]
   );
 
