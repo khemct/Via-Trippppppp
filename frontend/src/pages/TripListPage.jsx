@@ -28,8 +28,8 @@ export default function TripListPage() {
   const totalPages = Math.ceil(total / limit);
 
   return (
-    <div className="max-w-3xl mx-auto mt-8 px-4 md:px-6 py-6">
-      <div className="flex items-center justify-between mb-6">
+    <div className="max-w-3xl mx-auto mt-4 px-4 md:px-6 py-4">
+      <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold text-heading">My Trips</h1>
         <Link
           to="/trips/new"
@@ -63,7 +63,7 @@ export default function TripListPage() {
       )}
 
       {!loading && !error && trips.length === 0 && (
-        <div className="text-center py-12">
+        <div className="text-center py-8">
           <p className="text-muted mb-4">No trips yet. Plan your first road trip!</p>
           <Link
             to="/trips/new"
@@ -110,7 +110,7 @@ export default function TripListPage() {
           </div>
 
           {totalPages > 1 && (
-            <div className="flex items-center justify-center gap-2 mt-6">
+            <div className="flex items-center justify-center gap-2 mt-4">
               <button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page <= 1}

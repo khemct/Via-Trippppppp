@@ -183,9 +183,9 @@ function Skeleton({ className = '' }) {
 
 function LoadingState() {
   return (
-    <div className="w-full max-w-full mt-8 px-8">
+    <div className="w-full max-w-full mt-4 px-8">
       <div className="flex gap-6">
-        <div className="w-[480px] shrink-0 bg-card border border-line-strong rounded p-6 space-y-4">
+        <div className="w-[480px] shrink-0 bg-card border border-line-strong rounded p-4 space-y-3">
           <Skeleton className="h-8 w-3/4" />
           <Skeleton className="h-4 w-1/4" />
           <div className="pt-4 space-y-3">
@@ -349,7 +349,7 @@ export default function TripDetailPage() {
 
   if (error) {
     return (
-      <div className="w-full max-w-lg mx-auto mt-12 p-6">
+      <div className="w-full max-w-lg mx-auto mt-8 p-4">
         <div className="bg-red-50 border border-red-200 rounded-lg px-5 py-4 mb-4" role="alert">
           <div className="flex items-center gap-3">
             <X size={20} className="text-red-500 shrink-0" />
@@ -374,10 +374,10 @@ export default function TripDetailPage() {
   // ---- EDIT MODE ----
   if (editing) {
     return (
-      <div className="w-full max-w-4xl mx-auto mt-8 p-6">
+      <div className="w-full max-w-4xl mx-auto mt-4 p-4">
         <div className="bg-card rounded-lg shadow-sm border border-line-strong overflow-hidden border-l-4 border-brand">
-          <div className="p-8">
-            <h1 className="text-xl font-bold text-heading mb-6">Edit Trip</h1>
+          <div className="p-6">
+            <h1 className="text-lg font-bold text-heading mb-4">Edit Trip</h1>
 
             {saveError && (
               <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3 mb-5">
@@ -385,7 +385,7 @@ export default function TripDetailPage() {
               </div>
             )}
 
-            <div className="space-y-6">
+            <div className="space-y-4">
               <div>
                 <SectionHeading>Trip Details</SectionHeading>
                 <div className="space-y-4">
@@ -513,7 +513,7 @@ export default function TripDetailPage() {
               </div>
             </div>
 
-            <div className="mt-8 pt-5 border-t border-line flex items-center gap-3">
+            <div className="mt-6 pt-4 border-t border-line flex items-center gap-3">
               <button
                 onClick={handleSave}
                 disabled={saving}
@@ -541,9 +541,9 @@ export default function TripDetailPage() {
 
   // ---- VIEW MODE ----
   return (
-    <div className="w-full max-w-full mt-8 px-8 h-[calc(100vh-76px)]">
+    <div className="w-full max-w-full mt-4 px-4 md:px-6 h-[calc(100vh-80px)]">
       <div className="h-full flex flex-col">
-        <div className="flex items-center justify-between mb-4 shrink-0">
+        <div className="flex items-center justify-between mb-3 shrink-0">
           <Link
             to="/trips"
             className="inline-flex items-center gap-1.5 text-sm text-brand-text font-medium hover:underline"
@@ -561,10 +561,10 @@ export default function TripDetailPage() {
           )}
         </div>
 
-        <div className="flex gap-6 flex-1 min-h-0 flex-col lg:flex-row">
+        <div className="flex gap-4 flex-1 min-h-0 flex-col lg:flex-row">
           {/* Left: Info */}
-          <div className="w-full lg:w-[480px] shrink-0 bg-card border border-line-strong rounded-lg p-6 overflow-y-auto">
-          <div className="flex items-start justify-between mb-6">
+          <div className="w-full lg:w-[480px] shrink-0 bg-card border border-line-strong rounded-lg p-4 overflow-y-auto">
+          <div className="flex items-start justify-between mb-4">
             <h1 className="text-xl font-bold text-heading leading-tight">{trip.name}</h1>
             <span
               className={`shrink-0 ml-3 text-xs font-medium px-2.5 py-0.5 rounded-full ${
@@ -577,7 +577,7 @@ export default function TripDetailPage() {
             </span>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-4">
             <div>
               <SectionHeading>Route</SectionHeading>
               <div className="space-y-3">
@@ -618,7 +618,7 @@ export default function TripDetailPage() {
           </div>
 
           {/* Actions */}
-          <div className="mt-6 pt-4 border-t border-line space-y-2.5">
+          <div className="mt-4 pt-3 border-t border-line space-y-2.5">
             <Link
               to={`/trips/${tripId}/itinerary`}
               className="w-full inline-flex items-center justify-center gap-2 bg-brand text-brand-light rounded-lg px-4 py-2.5 text-sm font-medium border border-brand-hover hover:bg-brand-hover transition-colors"
