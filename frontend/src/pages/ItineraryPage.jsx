@@ -180,12 +180,20 @@ export default function ItineraryPage() {
       <div className="h-full flex flex-col">
         {/* Top bar */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-3 shrink-0">
-          <Link
-            to={`/trips/${tripId}`}
-            className="inline-flex items-center gap-1.5 text-sm text-brand-text font-medium hover:underline"
-          >
-            &larr; Back to Trip Detail
-          </Link>
+          <div className="flex gap-2">
+            <Link
+              to={`/trips/${tripId}`}
+              className="text-heading text-sm font-medium no-underline border border-line-strong rounded-lg px-3 py-1.5 hover:bg-line transition-colors"
+            >
+              Back to Trip Detail
+            </Link>
+            <Link
+              to="/trips"
+              className="text-heading text-sm font-medium no-underline border border-line-strong rounded-lg px-3 py-1.5 hover:bg-line transition-colors"
+            >
+              Back to My Trips
+            </Link>
+          </div>
           <div className="flex items-center gap-3">
             <span className="text-sm font-medium text-heading">{trip.name}</span>
             <span className="text-xs text-muted capitalize">{trip.travel_style}</span>
