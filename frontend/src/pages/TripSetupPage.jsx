@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { GoogleMap, LoadScriptNext, Marker, Polyline } from '@react-google-maps/api';
 import { useAuth } from '../hooks/useAuth';
@@ -89,7 +89,10 @@ export default function TripSetupPage() {
     [name, origin, dest, travelDate, numDays, dailyHours, travelStyle, stopDuration, token, navigate]
   );
 
-
+  const decodedPath = useMemo(
+    () => trip?.route_polyline ? decodePolyline(trip.route_polyline) : [],
+    [trip?.route_polyline]
+  );
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -372,7 +375,7 @@ export default function TripSetupPage() {
                 {trip?.route_polyline && (
                   <Polyline
                     key={trip.route_polyline}
-                    path={decodePolyline(trip.route_polyline)}
+                    path={decodedPath}
                     options={{
                       strokeColor: '#2563eb',
                       strokeOpacity: 0.8,

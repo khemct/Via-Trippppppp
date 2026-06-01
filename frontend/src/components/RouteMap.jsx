@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { GoogleMap, LoadScriptNext, Polyline, Marker } from '@react-google-maps/api';
 import { decodePolyline } from '../utils/polyline';
 
@@ -35,12 +36,14 @@ function WaypointMarker({ wp }) {
 }
 
 export default function RouteMap({ origin, destination, routePolyline, waypoints, height }) {
-  const path = routePolyline ? decodePolyline(routePolyline) : [];
+  const path = useMemo(() => routePolyline ? decodePolyline(routePolyline) : [], [routePolyline]);
 
-  const center =
+  const center = useMemo(() =>
     path.length > 0
       ? path[Math.floor(path.length / 2)]
-      : origin || { lat: 0, lng: 0 };
+      : origin || { lat: 0, lng: 0 },
+    [path, origin]
+  );
 
   const mapStyle = height ? { width: '100%', height } : containerStyle;
 
