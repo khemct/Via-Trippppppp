@@ -119,7 +119,7 @@ export default function TripListPage() {
               return (
                 <Link
                   key={trip.trip_id}
-                  to={`/trips/${trip.trip_id}`}
+                  to={`/trips/${trip.trip_id}/itinerary`}
                   className="block bg-card border border-line/40 rounded-2xl p-5 shadow-soft hover:shadow-soft-lg hover:-translate-y-1 transition-all duration-300 group"
                 >
                   {/* Top row: name + status */}
