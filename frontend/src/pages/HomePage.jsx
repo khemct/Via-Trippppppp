@@ -39,7 +39,7 @@ export default function HomePage() {
     <div>
       {/* Section 1 — Hero */}
       <section className="bg-gradient-to-br from-brand-light/40 via-card to-base px-4 md:px-8 py-10 md:py-14">
-        <div className="max-w-6xl mx-auto flex gap-10 items-center flex-col lg:flex-row">
+        <div className="max-w-6xl mx-auto flex gap-10 flex-col lg:flex-row">
           {/* Left */}
           <div className="w-full lg:w-[55%]">
             <div className="inline-flex items-center gap-2 bg-brand-light/60 text-brand-text rounded-full px-3.5 py-1 text-[12px] font-medium mb-4">
@@ -79,10 +79,12 @@ export default function HomePage() {
 
           {/* Right */}
           <div className="w-full lg:w-[45%]">
-            <div className="bg-gradient-to-br from-brand via-brand-hover to-brand-text rounded-2xl p-10 text-white text-center shadow-soft-lg">
-              <div className="mb-4"><Mountain size={64} className="text-white/90 mx-auto" /></div>
-              <div className="text-2xl font-bold mb-1">Adventure Awaits</div>
-              <div className="text-sm text-white/80 mb-5">Discover the road less traveled</div>
+            <div className="bg-gradient-to-br from-brand via-brand-hover to-brand-text rounded-2xl p-10 text-white text-center shadow-soft-lg h-full flex flex-col justify-between">
+              <div>
+                <div className="mb-4"><Mountain size={64} className="text-white/90 mx-auto" /></div>
+                <div className="text-2xl font-bold mb-1">Adventure Awaits</div>
+                <div className="text-sm text-white/80 mb-5">Discover the road less traveled</div>
+              </div>
               <div className="flex gap-2 justify-center flex-wrap">
                 {['Mountains', 'Waterfalls', 'Cafés', 'Good Vibes'].map((tag) => (
                   <span key={tag} className="bg-white/20 rounded-xl px-3.5 py-1 text-[12px] font-medium backdrop-blur-sm">
