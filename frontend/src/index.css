@@ -2,100 +2,100 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Adventure Road Trip (default) ── */
+/* ── Seaside Escape (default) ── */
 .theme-adventure {
-  --color-base: #f8f3ea;
+  --color-base: #f4f8f7;
   --color-card: #ffffff;
-  --color-input: #f2ede2;
-  --color-deep: #ece4d6;
-  --color-heading: #2a3a28;
-  --color-body: #5a6e52;
-  --color-muted: #9aab8e;
-  --color-line: #e2dcc8;
-  --color-line-strong: #d0c8b0;
-  --color-brand: #3a8a44;
-  --color-brand-hover: #2d7536;
-  --color-brand-text: #6aad5e;
-  --color-brand-light: #e6f5de;
+  --color-input: #eef4f2;
+  --color-deep: #e6efec;
+  --color-heading: #134e4a;
+  --color-body: #3d6b65;
+  --color-muted: #7a9e98;
+  --color-line: #d6e6e2;
+  --color-line-strong: #b8cec8;
+  --color-brand: #0f766e;
+  --color-brand-hover: #0d5e56;
+  --color-brand-text: #14b8a6;
+  --color-brand-light: #ccfbf1;
 }
 .theme-adventure.dark {
-  --color-base: #1a2418;
-  --color-card: #222d20;
-  --color-input: #2a3728;
-  --color-deep: #151e14;
-  --color-heading: #e0ead8;
-  --color-body: #9aab8e;
-  --color-muted: #7a8a6e;
-  --color-line: #334830;
-  --color-line-strong: #40583d;
-  --color-brand: #5aad4e;
-  --color-brand-hover: #4a9d3e;
-  --color-brand-text: #7bc46e;
-  --color-brand-light: #1a3a18;
+  --color-base: #0d1b1a;
+  --color-card: #152523;
+  --color-input: #1a2e2c;
+  --color-deep: #0a1514;
+  --color-heading: #ccfbf1;
+  --color-body: #8aa8a2;
+  --color-muted: #60807a;
+  --color-line: #1d3835;
+  --color-line-strong: #264a46;
+  --color-brand: #14b8a6;
+  --color-brand-hover: #0f766e;
+  --color-brand-text: #2dd4bf;
+  --color-brand-light: #134e4a;
 }
 
-/* ── Bright ── */
+/* ── Sunset Boulevard ── */
 .theme-bright {
-  --color-base: #fafafe;
+  --color-base: #fdf6f2;
   --color-card: #ffffff;
-  --color-input: #f0f2fe;
-  --color-deep: #e6eafe;
-  --color-heading: #1a1a2e;
-  --color-body: #4a4a6a;
-  --color-muted: #9a9ab0;
-  --color-line: #e0e4f0;
-  --color-line-strong: #c8cee0;
-  --color-brand: #6c5ce7;
-  --color-brand-hover: #5a4bd1;
-  --color-brand-text: #a29bfe;
-  --color-brand-light: #eaddff;
+  --color-input: #faf0ea;
+  --color-deep: #f5e8e0;
+  --color-heading: #3d1f15;
+  --color-body: #6b4538;
+  --color-muted: #b08272;
+  --color-line: #edddd4;
+  --color-line-strong: #dec8bc;
+  --color-brand: #e85d3a;
+  --color-brand-hover: #d04d2e;
+  --color-brand-text: #f4806a;
+  --color-brand-light: #fde8db;
 }
 .theme-bright.dark {
-  --color-base: #1a1a2e;
-  --color-card: #222240;
-  --color-input: #2a2a50;
-  --color-deep: #141428;
-  --color-heading: #e8e8ff;
-  --color-body: #a0a0c8;
-  --color-muted: #7070a0;
-  --color-line: #303058;
-  --color-line-strong: #404070;
-  --color-brand: #a29bfe;
-  --color-brand-hover: #6c5ce7;
-  --color-brand-text: #b8b1ff;
-  --color-brand-light: #3d2e80;
+  --color-base: #1f110d;
+  --color-card: #2a1814;
+  --color-input: #33201a;
+  --color-deep: #170d0a;
+  --color-heading: #fde8db;
+  --color-body: #c49a8a;
+  --color-muted: #9a6a5a;
+  --color-line: #3d2820;
+  --color-line-strong: #4d342c;
+  --color-brand: #f4806a;
+  --color-brand-hover: #e85d3a;
+  --color-brand-text: #fca5a5;
+  --color-brand-light: #3d1f15;
 }
 
-/* ── Modern ── */
+/* ── Tropical Punch ── */
 .theme-modern {
-  --color-base: #fafafa;
+  --color-base: #fdf2f8;
   --color-card: #ffffff;
-  --color-input: #f5f5f5;
-  --color-deep: #eeeeee;
-  --color-heading: #0a0a0a;
-  --color-body: #3f3f46;
-  --color-muted: #a1a1aa;
-  --color-line: #e4e4e7;
-  --color-line-strong: #d4d4d8;
-  --color-brand: #0891b2;
-  --color-brand-hover: #0e7490;
-  --color-brand-text: #06b6d4;
-  --color-brand-light: #cffafe;
+  --color-input: #faedf4;
+  --color-deep: #f5e6ee;
+  --color-heading: #2d1b2b;
+  --color-body: #6b3f60;
+  --color-muted: #b880a8;
+  --color-line: #eddce8;
+  --color-line-strong: #dec8d8;
+  --color-brand: #d946ef;
+  --color-brand-hover: #c026d3;
+  --color-brand-text: #e879f9;
+  --color-brand-light: #fae8ff;
 }
 .theme-modern.dark {
-  --color-base: #0a0a0a;
-  --color-card: #18181b;
-  --color-input: #1f1f23;
-  --color-deep: #050505;
-  --color-heading: #fafafa;
-  --color-body: #a1a1aa;
-  --color-muted: #71717a;
-  --color-line: #27272a;
-  --color-line-strong: #3f3f46;
-  --color-brand: #22d3ee;
-  --color-brand-hover: #06b6d4;
-  --color-brand-text: #67e8f9;
-  --color-brand-light: #164e63;
+  --color-base: #1a0e18;
+  --color-card: #241620;
+  --color-input: #2d1b2b;
+  --color-deep: #140a12;
+  --color-heading: #fae8ff;
+  --color-body: #c4a0b8;
+  --color-muted: #9a6a8a;
+  --color-line: #3d2838;
+  --color-line-strong: #4d3448;
+  --color-brand: #e879f9;
+  --color-brand-hover: #d946ef;
+  --color-brand-text: #f0abfc;
+  --color-brand-light: #2d1b2b;
 }
 
 @layer base {
