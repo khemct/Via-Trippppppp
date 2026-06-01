@@ -14,6 +14,20 @@ const travelStyles = [
   { id: 'budget', emoji: '💰', label: 'Budget' },
 ];
 
+const polylineOptions = {
+  strokeColor: '#2563eb',
+  strokeOpacity: 0.8,
+  strokeWeight: 4,
+};
+
+const googleMapOptions = {
+  mapTypeControl: false,
+  streetViewControl: false,
+  fullscreenControl: false,
+  zoomControl: true,
+  gestureHandling: 'greedy',
+};
+
 function todayStr() {
   const d = new Date();
   return d.toISOString().split('T')[0];
@@ -93,6 +107,21 @@ export default function TripSetupPage() {
     () => trip?.route_polyline ? decodePolyline(trip.route_polyline) : [],
     [trip?.route_polyline]
   );
+
+  const center = useMemo(() => {
+    if (trip?.origin_coordinates) return { lat: trip.origin_coordinates.latitude, lng: trip.origin_coordinates.longitude };
+    return { lat: 13.736717, lng: 100.523186 };
+  }, [trip?.origin_coordinates?.latitude, trip?.origin_coordinates?.longitude]);
+
+  const originPos = useMemo(() => {
+    if (!trip?.origin_coordinates) return null;
+    return { lat: trip.origin_coordinates.latitude, lng: trip.origin_coordinates.longitude };
+  }, [trip?.origin_coordinates?.latitude, trip?.origin_coordinates?.longitude]);
+
+  const destPos = useMemo(() => {
+    if (!trip?.dest_coordinates) return null;
+    return { lat: trip.dest_coordinates.latitude, lng: trip.dest_coordinates.longitude };
+  }, [trip?.dest_coordinates?.latitude, trip?.dest_coordinates?.longitude]);
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -346,41 +375,17 @@ export default function TripSetupPage() {
             >
               <GoogleMap
                 mapContainerStyle={{ width: '100%', height: '100%' }}
-                center={
-                  trip?.origin_coordinates
-                    ? { lat: trip.origin_coordinates.latitude, lng: trip.origin_coordinates.longitude }
-                    : { lat: 13.736717, lng: 100.523186 }
-                }
+                center={center}
                 zoom={trip ? 8 : 6}
-                options={{
-                  mapTypeControl: false,
-                  streetViewControl: false,
-                  fullscreenControl: false,
-                  zoomControl: true,
-                  gestureHandling: 'greedy',
-                }}
+                options={googleMapOptions}
               >
-                {trip?.origin_coordinates && (
-                  <Marker
-                    position={{ lat: trip.origin_coordinates.latitude, lng: trip.origin_coordinates.longitude }}
-                    label="O"
-                  />
-                )}
-                {trip?.dest_coordinates && (
-                  <Marker
-                    position={{ lat: trip.dest_coordinates.latitude, lng: trip.dest_coordinates.longitude }}
-                    label="D"
-                  />
-                )}
-                {trip?.route_polyline && (
+                {originPos && <Marker position={originPos} label="O" />}
+                {destPos && <Marker position={destPos} label="D" />}
+                {decodedPath.length > 0 && (
                   <Polyline
-                    key={trip.route_polyline}
+                    key="route"
                     path={decodedPath}
-                    options={{
-                      strokeColor: '#2563eb',
-                      strokeOpacity: 0.8,
-                      strokeWeight: 4,
-                    }}
+                    options={polylineOptions}
                   />
                 )}
               </GoogleMap>

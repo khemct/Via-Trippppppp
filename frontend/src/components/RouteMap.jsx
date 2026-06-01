@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { GoogleMap, LoadScriptNext, Polyline, Marker } from '@react-google-maps/api';
 import { decodePolyline } from '../utils/polyline';
 
@@ -9,6 +9,12 @@ const defaultOptions = {
   streetViewControl: false,
   fullscreenControl: false,
   gestureHandling: 'greedy',
+};
+
+const polylineOptions = {
+  strokeColor: '#2563eb',
+  strokeOpacity: 0.8,
+  strokeWeight: 4,
 };
 
 function waypointColor(dist) {
@@ -35,7 +41,7 @@ function WaypointMarker({ wp }) {
   );
 }
 
-export default function RouteMap({ origin, destination, routePolyline, waypoints, height }) {
+function RouteMap({ origin, destination, routePolyline, waypoints, height }) {
   const path = useMemo(() => routePolyline ? decodePolyline(routePolyline) : [], [routePolyline]);
 
   const center = useMemo(() =>
@@ -59,13 +65,9 @@ export default function RouteMap({ origin, destination, routePolyline, waypoints
         {destination && <Marker position={destination} label="D" />}
         {routePolyline && path.length > 0 && (
           <Polyline
-            key={routePolyline}
+            key="route-polyline"
             path={path}
-            options={{
-              strokeColor: '#2563eb',
-              strokeOpacity: 0.8,
-              strokeWeight: 4,
-            }}
+            options={polylineOptions}
           />
         )}
         {waypoints && waypoints.map((wp) => (
@@ -75,3 +77,5 @@ export default function RouteMap({ origin, destination, routePolyline, waypoints
     </LoadScriptNext>
   );
 }
+
+export default memo(RouteMap);
