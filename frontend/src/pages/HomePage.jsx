@@ -78,11 +78,11 @@ export default function HomePage() {
           </div>
 
           {/* Right */}
-          <div className="w-full lg:w-[40%]">
-            <div className="bg-gradient-to-br from-brand via-brand-hover to-brand-text rounded-2xl p-8 text-white text-center shadow-soft-lg">
-              <div className="mb-3"><Mountain size={56} className="text-white/90 mx-auto" /></div>
-              <div className="text-xl font-bold mb-1">Adventure Awaits</div>
-              <div className="text-sm text-white/80 mb-4">Discover the road less traveled</div>
+          <div className="w-full lg:w-[45%]">
+            <div className="bg-gradient-to-br from-brand via-brand-hover to-brand-text rounded-2xl p-10 text-white text-center shadow-soft-lg">
+              <div className="mb-4"><Mountain size={64} className="text-white/90 mx-auto" /></div>
+              <div className="text-2xl font-bold mb-1">Adventure Awaits</div>
+              <div className="text-sm text-white/80 mb-5">Discover the road less traveled</div>
               <div className="flex gap-2 justify-center flex-wrap">
                 {['Mountains', 'Waterfalls', 'Cafés', 'Good Vibes'].map((tag) => (
                   <span key={tag} className="bg-white/20 rounded-xl px-3.5 py-1 text-[12px] font-medium backdrop-blur-sm">
