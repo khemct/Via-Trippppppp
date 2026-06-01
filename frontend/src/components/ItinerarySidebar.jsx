@@ -1,11 +1,16 @@
+import { UtensilsCrossed, Coffee, Landmark, TreePine, ShoppingBag, Building2, Fuel, MapPin } from 'lucide-react';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
-const CATEGORY_ICONS = {
-  restaurant: '🍽', cafe: '☕', attraction: '🎯', park: '🌳',
-  museum: '🏛', shopping: '🛍', accommodation: '🏨', gas_station: '⛽',
-};
+function CategoryIcon({ category, size = 12 }) {
+  const map = {
+    restaurant: UtensilsCrossed, cafe: Coffee, attraction: Landmark, park: TreePine,
+    museum: Landmark, shopping: ShoppingBag, accommodation: Building2, gas_station: Fuel,
+  };
+  const Icon = map[category];
+  return Icon ? <Icon size={size} className="text-muted" /> : <MapPin size={size} className="text-muted" />;
+}
 
 function SortableWaypoint({ wp, onRemove, onUpdateDuration }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: wp.waypoint_id });
@@ -33,7 +38,7 @@ function SortableWaypoint({ wp, onRemove, onUpdateDuration }) {
       <span className="text-xs font-bold text-muted w-5 shrink-0">{wp.order}</span>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1">
-          <span className="text-xs">{CATEGORY_ICONS[wp.category] || '📍'}</span>
+          <CategoryIcon category={wp.category} size={12} />
           <span className="text-xs font-medium text-heading truncate">{wp.name}</span>
         </div>
         <div className="flex items-center gap-2 mt-1">

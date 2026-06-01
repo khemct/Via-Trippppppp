@@ -7,11 +7,6 @@ import RouteMap from '../components/RouteMap';
 import RecommendationPanel from '../components/RecommendationPanel';
 import ItinerarySidebar from '../components/ItinerarySidebar';
 
-const CATEGORY_ICONS = {
-  restaurant: '🍽', cafe: '☕', attraction: '🎯', park: '🌳',
-  museum: '🏛', shopping: '🛍', accommodation: '🏨', gas_station: '⛽',
-};
-
 export default function ItineraryPage() {
   const { tripId } = useParams();
   const { token } = useAuth();

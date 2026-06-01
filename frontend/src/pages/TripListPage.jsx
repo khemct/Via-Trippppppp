@@ -33,7 +33,7 @@ export default function TripListPage() {
         <h1 className="text-2xl font-bold text-heading">My Trips</h1>
         <Link
           to="/trips/new"
-          className="bg-brand text-brand-light px-4 py-2 rounded text-sm hover:bg-brand-hover active:scale-95 transition-transform"
+          className="bg-brand text-brand-light px-4 py-2 rounded text-sm border border-brand-hover hover:bg-brand-hover active:scale-95 transition-transform"
         >
           + New Trip
         </Link>
@@ -67,7 +67,7 @@ export default function TripListPage() {
           <p className="text-muted mb-4">No trips yet. Plan your first road trip!</p>
           <Link
             to="/trips/new"
-            className="bg-brand text-brand-light px-6 py-2 rounded text-sm hover:bg-brand-hover active:scale-95 transition-transform"
+            className="bg-brand text-brand-light px-6 py-2 rounded text-sm border border-brand-hover hover:bg-brand-hover active:scale-95 transition-transform"
           >
             Plan a Trip
           </Link>

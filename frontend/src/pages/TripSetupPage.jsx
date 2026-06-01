@@ -1,17 +1,22 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Smile, UtensilsCrossed, Camera, Mountain, Coins, Map } from 'lucide-react';
 import { GoogleMap, LoadScriptNext, Marker, Polyline } from '@react-google-maps/api';
 import { useAuth } from '../hooks/useAuth';
 import { trips as tripsApi } from '../services/api';
 import { decodePolyline } from '../utils/polyline';
 import Navbar from '../components/Navbar';
 
+const TRAVEL_STYLE_ICONS = {
+  chill: Smile, foodie: UtensilsCrossed, photographer: Camera, adventure: Mountain, budget: Coins,
+};
+
 const travelStyles = [
-  { id: 'chill', emoji: '😌', label: 'Chill' },
-  { id: 'foodie', emoji: '🍜', label: 'Foodie' },
-  { id: 'photographer', emoji: '📷', label: 'Photographer' },
-  { id: 'adventure', emoji: '🏔', label: 'Adventure' },
-  { id: 'budget', emoji: '💰', label: 'Budget' },
+  { id: 'chill', label: 'Chill' },
+  { id: 'foodie', label: 'Foodie' },
+  { id: 'photographer', label: 'Photographer' },
+  { id: 'adventure', label: 'Adventure' },
+  { id: 'budget', label: 'Budget' },
 ];
 
 const polylineOptions = {
@@ -237,7 +242,7 @@ export default function TripSetupPage() {
                           : 'border border-line bg-line text-body'
                       }`}
                     >
-                      <span className="text-xl">{s.emoji}</span>
+                      <span className="text-xl">{(() => { const Icon = TRAVEL_STYLE_ICONS[s.id]; return Icon ? <Icon size={22} /> : null; })()}</span>
                       <span>{s.label}</span>
                     </button>
                   );
@@ -271,14 +276,14 @@ export default function TripSetupPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-12 bg-brand disabled:bg-muted text-brand-light border-none rounded-lg text-[15px] font-semibold disabled:cursor-not-allowed cursor-pointer mt-1 active:scale-[0.98] transition-transform"
+              className="w-full h-12 bg-brand disabled:bg-muted text-brand-light border border-brand-hover rounded-lg text-[15px] font-semibold disabled:cursor-not-allowed cursor-pointer mt-1 active:scale-[0.98] transition-transform"
             >
               {loading ? (
                 <span className="inline-flex items-center gap-2">
                   <span className="w-4 h-4 border-2 border-brand-light border-t-transparent rounded-full animate-spin" />
                   Calculating...
                 </span>
-              ) : '🗺️ Calculate Route'}
+              ) : <span className="inline-flex items-center gap-1.5">{(() => { const Icon = Map; return <Icon size={16} />; })()} Calculate Route</span>}
             </button>
           </form>
         </div>

@@ -65,7 +65,7 @@ export default function ForgotPasswordPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-brand text-brand-light py-2 rounded text-sm font-medium hover:bg-brand-hover disabled:opacity-50 active:scale-[0.98] transition-all"
+            className="w-full bg-brand text-brand-light py-2 rounded text-sm font-medium border border-brand-hover hover:bg-brand-hover disabled:opacity-50 active:scale-[0.98] transition-all"
           >
             {loading ? (
               <span className="inline-flex items-center gap-2">

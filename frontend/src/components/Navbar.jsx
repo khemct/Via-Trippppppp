@@ -1,14 +1,15 @@
 import { Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
+import { Mountain, Sun, Moon, Palette } from 'lucide-react';
 
 export default function Navbar({ isLoggedIn, userName, onLogout }) {
-  const { theme, toggle } = useTheme();
+  const { theme, toggle, colorTheme, cycleColorTheme } = useTheme();
   return (
-    <nav className="h-[60px] bg-input border-b border-line sticky top-0 z-50">
+    <nav className="h-[60px] bg-card/70 backdrop-blur-xl border-b border-line/20 sticky top-0 z-50 shadow-glass">
       <div className="flex items-center h-full px-4 md:px-6 max-w-[1280px] mx-auto">
         <Link to="/" className="flex items-center gap-2.5 no-underline">
-          <div className="w-9 h-9 rounded-full bg-brand flex items-center justify-center text-white text-lg leading-none">
-            🏔
+          <div className="w-9 h-9 rounded-full bg-brand flex items-center justify-center text-white">
+            <Mountain size={20} />
           </div>
           <div>
             <div className="text-base font-bold text-heading leading-tight">Via-Trip</div>
@@ -16,30 +17,31 @@ export default function Navbar({ isLoggedIn, userName, onLogout }) {
           </div>
         </Link>
 
-          <div className="flex gap-2 md:gap-6 ml-4 md:ml-12">
-            {!isLoggedIn ? (
-              <>
-                <Link to="/" className="text-body text-sm font-medium no-underline focus-visible:ring-2 ring-brand">Explore</Link>
-                <Link to="/" className="text-body text-sm font-medium no-underline focus-visible:ring-2 ring-brand">How It Works</Link>
-                <Link to="/" className="text-body text-sm font-medium no-underline focus-visible:ring-2 ring-brand">About Us</Link>
-              </>
-            ) : (
-              <>
-                <Link to="/" className="text-body text-sm font-medium no-underline focus-visible:ring-2 ring-brand">Home</Link>
-                <Link to="/" className="text-body text-sm font-medium no-underline focus-visible:ring-2 ring-brand">Explore</Link>
-                <Link to="/trips" className="text-body text-sm font-medium no-underline focus-visible:ring-2 ring-brand">My Trips</Link>
-                <Link to="/" className="text-body text-sm font-medium no-underline focus-visible:ring-2 ring-brand">How It Works</Link>
-              </>
-            )}
-          </div>
+          {isLoggedIn && (
+            <div className="flex gap-2 md:gap-6 ml-4 md:ml-12">
+              <Link to="/" className="text-body text-sm font-medium no-underline focus-visible:ring-2 ring-brand">Home</Link>
+              <Link to="/trips/new" className="text-body text-sm font-medium no-underline focus-visible:ring-2 ring-brand">New Trip</Link>
+              <Link to="/trips" className="text-body text-sm font-medium no-underline focus-visible:ring-2 ring-brand">My Trips</Link>
+            </div>
+          )}
 
-        <button
-          onClick={toggle}
-          aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-          className="ml-auto mr-3 w-8 h-8 flex items-center justify-center rounded-lg text-muted hover:text-heading hover:bg-line transition-colors focus-visible:ring-2 ring-brand"
-        >
-          {theme === 'dark' ? '☀️' : '🌙'}
-        </button>
+        <div className="ml-auto flex items-center gap-0.5">
+          <button
+            onClick={cycleColorTheme}
+            aria-label={`Color theme: ${colorTheme}. Click to cycle.`}
+            title={`Theme: ${colorTheme}`}
+            className="w-8 h-8 flex items-center justify-center rounded-lg text-muted hover:text-heading hover:bg-line transition-colors focus-visible:ring-2 ring-brand"
+          >
+            <Palette size={18} />
+          </button>
+          <button
+            onClick={toggle}
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            className="w-8 h-8 flex items-center justify-center rounded-lg text-muted hover:text-heading hover:bg-line transition-colors focus-visible:ring-2 ring-brand"
+          >
+            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+        </div>
 
         <div className="flex items-center gap-2 md:gap-3">
           {!isLoggedIn ? (
@@ -52,7 +54,7 @@ export default function Navbar({ isLoggedIn, userName, onLogout }) {
               </Link>
               <Link
                 to="/register"
-                className="bg-brand text-brand-light rounded-lg px-5 py-2 text-sm font-medium border-none no-underline cursor-pointer focus-visible:ring-2 ring-brand"
+                className="bg-brand text-brand-light rounded-lg px-5 py-2 text-sm font-medium border border-brand-hover no-underline cursor-pointer focus-visible:ring-2 ring-brand"
               >
                 Register
               </Link>

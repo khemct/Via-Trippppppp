@@ -1,11 +1,16 @@
 import { useState } from 'react';
+import { UtensilsCrossed, Coffee, Landmark, TreePine, ShoppingBag, Building2, Fuel, MapPin } from 'lucide-react';
 
 const CATEGORIES = ['', 'restaurant', 'cafe', 'attraction', 'park', 'museum', 'shopping', 'accommodation', 'gas_station'];
 
-const CATEGORY_ICONS = {
-  restaurant: '🍽', cafe: '☕', attraction: '🎯', park: '🌳',
-  museum: '🏛', shopping: '🛍', accommodation: '🏨', gas_station: '⛽',
-};
+function CategoryIcon({ category, size = 12 }) {
+  const map = {
+    restaurant: UtensilsCrossed, cafe: Coffee, attraction: Landmark, park: TreePine,
+    museum: Landmark, shopping: ShoppingBag, accommodation: Building2, gas_station: Fuel,
+  };
+  const Icon = map[category];
+  return Icon ? <Icon size={size} className="text-muted" /> : <MapPin size={size} className="text-muted" />;
+}
 
 function StarIcon({ filled }) {
   return (
@@ -65,7 +70,7 @@ export default function RecommendationPanel({
           >
             {CATEGORIES.map((c) => (
               <option key={c} value={c}>
-                {c ? CATEGORY_ICONS[c] + ' ' + c.charAt(0).toUpperCase() + c.slice(1) : 'All Categories'}
+                {c ? c.charAt(0).toUpperCase() + c.slice(1) : 'All Categories'}
               </option>
             ))}
           </select>
@@ -122,7 +127,7 @@ export default function RecommendationPanel({
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5 mb-0.5">
-                      <span className="text-xs text-muted">{CATEGORY_ICONS[place.category] || '📍'}</span>
+                      <CategoryIcon category={place.category} size={12} />
                       <span className="text-xs font-medium text-heading truncate">{place.name}</span>
                     </div>
                     <div className="flex items-center gap-2 text-xs text-muted">

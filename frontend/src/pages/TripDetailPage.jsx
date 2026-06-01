@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { Check, AlertTriangle, X } from 'lucide-react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { trips as tripsApi, itinerary as itineraryApi } from '../services/api';
@@ -158,17 +159,18 @@ function FeasibilityBadge({ status }) {
     tight: 'bg-amber-50 text-amber-800',
     infeasible: 'bg-red-50 text-red-800',
   };
-  const icons = {
-    feasible: '✓',
-    tight: '⚠',
-    infeasible: '✕',
+  const iconMap = {
+    feasible: Check,
+    tight: AlertTriangle,
+    infeasible: X,
   };
+  const Icon = iconMap[status] || null;
   const cls = styles[status] || 'bg-input text-muted';
   return (
     <div className="flex items-center gap-2">
       <span className="text-xs text-muted">Feasibility</span>
       <span className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded ${cls}`}>
-        <span>{icons[status] || '?'}</span>
+        {Icon && <Icon size={14} />}
         <span className="capitalize">{status}</span>
       </span>
     </div>
@@ -350,7 +352,7 @@ export default function TripDetailPage() {
       <div className="w-full max-w-lg mx-auto mt-12 p-6">
         <div className="bg-red-50 border border-red-200 rounded-lg px-5 py-4 mb-4" role="alert">
           <div className="flex items-center gap-3">
-            <span className="text-red-500 text-lg">✕</span>
+            <X size={20} className="text-red-500 shrink-0" />
             <div>
               <p className="font-medium text-red-800 text-sm">Error loading trip</p>
               <p className="text-red-600 text-sm mt-0.5">{error}</p>
@@ -515,7 +517,7 @@ export default function TripDetailPage() {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="bg-brand text-brand-light px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-brand-hover disabled:opacity-50 transition-all active:scale-[0.98]"
+                className="bg-brand text-brand-light px-6 py-2.5 rounded-lg text-sm font-medium border border-brand-hover hover:bg-brand-hover disabled:opacity-50 transition-all active:scale-[0.98]"
               >
                 {saving ? (
                   <span className="inline-flex items-center gap-2">
@@ -619,7 +621,7 @@ export default function TripDetailPage() {
           <div className="mt-6 pt-4 border-t border-line space-y-2.5">
             <Link
               to={`/trips/${tripId}/itinerary`}
-              className="w-full inline-flex items-center justify-center gap-2 bg-brand text-brand-light rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-brand-hover transition-colors"
+              className="w-full inline-flex items-center justify-center gap-2 bg-brand text-brand-light rounded-lg px-4 py-2.5 text-sm font-medium border border-brand-hover hover:bg-brand-hover transition-colors"
             >
               <RouteIcon />
               Plan Itinerary

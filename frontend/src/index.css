@@ -2,31 +2,103 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Adventure Road Trip (default) ── */
+.theme-adventure {
+  --color-base: #f8f3ea;
+  --color-card: #ffffff;
+  --color-input: #f2ede2;
+  --color-deep: #ece4d6;
+  --color-heading: #2a3a28;
+  --color-body: #5a6e52;
+  --color-muted: #9aab8e;
+  --color-line: #e2dcc8;
+  --color-line-strong: #d0c8b0;
+  --color-brand: #3a8a44;
+  --color-brand-hover: #2d7536;
+  --color-brand-text: #6aad5e;
+  --color-brand-light: #e6f5de;
+}
+.theme-adventure.dark {
+  --color-base: #1a2418;
+  --color-card: #222d20;
+  --color-input: #2a3728;
+  --color-deep: #151e14;
+  --color-heading: #e0ead8;
+  --color-body: #9aab8e;
+  --color-muted: #7a8a6e;
+  --color-line: #334830;
+  --color-line-strong: #40583d;
+  --color-brand: #5aad4e;
+  --color-brand-hover: #4a9d3e;
+  --color-brand-text: #7bc46e;
+  --color-brand-light: #1a3a18;
+}
+
+/* ── Bright ── */
+.theme-bright {
+  --color-base: #fafafe;
+  --color-card: #ffffff;
+  --color-input: #f0f2fe;
+  --color-deep: #e6eafe;
+  --color-heading: #1a1a2e;
+  --color-body: #4a4a6a;
+  --color-muted: #9a9ab0;
+  --color-line: #e0e4f0;
+  --color-line-strong: #c8cee0;
+  --color-brand: #6c5ce7;
+  --color-brand-hover: #5a4bd1;
+  --color-brand-text: #a29bfe;
+  --color-brand-light: #eaddff;
+}
+.theme-bright.dark {
+  --color-base: #1a1a2e;
+  --color-card: #222240;
+  --color-input: #2a2a50;
+  --color-deep: #141428;
+  --color-heading: #e8e8ff;
+  --color-body: #a0a0c8;
+  --color-muted: #7070a0;
+  --color-line: #303058;
+  --color-line-strong: #404070;
+  --color-brand: #a29bfe;
+  --color-brand-hover: #6c5ce7;
+  --color-brand-text: #b8b1ff;
+  --color-brand-light: #3d2e80;
+}
+
+/* ── Modern ── */
+.theme-modern {
+  --color-base: #fafafa;
+  --color-card: #ffffff;
+  --color-input: #f5f5f5;
+  --color-deep: #eeeeee;
+  --color-heading: #0a0a0a;
+  --color-body: #3f3f46;
+  --color-muted: #a1a1aa;
+  --color-line: #e4e4e7;
+  --color-line-strong: #d4d4d8;
+  --color-brand: #0891b2;
+  --color-brand-hover: #0e7490;
+  --color-brand-text: #06b6d4;
+  --color-brand-light: #cffafe;
+}
+.theme-modern.dark {
+  --color-base: #0a0a0a;
+  --color-card: #18181b;
+  --color-input: #1f1f23;
+  --color-deep: #050505;
+  --color-heading: #fafafa;
+  --color-body: #a1a1aa;
+  --color-muted: #71717a;
+  --color-line: #27272a;
+  --color-line-strong: #3f3f46;
+  --color-brand: #22d3ee;
+  --color-brand-hover: #06b6d4;
+  --color-brand-text: #67e8f9;
+  --color-brand-light: #164e63;
+}
+
 @layer base {
-  :root {
-    --color-base: #f5f2e8;
-    --color-card: #ffffff;
-    --color-input: #f0ede3;
-    --color-deep: #e8e4d8;
-    --color-heading: #1e1c14;
-    --color-body: #5a5540;
-    --color-muted: #8a8468;
-    --color-line: #e0dcc8;
-    --color-line-strong: #c8c4a0;
-  }
-
-  .dark {
-    --color-base: #312f24;
-    --color-card: #2a2820;
-    --color-input: #252318;
-    --color-deep: #1e1c14;
-    --color-heading: #c8c4a0;
-    --color-body: #a8a080;
-    --color-muted: #8a8468;
-    --color-line: #3e3b2a;
-    --color-line-strong: #4a4738;
-  }
-
   body {
     @apply bg-base text-body;
   }

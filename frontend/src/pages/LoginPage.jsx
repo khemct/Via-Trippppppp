@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { EyeOff, Eye } from 'lucide-react';
 import Navbar from '../components/Navbar';
 
 const perks = [
   'Mountains & Viewpoints',
   'Waterfalls & Nature',
   'Local Cafés & Food',
-  'Good Vibes ♡',
+  'Good Vibes',
 ];
 
 export default function LoginPage() {
@@ -54,7 +55,7 @@ export default function LoginPage() {
         {/* Left */}
         <div className="w-full lg:w-[45%] bg-gradient-to-br from-card to-deep px-6 md:px-12 py-8 md:py-12 flex flex-col justify-center">
           <h2 className="text-[32px] font-bold text-heading mb-4">
-            Welcome Back Explorer! ✦
+            Welcome Back Explorer!
           </h2>
           <p className="text-[15px] text-body leading-relaxed mb-8">
             Log in to continue your journey. Access your saved trips, discover new routes, and pick up right where you left off.
@@ -102,7 +103,7 @@ export default function LoginPage() {
                   aria-label={showPw ? 'Hide password' : 'Show password'}
                   className="absolute right-3 top-1/2 -translate-y-1/2 bg-none border-none cursor-pointer text-base text-muted p-0"
                 >
-                  {showPw ? '🙈' : '👁️'}
+                  {showPw ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
             </div>
@@ -126,7 +127,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-12 bg-brand disabled:bg-muted text-brand-light border-none rounded-lg text-[15px] font-semibold disabled:cursor-not-allowed cursor-pointer active:scale-[0.98] transition-transform"
+              className="w-full h-12 bg-brand disabled:bg-muted text-brand-light border border-brand-hover rounded-lg text-[15px] font-semibold disabled:cursor-not-allowed cursor-pointer active:scale-[0.98] transition-transform"
             >
               {loading ? (
                 <span className="inline-flex items-center gap-2">

@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { Heart, Sparkles } from 'lucide-react';
 import Navbar from '../components/Navbar';
 
 const perks = [
   'Mountains & Viewpoints',
   'Waterfalls & Nature',
   'Local Cafés & Food',
-  'Good Vibes ♡',
+  'Good Vibes',
 ];
 
 const roles = [
@@ -60,7 +61,7 @@ export default function RegisterPage() {
         {/* Left */}
         <div className="w-full lg:w-[45%] bg-gradient-to-br from-card to-deep px-6 md:px-12 py-8 md:py-12 flex flex-col justify-center">
           <h2 className="text-[32px] font-bold text-heading mb-4">
-            Join the Adventure! ✦
+            Join the Adventure! <Sparkles size={20} className="inline text-brand" />
           </h2>
           <p className="text-[15px] text-body leading-relaxed mb-8">
             Create your account and start planning your perfect road trip.
@@ -147,7 +148,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-12 bg-brand disabled:bg-muted text-brand-light border-none rounded-lg text-[15px] font-semibold disabled:cursor-not-allowed cursor-pointer mt-1 active:scale-[0.98] transition-transform"
+              className="w-full h-12 bg-brand disabled:bg-muted text-brand-light border border-brand-hover rounded-lg text-[15px] font-semibold disabled:cursor-not-allowed cursor-pointer mt-1 active:scale-[0.98] transition-transform"
             >
               {loading ? (
                 <span className="inline-flex items-center gap-2">
