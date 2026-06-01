@@ -361,9 +361,9 @@ export default function TripDetailPage() {
         </div>
         <Link
           to="/trips"
-          className="inline-flex items-center gap-1.5 text-sm text-brand-text font-medium hover:underline"
+          className="text-heading text-sm font-medium no-underline border border-line-strong rounded-lg px-3 py-1.5 hover:bg-line transition-colors"
         >
-          &larr; Back to My Trips
+          Back to My Trips
         </Link>
       </div>
     );
@@ -546,9 +546,9 @@ export default function TripDetailPage() {
         <div className="flex items-center justify-between mb-3 shrink-0">
           <Link
             to="/trips"
-            className="inline-flex items-center gap-1.5 text-sm text-brand-text font-medium hover:underline"
+            className="text-heading text-sm font-medium no-underline border border-line-strong rounded-lg px-3 py-1.5 hover:bg-line transition-colors"
           >
-            &larr; Back to My Trips
+            Back to My Trips
           </Link>
           {isOwner() && (
             <button
