@@ -6,10 +6,10 @@ import Footer from '../components/Footer';
 import SearchInput from '../components/SearchInput';
 
 const features = [
-  { icon: MapPin, title: 'Smart Route Planning', desc: 'Optimized routes with smart stops along the way.' },
-  { icon: Camera, title: 'Discover Hidden Gems', desc: 'Find unique places off the beaten path.' },
-  { icon: ClipboardList, title: 'Build Your Itinerary', desc: 'Customize every stop and plan your perfect day.' },
-  { icon: Heart, title: 'Collect Memories', desc: 'Save your favorite spots and share your journey.' },
+  { icon: MapPin, img: '/Pin_icon.png', title: 'Smart Route Planning', desc: 'Optimized routes with smart stops along the way.' },
+  { icon: Camera, img: '/Camera_icon.png', title: 'Discover Hidden Gems', desc: 'Find unique places off the beaten path.' },
+  { icon: ClipboardList, img: '/Clipboard_icon.png', title: 'Build Your Itinerary', desc: 'Customize every stop and plan your perfect day.' },
+  { icon: Heart, img: '/Heart_icon.png', title: 'Collect Memories', desc: 'Save your favorite spots and share your journey.' },
 ];
 
 const inspirations = [
@@ -109,7 +109,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {features.map((f) => (
               <div key={f.title} className="bg-base rounded-2xl p-5 border border-line/40 shadow-soft hover:shadow-soft-lg transition-all duration-300 hover:-translate-y-0.5">
-                <div className="w-10 h-10 rounded-xl bg-brand-light/60 flex items-center justify-center text-brand mb-3"><f.icon size={18} /></div>
+                <div className="w-10 h-10 rounded-xl bg-brand-light/60 flex items-center justify-center text-brand mb-3"><img src={f.img} alt={f.title} className="w-5 h-5" /></div>
                 <div className="text-sm font-semibold text-heading mb-1">{f.title}</div>
                 <div className="text-sm text-muted leading-relaxed">{f.desc}</div>
               </div>
