@@ -121,7 +121,7 @@ export default function TripListPage() {
                   className="relative bg-card border border-line/40 rounded-2xl p-5 shadow-soft hover:shadow-soft-lg hover:-translate-y-1 transition-all duration-300 group"
                 >
                   <Link
-                    to={`/trips/${trip.trip_id}/itinerary`}
+                    to={`/trips/${trip.trip_id}`}
                     className="block before:absolute before:inset-0 before:z-0"
                   >
                     {/* Top row: name + status */}
