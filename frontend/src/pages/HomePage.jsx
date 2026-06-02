@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { MapPin, Camera, ClipboardList, Heart, Sparkles, Truck, Compass, Trees, Coffee, Mountain, Waves, Sunset, Palmtree } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import Footer from '../components/Footer';
+import SearchInput from '../components/SearchInput';
 
 const features = [
   { icon: MapPin, title: 'Smart Route Planning', desc: 'Optimized routes with smart stops along the way.' },
@@ -55,17 +56,17 @@ export default function HomePage() {
 
             <form onSubmit={handleSearch} className="bg-card rounded-2xl p-6 shadow-soft border border-line/40" role="search">
               <div className="flex flex-col md:flex-row gap-2.5 mb-3">
-                <input
+                <SearchInput
                   value={origin}
-                  onChange={(e) => setOrigin(e.target.value)}
+                  onChange={setOrigin}
                   placeholder="Where are you starting?"
-                  className="flex-1 border border-line-strong rounded-xl bg-input px-3.5 py-2.5 text-sm text-heading outline-none focus:ring-2 focus:ring-brand/30 focus:border-transparent transition-all"
+                  className="flex-1"
                 />
-                <input
+                <SearchInput
                   value={dest}
-                  onChange={(e) => setDest(e.target.value)}
+                  onChange={setDest}
                   placeholder="Where are you going?"
-                  className="flex-1 border border-line-strong rounded-xl bg-input px-3.5 py-2.5 text-sm text-heading outline-none focus:ring-2 focus:ring-brand/30 focus:border-transparent transition-all"
+                  className="flex-1"
                 />
               </div>
               <button
