@@ -59,10 +59,12 @@ export default function Navbar({ isLoggedIn, userName, onLogout }) {
             </>
           ) : (
             <>
-              <span className="text-body text-sm">Hello, {userName}! 👋</span>
-              <div className="w-9 h-9 rounded-full bg-line flex items-center justify-center text-brand-text font-semibold text-sm">
-                {userName?.charAt(0).toUpperCase()}
-              </div>
+              <span className="text-body text-sm mr-1">{userName}</span>
+              <img
+                src="/Avatar.png"
+                alt={userName}
+                className="w-9 h-9 rounded-full object-cover"
+              />
               {onLogout && (
                 <button
                   onClick={onLogout}
