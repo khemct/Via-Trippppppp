@@ -101,7 +101,7 @@ export default function HomePage() {
         </div>
 
       {/* Section 2 — Inspiration */}
-        <div className="max-w-6xl mx-auto relative z-10">
+        <div className="max-w-6xl mx-auto relative z-10 mt-10 md:mt-14">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-xl font-bold text-heading">Inspiration for Your Next Trip</h2>
