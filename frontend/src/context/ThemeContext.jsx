@@ -13,7 +13,7 @@ function getInitialTheme() {
 function getInitialColorTheme() {
   const stored = localStorage.getItem('viattrip_color_theme');
   if (COLOR_THEMES.includes(stored)) return stored;
-  return 'adventure';
+  return 'vintage';
 }
 
 export function ThemeProvider({ children }) {

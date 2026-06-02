@@ -7,7 +7,7 @@
     <script>
       (function(){
         var ct = localStorage.getItem('viattrip_color_theme');
-        if (!ct) ct = 'adventure';
+        if (!ct) ct = 'vintage';
         var t = localStorage.getItem('viattrip_theme');
         if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         document.documentElement.classList.add('theme-' + ct);
