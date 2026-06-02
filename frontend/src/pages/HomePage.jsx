@@ -43,7 +43,7 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto flex gap-10 flex-col lg:flex-row">
           {/* Left */}
           <div className="w-full lg:w-[55%]">
-            <div className="inline-flex items-center gap-2 bg-brand-light/60 text-brand-text rounded-full px-3.5 py-1 text-sm font-medium mb-4">
+            <div className="inline-flex items-center gap-2 bg-brand text-brand-light border border-brand-hover rounded-full px-3.5 py-1 text-sm font-medium mb-4">
               <Compass size={13} />
               Your adventure starts here
             </div>
