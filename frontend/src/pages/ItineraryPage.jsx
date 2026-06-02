@@ -233,6 +233,7 @@ export default function ItineraryPage() {
               }
               routePolyline={trip.route_polyline}
               waypoints={routeWaypoints}
+              maxDetourKm={trip.max_detour_km}
               height="100%"
             />
           </div>

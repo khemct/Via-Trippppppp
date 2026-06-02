@@ -112,7 +112,12 @@ router.post('/:tripId/waypoints', requireAuth, async (req, res) => {
     );
 
     const place = placeResult.rows[0];
-    const wpFeasibility = assessWaypointFeasibility(place);
+    const detourRow = await pool.query(
+      'SELECT max_detour_km FROM trips WHERE trip_id = $1',
+      [tripId]
+    );
+    const maxDetourKm = parseFloat(detourRow.rows[0]?.max_detour_km) || 3;
+    const wpFeasibility = assessWaypointFeasibility(place, maxDetourKm);
 
     res.status(201).json({
       waypoint: { ...result.rows[0], ...place },
@@ -291,7 +296,12 @@ router.get('/:tripId/waypoints/:waypointId/feasibility', requireAuth, async (req
       return res.status(404).json({ error: 'Waypoint not found' });
     }
 
-    const feasibility = assessWaypointFeasibility(result.rows[0]);
+    const detourRow = await pool.query(
+      'SELECT max_detour_km FROM trips WHERE trip_id = $1',
+      [tripId]
+    );
+    const maxDetourKm = parseFloat(detourRow.rows[0]?.max_detour_km) || 3;
+    const feasibility = assessWaypointFeasibility(result.rows[0], maxDetourKm);
     res.json({ feasibility });
   } catch (err) {
     console.error('Waypoint feasibility error:', err);

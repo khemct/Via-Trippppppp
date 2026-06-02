@@ -8,7 +8,7 @@ const TRIP_SELECT = `
   ST_X(dest_coordinates::geometry) AS dest_lng,
   ST_Y(dest_coordinates::geometry) AS dest_lat,
   travel_date, number_of_days, daily_hours,
-  travel_style, estimated_stop_duration,
+  travel_style, estimated_stop_duration, max_detour_km,
   route_polyline, total_distance_km,
   total_duration_minutes, total_duration_estimate,
   status, feasibility_status,
@@ -35,6 +35,7 @@ function rowToTrip(row) {
     daily_hours: row.daily_hours,
     travel_style: row.travel_style,
     estimated_stop_duration: row.estimated_stop_duration,
+    max_detour_km: row.max_detour_km ? parseFloat(row.max_detour_km) : 3,
     route_polyline: row.route_polyline,
     total_distance_km: parseFloat(row.total_distance_km),
     total_duration_minutes: row.total_duration_minutes,
@@ -42,6 +43,7 @@ function rowToTrip(row) {
     status: row.status,
     feasibility_status: row.feasibility_status,
     waypoint_count: parseInt(row.waypoint_count, 10) || 0,
+    waypoints: row.waypoints || [],
     created_at: row.created_at,
     updated_at: row.updated_at,
   };
@@ -62,7 +64,7 @@ async function createTrip(userId, input) {
        user_id, name, origin, destination,
        origin_coordinates, dest_coordinates,
        travel_date, number_of_days, daily_hours,
-       travel_style, estimated_stop_duration,
+       travel_style, estimated_stop_duration, max_detour_km,
        route_polyline, total_distance_km,
        total_duration_minutes, feasibility_status
      ) VALUES (
@@ -70,9 +72,9 @@ async function createTrip(userId, input) {
        ST_SetSRID(ST_MakePoint($5, $6), 4326)::geography,
        ST_SetSRID(ST_MakePoint($7, $8), 4326)::geography,
        $9, $10, $11,
-       $12, $13,
-       $14, $15,
-       $16, 'feasible'
+       $12, $13, $14,
+       $15, $16,
+       $17, 'feasible'
      )
      RETURNING ${TRIP_SELECT}`,
     [
@@ -83,6 +85,7 @@ async function createTrip(userId, input) {
       input.daily_hours || 10,
       input.travel_style || 'chill',
       input.estimated_stop_duration || 30,
+      input.max_detour_km || 3,
       data.polyline,
       data.distance_km,
       data.duration_minutes,
@@ -133,7 +136,24 @@ async function listTrips(userId, page = 1, limit = 20, status) {
 async function getTrip(tripId, userId) {
   const result = await query(
     `SELECT ${TRIP_SELECT},
-            (SELECT COUNT(*) FROM trip_waypoints WHERE trip_id = $1) AS waypoint_count
+            (SELECT COUNT(*) FROM trip_waypoints WHERE trip_id = $1) AS waypoint_count,
+            COALESCE(
+              (SELECT json_agg(json_build_object(
+                'waypoint_id', w.waypoint_id,
+                'place_id', w.place_id,
+                'name', c.name,
+                'lat', ST_Y(c.coordinates::geometry),
+                'lng', ST_X(c.coordinates::geometry),
+                'order', w."order",
+                'stop_duration_minutes', w.stop_duration_minutes,
+                'category', c.category,
+                'distance_from_route', c.distance_from_route
+              ) ORDER BY w."order")
+              FROM trip_waypoints w
+              JOIN trip_places_cache c ON w.trip_id = c.trip_id AND w.place_id = c.place_id
+              WHERE w.trip_id = $1),
+              '[]'::json
+            ) AS waypoints
      FROM trips WHERE trip_id = $1`,
     [tripId]
   );
@@ -173,6 +193,7 @@ async function updateTrip(tripId, userId, input) {
     daily_hours: 'daily_hours',
     travel_style: 'travel_style',
     estimated_stop_duration: 'estimated_stop_duration',
+    max_detour_km: 'max_detour_km',
     status: 'status',
   };
 
