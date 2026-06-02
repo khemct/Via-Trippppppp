@@ -66,6 +66,42 @@
   --color-brand-light: #3d1f15;
 }
 
+/* ── Vintage Explorer ── */
+.theme-vintage {
+  --color-base: #F5EFE5;
+  --color-card: #F5EFE5;
+  --color-input: #EDE5DB;
+  --color-deep: #EBE3D8;
+  --color-heading: #4D5A4D;
+  --color-body: #4D5A4D;
+  --color-muted: #8A9A8A;
+  --color-line: #E0D8CE;
+  --color-line-strong: #C8BEAE;
+  --color-brand: #A66A45;
+  --color-brand-hover: #8E5535;
+  --color-brand-text: #F5EFE5;
+  --color-brand-light: #EDE0D8;
+  --color-secondary: #AAB3A2;
+  --color-secondary-hover: #96A08E;
+}
+.theme-vintage.dark {
+  --color-base: #1E1814;
+  --color-card: #2A221D;
+  --color-input: #332A24;
+  --color-deep: #161210;
+  --color-heading: #F5EFE5;
+  --color-body: #C8BEAE;
+  --color-muted: #8A7A6A;
+  --color-line: #3D322C;
+  --color-line-strong: #4D4038;
+  --color-brand: #C48A6A;
+  --color-brand-hover: #A66A45;
+  --color-brand-text: #F5EFE5;
+  --color-brand-light: #3D2818;
+  --color-secondary: #8A9A82;
+  --color-secondary-hover: #7A8A72;
+}
+
 /* ── Tropical Punch ── */
 .theme-modern {
   --color-base: #fdf2f8;

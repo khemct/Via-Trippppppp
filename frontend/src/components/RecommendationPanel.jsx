@@ -66,7 +66,7 @@ export default function RecommendationPanel({
           <select
             value={filters.category}
             onChange={(e) => onFilterChange({ ...filters, category: e.target.value, cursor: null })}
-            className="flex-1 border border-line-strong rounded px-2 py-1.5 text-xs text-heading bg-input focus:outline-none focus:ring-1 focus:ring-brand"
+            className="flex-1 border border-line-strong rounded px-2 py-1.5 text-xs text-heading bg-input focus:outline-none focus:ring-1 focus:ring-secondary"
           >
             {CATEGORIES.map((c) => (
               <option key={c} value={c}>
@@ -77,7 +77,7 @@ export default function RecommendationPanel({
           <select
             value={filters.sort_by}
             onChange={(e) => onFilterChange({ ...filters, sort_by: e.target.value, cursor: null })}
-            className="border border-line-strong rounded px-2 py-1.5 text-xs text-heading bg-input focus:outline-none focus:ring-1 focus:ring-brand"
+            className="border border-line-strong rounded px-2 py-1.5 text-xs text-heading bg-input focus:outline-none focus:ring-1 focus:ring-secondary"
           >
             <option value="score">Best Match</option>
             <option value="distance">Nearest</option>

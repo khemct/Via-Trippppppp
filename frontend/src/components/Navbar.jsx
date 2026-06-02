@@ -46,7 +46,7 @@ export default function Navbar({ isLoggedIn, userName, onLogout }) {
             <>
               <Link
                 to="/login"
-                className="border border-brand-hover text-brand-text rounded-lg px-5 py-2 text-sm font-medium bg-transparent no-underline cursor-pointer focus-visible:ring-2 ring-brand hover:bg-brand-light/40 transition-colors"
+                className="bg-secondary text-heading rounded-lg px-5 py-2 text-sm font-medium border border-secondary-hover no-underline cursor-pointer focus-visible:ring-2 ring-secondary hover:bg-secondary-hover transition-colors"
               >
                 Log In
               </Link>

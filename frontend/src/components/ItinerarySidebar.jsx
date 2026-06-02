@@ -56,7 +56,7 @@ function SortableWaypoint({ wp, onRemove, onUpdateDuration }) {
           step="5"
           value={wp.stop_duration_minutes || 30}
           onChange={(e) => onUpdateDuration(wp.waypoint_id, parseInt(e.target.value, 10) || 30)}
-          className="w-12 text-xs text-center border border-line-strong rounded px-1 py-0.5 text-heading focus:outline-none focus:ring-1 focus:ring-brand"
+          className="w-12 text-xs text-center border border-line-strong rounded px-1 py-0.5 text-heading focus:outline-none focus:ring-1 focus:ring-secondary"
         />
         <span className="text-xs text-muted">min</span>
         <button

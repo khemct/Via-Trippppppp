@@ -395,7 +395,7 @@ export default function TripDetailPage() {
                       name="name"
                       value={editForm.name}
                       onChange={handleEditChange}
-                      className="w-full border border-line-strong rounded-lg px-3 py-2 text-sm text-heading focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+                      className="w-full border border-line-strong rounded-lg px-3 py-2 text-sm text-heading focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
                     />
                   </div>
                   <div className="flex gap-4">
@@ -406,7 +406,7 @@ export default function TripDetailPage() {
                         name="travel_date"
                         value={editForm.travel_date}
                         onChange={handleEditChange}
-                        className="w-full border border-line-strong rounded-lg px-3 py-2 text-sm text-heading focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+                        className="w-full border border-line-strong rounded-lg px-3 py-2 text-sm text-heading focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
                       />
                     </div>
                     <div className="flex-1">
@@ -415,7 +415,7 @@ export default function TripDetailPage() {
                         name="status"
                         value={editForm.status}
                         onChange={handleEditChange}
-                        className="w-full border border-line-strong rounded-lg px-3 py-2 text-sm text-heading focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+                        className="w-full border border-line-strong rounded-lg px-3 py-2 text-sm text-heading focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
                       >
                         <option value="draft">Draft</option>
                         <option value="saved">Saved</option>
@@ -440,7 +440,7 @@ export default function TripDetailPage() {
                         max="30"
                         value={editForm.number_of_days}
                         onChange={handleEditChange}
-                        className="w-full border border-line-strong rounded-lg px-3 py-2 text-sm text-heading focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+                        className="w-full border border-line-strong rounded-lg px-3 py-2 text-sm text-heading focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
                       />
                     </div>
                     <div className="flex-1">

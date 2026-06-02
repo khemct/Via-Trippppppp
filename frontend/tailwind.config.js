@@ -27,6 +27,8 @@ export default {
         'brand-hover': 'var(--color-brand-hover)',
         'brand-text': 'var(--color-brand-text)',
         'brand-light': 'var(--color-brand-light)',
+        secondary: 'var(--color-secondary)',
+        'secondary-hover': 'var(--color-secondary-hover)',
       },
     },
   },
