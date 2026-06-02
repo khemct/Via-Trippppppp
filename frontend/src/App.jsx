@@ -10,6 +10,7 @@ import TripListPage from './pages/TripListPage';
 import TripSetupPage from './pages/TripSetupPage';
 import TripDetailPage from './pages/TripDetailPage';
 import ItineraryPage from './pages/ItineraryPage';
+import SharedTripPage from './pages/SharedTripPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import RoleGuard from './components/RoleGuard';
 
@@ -102,6 +103,14 @@ export default function App() {
                 <AdminPage />
               </RoleGuard>
             </ProtectedRoute>
+          </Layout>
+        }
+      />
+      <Route
+        path="/shared/:shareToken"
+        element={
+          <Layout noGlobalNav>
+            <SharedTripPage />
           </Layout>
         }
       />
