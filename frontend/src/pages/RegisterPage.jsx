@@ -70,7 +70,7 @@ export default function RegisterPage() {
             {perks.map((item) => (
               <div key={item} className="flex items-center gap-3">
                 <div className="w-2.5 h-2.5 rounded-full bg-brand shrink-0" />
-                <span className="text-[15px] text-heading font-medium">{item}</span>
+                <span className="text-base text-heading font-medium">{item}</span>
               </div>
             ))}
           </div>
@@ -83,7 +83,7 @@ export default function RegisterPage() {
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
             <div>
-              <label className="text-[13px] font-medium text-body block mb-1.5">Full Name</label>
+              <label className="text-sm font-medium text-body block mb-1.5">Full Name</label>
               <input
                 type="text"
                 value={name}
@@ -94,7 +94,7 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="text-[13px] font-medium text-body block mb-1.5">Email Address</label>
+              <label className="text-sm font-medium text-body block mb-1.5">Email Address</label>
               <input
                 type="email"
                 value={email}
@@ -105,7 +105,7 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="text-[13px] font-medium text-body block mb-1.5">Password</label>
+              <label className="text-sm font-medium text-body block mb-1.5">Password</label>
               <input
                 type="password"
                 value={password}
@@ -116,7 +116,7 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="text-[13px] font-medium text-body block mb-1.5">Confirm Password</label>
+              <label className="text-sm font-medium text-body block mb-1.5">Confirm Password</label>
               <input
                 type="password"
                 value={confirmPw}
@@ -127,7 +127,7 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="text-[13px] font-medium text-body block mb-1.5">Role</label>
+              <label className="text-sm font-medium text-body block mb-1.5">Role</label>
               <select
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
@@ -140,7 +140,7 @@ export default function RegisterPage() {
             </div>
 
             {error && (
-              <div className="bg-red-50 border border-red-200 rounded-lg px-3.5 py-2.5 text-[13px] text-red-700">
+              <div className="bg-red-50 border border-red-200 rounded-lg px-3.5 py-2.5 text-sm text-red-700">
                 {error}
               </div>
             )}
@@ -148,7 +148,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-12 bg-brand disabled:bg-muted text-brand-light border border-brand-hover rounded-lg text-[15px] font-semibold disabled:cursor-not-allowed cursor-pointer mt-1 active:scale-[0.98] transition-transform"
+              className="w-full h-12 bg-brand disabled:bg-muted text-brand-light border border-brand-hover rounded-lg text-base font-semibold disabled:cursor-not-allowed cursor-pointer mt-1 active:scale-[0.98] transition-transform"
             >
               {loading ? (
                 <span className="inline-flex items-center gap-2">
@@ -169,7 +169,7 @@ export default function RegisterPage() {
       </div>
 
       {/* Footer copyright only */}
-      <div className="border-t border-line bg-deep py-3 px-6 text-center text-[12px] text-muted">
+      <div className="border-t border-line bg-deep py-3 px-6 text-center text-sm text-muted">
         &copy; 2026 Via-Trip. All rights reserved.
       </div>
     </div>

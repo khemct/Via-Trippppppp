@@ -7,13 +7,11 @@ export default function Navbar({ isLoggedIn, userName, onLogout }) {
   return (
     <nav className="h-[60px] bg-card/70 backdrop-blur-xl border-b border-line/20 sticky top-0 z-50 shadow-glass">
       <div className="flex items-center h-full px-4 md:px-6 max-w-[1280px] mx-auto">
-        <Link to="/" className="flex items-center gap-2.5 no-underline">
-          <div className="w-9 h-9 rounded-full bg-brand flex items-center justify-center text-white">
-            <Mountain size={20} />
-          </div>
+        <Link to="/" className="flex items-center gap-1.0 no-underline">
+          <img src="/Via_trip_logo.png" alt="Via-Trip" className="w-[72px] h-[72px]" />
           <div>
             <div className="text-base font-bold text-heading leading-tight">Via-Trip</div>
-            <div className="text-[11px] text-muted leading-tight">Journey your way.</div>
+            <div className="text-xs text-muted leading-tight">Journey your way.</div>
           </div>
         </Link>
 

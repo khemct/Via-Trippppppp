@@ -43,14 +43,14 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto flex gap-10 flex-col lg:flex-row">
           {/* Left */}
           <div className="w-full lg:w-[55%]">
-            <div className="inline-flex items-center gap-2 bg-brand-light/60 text-brand-text rounded-full px-3.5 py-1 text-[12px] font-medium mb-4">
+            <div className="inline-flex items-center gap-2 bg-brand-light/60 text-brand-text rounded-full px-3.5 py-1 text-sm font-medium mb-4">
               <Compass size={13} />
               Your adventure starts here
             </div>
             <h1 className="text-3xl md:text-[42px] font-extrabold text-heading leading-[1.1] mb-4">
               Every Route Has a Story<ThemeIcon size={26} className="inline ml-1.5 text-brand align-middle" />
             </h1>
-            <p className="text-[15px] text-body leading-relaxed mb-6 max-w-[480px]">
+            <p className="text-base text-body leading-relaxed mb-6 max-w-[480px]">
               Plan your trip, discover hidden gems, and collect memories along the way.
             </p>
 
@@ -80,15 +80,16 @@ export default function HomePage() {
 
           {/* Right */}
           <div className="w-full lg:w-[45%]">
-            <div className="bg-gradient-to-br from-brand via-brand-hover to-brand-text rounded-2xl p-10 text-white text-center shadow-soft-lg h-full flex flex-col justify-between">
-              <div>
-                <div className="mb-4"><Mountain size={64} className="text-white/90 mx-auto" /></div>
+            <div className="relative bg-cover bg-center rounded-2xl pt-6 pb-10 px-10 text-white text-center shadow-soft-lg h-full flex flex-col justify-between overflow-hidden"
+                 style={{ backgroundImage: "url('/Await_bg.png')" }}>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20" />
+              <div className="relative z-10">
                 <div className="text-2xl font-bold mb-1">Adventure Awaits</div>
                 <div className="text-sm text-white/80 mb-5">Discover the road less traveled</div>
               </div>
-              <div className="flex gap-2 justify-center flex-wrap">
+              <div className="relative z-10 flex gap-2 justify-center flex-wrap">
                 {['Mountains', 'Waterfalls', 'Cafés', 'Good Vibes'].map((tag) => (
-                  <span key={tag} className="bg-white/20 rounded-xl px-3.5 py-1 text-[12px] font-medium backdrop-blur-sm">
+                  <span key={tag} className="bg-white/20 rounded-xl px-3.5 py-1 text-sm font-medium backdrop-blur-sm">
                     {tag}
                   </span>
                 ))}
@@ -110,7 +111,7 @@ export default function HomePage() {
               <div key={f.title} className="bg-base rounded-2xl p-5 border border-line/40 shadow-soft hover:shadow-soft-lg transition-all duration-300 hover:-translate-y-0.5">
                 <div className="w-10 h-10 rounded-xl bg-brand-light/60 flex items-center justify-center text-brand mb-3"><f.icon size={18} /></div>
                 <div className="text-sm font-semibold text-heading mb-1">{f.title}</div>
-                <div className="text-[12px] text-muted leading-relaxed">{f.desc}</div>
+                <div className="text-sm text-muted leading-relaxed">{f.desc}</div>
               </div>
             ))}
           </div>
@@ -144,7 +145,7 @@ export default function HomePage() {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-semibold text-heading">{item.name}</span>
-                    <span className="text-[12px] text-amber-500 font-semibold">★ {item.rating}</span>
+                    <span className="text-sm text-amber-500 font-semibold">★ {item.rating}</span>
                   </div>
                 </div>
               </div>

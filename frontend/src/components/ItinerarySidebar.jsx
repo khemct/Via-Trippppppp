@@ -39,7 +39,7 @@ function SortableWaypoint({ wp, onRemove, onUpdateDuration }) {
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1">
           <CategoryIcon category={wp.category} size={12} />
-          <span className="text-xs font-medium text-heading truncate">{wp.name}</span>
+          <span className="text-sm font-medium text-heading truncate">{wp.name}</span>
         </div>
         <div className="flex items-center gap-2 mt-1">
           <span className="text-xs text-muted">{wp.score}</span>
@@ -116,7 +116,7 @@ export default function ItinerarySidebar({
     <div className="h-full flex flex-col bg-card border border-line-strong rounded-lg overflow-hidden">
       <div className="shrink-0 px-4 pt-4 pb-3 border-b border-line flex items-center justify-between">
         <h2 className="text-sm font-semibold text-heading">Itinerary</h2>
-        <span className="text-xs text-muted">{waypoints.length} stop{waypoints.length !== 1 ? 's' : ''}</span>
+        <span className="text-sm text-muted">{waypoints.length} stop{waypoints.length !== 1 ? 's' : ''}</span>
       </div>
 
       <div className="flex-1 overflow-y-auto min-h-0">
@@ -157,8 +157,8 @@ export default function ItinerarySidebar({
       {feasi && (
         <div className={`shrink-0 p-4 border-t border-line ${feasi.container}`}>
           <div className="flex items-center justify-between mb-1.5">
-            <span className={`text-xs font-medium ${feasi.text}`}>{feasi.label}</span>
-            <span className={`text-xs ${feasi.text}`}>
+            <span className={`text-sm font-medium ${feasi.text}`}>{feasi.label}</span>
+            <span className={`text-sm ${feasi.text}`}>
               {feasibility.details.utilization_pct}% utilized
             </span>
           </div>
@@ -169,7 +169,7 @@ export default function ItinerarySidebar({
             />
           </div>
           {feasibility.details.detours > 0 && (
-            <div className={`mt-1.5 text-xs ${feasi.text}`}>
+            <div className={`mt-1.5 text-sm ${feasi.text}`}>
               {feasibility.details.detours} detour{feasibility.details.detours !== 1 ? 's' : ''} · {feasibility.details.total_detour_distance_m}m extra
             </div>
           )}

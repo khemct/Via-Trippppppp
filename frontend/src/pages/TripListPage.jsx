@@ -125,7 +125,7 @@ export default function TripListPage() {
                   {/* Top row: name + status */}
                   <div className="flex items-start justify-between gap-3 mb-3">
                     <h2 className="font-semibold text-heading truncate text-base">{trip.name}</h2>
-                    <span className={`shrink-0 text-[11px] font-medium px-2.5 py-0.5 rounded-full ${sc.cls}`}>
+                    <span className={`shrink-0 text-xs font-medium px-2.5 py-0.5 rounded-full ${sc.cls}`}>
                       {sc.label}
                     </span>
                   </div>
@@ -140,7 +140,7 @@ export default function TripListPage() {
                   </div>
 
                   {/* Meta row 1: date · days · style */}
-                  <div className="flex items-center gap-3 text-[12px] text-muted mb-2 flex-wrap">
+                  <div className="flex items-center gap-3 text-sm text-muted mb-2 flex-wrap">
                     <span className="inline-flex items-center gap-1">
                       <CalendarDays size={13} />
                       {trip.travel_date}
@@ -156,7 +156,7 @@ export default function TripListPage() {
                   </div>
 
                   {/* Meta row 2: distance · duration · waypoints · feasibility */}
-                  <div className="flex items-center gap-3 text-[12px] text-muted flex-wrap">
+                  <div className="flex items-center gap-3 text-sm text-muted flex-wrap">
                     <span className="inline-flex items-center gap-1">
                       <Route size={13} />
                       {trip.total_distance_km} km
