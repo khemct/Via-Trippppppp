@@ -664,6 +664,17 @@ export default function TripDetailPage() {
           </div>
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleDelete}
+        title="Delete trip"
+        message={`Are you sure you want to delete "${trip?.name || 'this trip'}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        danger={true}
+      />
     </div>
   );
 }
