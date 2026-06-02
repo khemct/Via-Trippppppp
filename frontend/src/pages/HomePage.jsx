@@ -39,7 +39,7 @@ export default function HomePage() {
   return (
     <div>
       {/* Section 1 — Hero */}
-      <section className="bg-gradient-to-br from-brand-light/40 via-card to-base px-4 md:px-8 pt-8 pb-4 md:pt-10 md:pb-6">
+      <section className="px-4 md:px-8 pt-8 pb-4 md:pt-10 md:pb-6">
         <div className="max-w-6xl mx-auto flex gap-10 flex-col lg:flex-row">
           {/* Left */}
           <div className="w-full lg:w-[55%]">
@@ -100,7 +100,7 @@ export default function HomePage() {
       </section>
 
       {/* Section 2 — Inspiration */}
-      <section className="bg-base px-4 md:px-8 pt-2 pb-6 md:pt-2 md:pb-8">
+      <section className="px-4 md:px-8 pt-2 pb-6 md:pt-2 md:pb-8">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -131,7 +131,7 @@ export default function HomePage() {
       </section>
 
       {/* Section 3 — Why Via-Trip? */}
-      <section className="bg-card px-4 md:px-8 py-6 md:py-8">
+      <section className="px-4 md:px-8 py-6 md:py-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-6">
             <h2 className="text-xl font-bold text-heading mb-1">Why Via-Trip?</h2>
@@ -139,7 +139,7 @@ export default function HomePage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {features.map((f) => (
-              <div key={f.title} className="bg-base rounded-2xl p-5 border border-line/40 shadow-soft hover:shadow-soft-lg transition-all duration-300 hover:-translate-y-0.5">
+              <div key={f.title} className="bg-card rounded-2xl p-5 border border-line/40 shadow-soft hover:shadow-soft-lg transition-all duration-300 hover:-translate-y-0.5">
                 <div className="flex gap-4 items-start">
                   <div className="w-20 h-20 shrink-0 rounded-xl bg-brand-light/60 flex items-center justify-center text-brand">
                     <img src={f.img} alt={f.title} className="w-20 h-20" />
