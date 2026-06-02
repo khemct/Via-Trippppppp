@@ -124,4 +124,24 @@
     position: relative;
     z-index: 1;
   }
+  .footer-bg {
+    position: relative;
+    background-color: var(--color-input);
+  }
+  .footer-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('/Main_bg02.png');
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.15;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .footer-bg > * {
+    position: relative;
+    z-index: 1;
+  }
 }
