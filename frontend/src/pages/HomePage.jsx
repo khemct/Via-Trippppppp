@@ -13,10 +13,10 @@ const features = [
 ];
 
 const inspirations = [
-  { name: 'Chiang Mai', tags: 'Nature · Culture', rating: 4.8, gradient: 'linear-gradient(135deg, #3a7d44, #7cb342)' },
-  { name: 'Phuket Roadtrip', tags: 'Coastal · Freedom', rating: 4.7, gradient: 'linear-gradient(135deg, #2d8a8a, #5bb8b8)' },
-  { name: 'Khao Yai', tags: 'Nature · Camping', rating: 4.8, gradient: 'linear-gradient(135deg, #558b3a, #8bc34a)' },
-  { name: 'Nan', tags: 'Slow life · Local vibe', rating: 4.6, gradient: 'linear-gradient(135deg, #b8874a, #d4a843)' },
+  { name: 'Bangkok', tags: 'Urban · Culture', rating: 4.7, img: '/Bangkok.png' },
+  { name: 'Chiang Mai', tags: 'Nature · Tradition', rating: 4.8, img: '/Chiang%20Mai.png' },
+  { name: 'Krabi', tags: 'Beach · Adventure', rating: 4.7, img: '/Krabi.png' },
+  { name: 'Phuket', tags: 'Coastal · Freedom', rating: 4.7, img: '/Phuket.png' },
 ];
 
 const themeIcons = { adventure: Waves, bright: Sunset, modern: Palmtree };
@@ -109,9 +109,15 @@ export default function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {features.map((f) => (
               <div key={f.title} className="bg-base rounded-2xl p-5 border border-line/40 shadow-soft hover:shadow-soft-lg transition-all duration-300 hover:-translate-y-0.5">
-                <div className="w-10 h-10 rounded-xl bg-brand-light/60 flex items-center justify-center text-brand mb-3"><img src={f.img} alt={f.title} className="w-5 h-5" /></div>
-                <div className="text-sm font-semibold text-heading mb-1">{f.title}</div>
-                <div className="text-sm text-muted leading-relaxed">{f.desc}</div>
+                <div className="flex gap-4 items-start">
+                  <div className="w-20 h-20 shrink-0 rounded-xl bg-brand-light/60 flex items-center justify-center text-brand">
+                    <img src={f.img} alt={f.title} className="w-20 h-20" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="font-bold text-heading leading-tight">{f.title}</div>
+                    <div className="text-sm text-muted leading-relaxed mt-1">{f.desc}</div>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -132,11 +138,11 @@ export default function HomePage() {
             {inspirations.map((item) => (
               <div key={item.name} className="bg-card rounded-2xl border border-line/40 overflow-hidden shadow-soft hover:shadow-soft-lg transition-all duration-300 hover:-translate-y-0.5">
                 <div
-                  className="h-[110px] flex items-center justify-center text-white text-[28px] font-bold relative"
-                  style={{ background: item.gradient }}
+                  className="h-[140px] bg-cover bg-center relative"
+                  style={{ backgroundImage: `url('${item.img}')` }}
                 >
-                  <div className="absolute inset-0 bg-black/10" />
-                  <span className="relative drop-shadow-lg">{item.name.split(' ')[0]}</span>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                  <span className="absolute bottom-3 left-3 text-white text-lg font-bold drop-shadow-lg">{item.name}</span>
                 </div>
                 <div className="p-4">
                   <div className="inline-flex items-center gap-1 bg-brand-light/60 text-brand-text rounded-full px-2.5 py-0.5 text-[10px] font-medium mb-2">
