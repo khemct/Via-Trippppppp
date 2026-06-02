@@ -4,6 +4,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { trips as tripsApi, itinerary as itineraryApi } from '../services/api';
 import RouteMap from '../components/RouteMap';
+import ConfirmModal from '../components/ConfirmModal';
 
 const STYLES = ['chill', 'foodie', 'photographer', 'adventure', 'budget'];
 
@@ -228,6 +229,7 @@ export default function TripDetailPage() {
   const [editForm, setEditForm] = useState({});
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState('');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -323,7 +325,7 @@ export default function TripDetailPage() {
   }
 
   async function handleDelete() {
-    if (!window.confirm('Delete this trip? This cannot be undone.')) return;
+    setShowDeleteModal(false);
     try {
       await tripsApi.delete(tripId, token);
       navigate('/trips', { replace: true });
@@ -534,8 +536,19 @@ export default function TripDetailPage() {
               </button>
             </div>
           </div>
-        </div>
       </div>
+
+      <ConfirmModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleDelete}
+        title="Delete trip"
+        message={`Are you sure you want to delete "${trip?.name || 'this trip'}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        danger={true}
+      />
+    </div>
   );
 }
 
@@ -628,7 +641,7 @@ export default function TripDetailPage() {
             </Link>
             {isOwner() && (
               <button
-                onClick={handleDelete}
+                onClick={() => setShowDeleteModal(true)}
                 className="w-full inline-flex items-center justify-center gap-2 border border-red-300 text-red-600 rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-red-50 transition-colors"
               >
                 <TrashIcon />
