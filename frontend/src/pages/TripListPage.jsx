@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { trips as tripsApi } from '../services/api';
-import { MapPin, Flag, CalendarDays, Mountain, Route, Compass, Plus, Map, ArrowLeft, ArrowRight, Car, Clock, CheckCircle, AlertTriangle, XCircle, Navigation } from 'lucide-react';
+import { MapPin, Flag, CalendarDays, Mountain, Route, Compass, Plus, Map, ArrowLeft, ArrowRight, Car, Clock, CheckCircle, AlertTriangle, XCircle, Navigation, Trash2 } from 'lucide-react';
+import ConfirmModal from '../components/ConfirmModal';
 
 const statusConfig = {
   saved: { cls: 'bg-brand-light/60 text-brand-text', label: 'Saved' },
@@ -23,6 +24,8 @@ export default function TripListPage() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [deleting, setDeleting] = useState(null);
+  const [deleteTarget, setDeleteTarget] = useState(null);
   const limit = 20;
 
   useEffect(() => {
@@ -37,6 +40,21 @@ export default function TripListPage() {
       .catch((err) => setError(err.message || 'Failed to load trips'))
       .finally(() => setLoading(false));
   }, [page, token]);
+
+  async function handleDeleteConfirm() {
+    if (!deleteTarget) return;
+    setDeleting(deleteTarget.trip_id);
+    try {
+      await tripsApi.delete(deleteTarget.trip_id, token);
+      setTrips((prev) => prev.filter((t) => t.trip_id !== deleteTarget.trip_id));
+      setTotal((prev) => prev - 1);
+    } catch (err) {
+      setError(err.message || 'Failed to delete trip');
+    } finally {
+      setDeleting(null);
+      setDeleteTarget(null);
+    }
+  }
 
   const totalPages = Math.ceil(total / limit);
 
@@ -117,70 +135,92 @@ export default function TripListPage() {
               const fc = feasibilityConfig[trip.feasibility_status];
               const FeasibilityIcon = fc?.icon;
               return (
-                <Link
+                <div
                   key={trip.trip_id}
-                  to={`/trips/${trip.trip_id}/itinerary`}
-                  className="block bg-card border border-line/40 rounded-2xl p-5 shadow-soft hover:shadow-soft-lg hover:-translate-y-1 transition-all duration-300 group"
+                  className="relative bg-card border border-line/40 rounded-2xl p-5 shadow-soft hover:shadow-soft-lg hover:-translate-y-1 transition-all duration-300 group"
                 >
-                  {/* Top row: name + status */}
-                  <div className="flex items-start justify-between gap-3 mb-3">
-                    <h2 className="font-semibold text-heading truncate text-base">{trip.name}</h2>
-                    <span className={`shrink-0 text-xs font-medium px-2.5 py-0.5 rounded-full ${sc.cls}`}>
-                      {sc.label}
-                    </span>
-                  </div>
+                  <Link
+                    to={`/trips/${trip.trip_id}/itinerary`}
+                    className="block before:absolute before:inset-0 before:z-0"
+                  >
+                    {/* Top row: name + status */}
+                    <div className="flex items-start justify-between gap-3 mb-3 relative z-10">
+                      <h2 className="font-semibold text-heading truncate text-base pointer-events-none">{trip.name}</h2>
+                      <span className={`shrink-0 text-xs font-medium px-2.5 py-0.5 rounded-full ${sc.cls}`}>
+                        {sc.label}
+                      </span>
+                    </div>
 
-                  {/* Route */}
-                  <div className="flex items-center gap-1.5 text-sm text-body mb-2.5">
-                    <MapPin size={14} className="shrink-0 text-muted" />
-                    <span className="truncate">{trip.origin}</span>
-                    <ArrowRight size={12} className="shrink-0 text-muted" />
-                    <Flag size={14} className="shrink-0 text-muted" />
-                    <span className="truncate">{trip.destination}</span>
-                  </div>
+                    {/* Route */}
+                    <div className="flex items-center gap-1.5 text-sm text-body mb-2.5 relative z-10">
+                      <MapPin size={14} className="shrink-0 text-muted" />
+                      <span className="truncate">{trip.origin}</span>
+                      <ArrowRight size={12} className="shrink-0 text-muted" />
+                      <Flag size={14} className="shrink-0 text-muted" />
+                      <span className="truncate">{trip.destination}</span>
+                    </div>
 
-                  {/* Meta row 1: date · days · style */}
-                  <div className="flex items-center gap-3 text-sm text-muted mb-2 flex-wrap">
-                    <span className="inline-flex items-center gap-1">
-                      <CalendarDays size={13} />
-                      {trip.travel_date}
-                    </span>
-                    <span className="inline-flex items-center gap-1">
-                      <Car size={13} />
-                      {trip.number_of_days} day{trip.number_of_days > 1 ? 's' : ''}
-                    </span>
-                    <span className="inline-flex items-center gap-1">
-                      <Mountain size={13} />
-                      {trip.travel_style}
-                    </span>
-                  </div>
-
-                  {/* Meta row 2: distance · duration · waypoints · feasibility */}
-                  <div className="flex items-center gap-3 text-sm text-muted flex-wrap">
-                    <span className="inline-flex items-center gap-1">
-                      <Route size={13} />
-                      {trip.total_distance_km} km
-                    </span>
-                    {trip.total_duration_minutes && (
+                    {/* Meta row 1: date · days · style */}
+                    <div className="flex items-center gap-3 text-sm text-muted mb-2 flex-wrap relative z-10">
                       <span className="inline-flex items-center gap-1">
-                        <Clock size={13} />
-                        {Math.round(trip.total_duration_minutes / 60)}h {trip.total_duration_minutes % 60}m
+                        <CalendarDays size={13} />
+                        {trip.travel_date}
                       </span>
-                    )}
-                    {trip.waypoint_count != null && (
                       <span className="inline-flex items-center gap-1">
-                        <Navigation size={13} />
-                        {trip.waypoint_count} stop{trip.waypoint_count !== 1 ? 's' : ''}
+                        <Car size={13} />
+                        {trip.number_of_days} day{trip.number_of_days > 1 ? 's' : ''}
                       </span>
-                    )}
-                    {FeasibilityIcon && (
-                      <span className={`inline-flex items-center gap-1 ${fc.cls}`}>
-                        <FeasibilityIcon size={13} />
-                        {fc.label}
+                      <span className="inline-flex items-center gap-1">
+                        <Mountain size={13} />
+                        {trip.travel_style}
                       </span>
+                    </div>
+
+                    {/* Meta row 2: distance · duration · waypoints · feasibility */}
+                    <div className="flex items-center gap-3 text-sm text-muted flex-wrap relative z-10">
+                      <span className="inline-flex items-center gap-1">
+                        <Route size={13} />
+                        {trip.total_distance_km} km
+                      </span>
+                      {trip.total_duration_minutes && (
+                        <span className="inline-flex items-center gap-1">
+                          <Clock size={13} />
+                          {Math.round(trip.total_duration_minutes / 60)}h {trip.total_duration_minutes % 60}m
+                        </span>
+                      )}
+                      {trip.waypoint_count != null && (
+                        <span className="inline-flex items-center gap-1">
+                          <Navigation size={13} />
+                          {trip.waypoint_count} stop{trip.waypoint_count !== 1 ? 's' : ''}
+                        </span>
+                      )}
+                      {FeasibilityIcon && (
+                        <span className={`inline-flex items-center gap-1 ${fc.cls}`}>
+                          <FeasibilityIcon size={13} />
+                          {fc.label}
+                        </span>
+                      )}
+                    </div>
+                  </Link>
+
+                  {/* Delete button */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      setDeleteTarget(trip);
+                    }}
+                    disabled={deleting === trip.trip_id}
+                    className="absolute bottom-3 right-3 z-20 w-8 h-8 flex items-center justify-center rounded-lg opacity-0 group-hover:opacity-100 hover:bg-red-50 text-muted hover:text-red-500 disabled:opacity-30 transition-all"
+                    title="Delete trip"
+                  >
+                    {deleting === trip.trip_id ? (
+                      <span className="w-4 h-4 border-2 border-red-400 border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                      <Trash2 size={15} />
                     )}
-                  </div>
-                </Link>
+                  </button>
+                </div>
               );
             })}
           </div>
@@ -226,6 +266,18 @@ export default function TripListPage() {
           )}
         </>
       )}
+
+      {/* Delete confirmation modal */}
+      <ConfirmModal
+        isOpen={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={handleDeleteConfirm}
+        title="Delete trip"
+        message={`Are you sure you want to delete "${deleteTarget?.name || 'this trip'}"? This action cannot be undone.`}
+        confirmText={deleting ? 'Deleting...' : 'Delete'}
+        cancelText="Cancel"
+        danger={true}
+      />
     </div>
   );
 }
