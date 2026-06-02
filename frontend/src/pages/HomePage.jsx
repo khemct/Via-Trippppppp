@@ -39,18 +39,20 @@ export default function HomePage() {
   return (
     <div>
       {/* Section 1 — Hero */}
-      <section className="bg-gradient-to-br from-brand-light/40 via-card to-base px-4 md:px-8 pt-8 pb-4 md:pt-10 md:pb-6">
+      <section className="relative bg-cover bg-center px-4 md:px-8 pt-8 pb-4 md:pt-10 md:pb-6"
+        style={{ backgroundImage: "url('/Nature_bg.png')" }}>
+        <div className="absolute inset-0 bg-gradient-to-br from-black/50 via-black/30 to-black/50" />
         <div className="max-w-6xl mx-auto flex gap-10 flex-col lg:flex-row">
           {/* Left */}
           <div className="w-full lg:w-[55%]">
-            <div className="inline-flex items-center gap-2 bg-brand-light/60 text-brand-text rounded-full px-3.5 py-1 text-sm font-medium mb-4">
+            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white rounded-full px-3.5 py-1 text-sm font-medium mb-4">
               <Compass size={13} />
               Your adventure starts here
             </div>
-            <h1 className="text-3xl md:text-[42px] font-extrabold text-heading leading-[1.1] mb-4">
-              Every Route Has a Story<ThemeIcon size={26} className="inline ml-1.5 text-brand align-middle" />
+            <h1 className="text-3xl md:text-[42px] font-extrabold text-white leading-[1.1] mb-4">
+              Every Route Has a Story<ThemeIcon size={26} className="inline ml-1.5 text-brand-light align-middle" />
             </h1>
-            <p className="text-base text-body leading-relaxed mb-6 max-w-[480px]">
+            <p className="text-base text-white/80 leading-relaxed mb-6 max-w-[480px]">
               Plan your trip, discover hidden gems, and collect memories along the way.
             </p>
 
