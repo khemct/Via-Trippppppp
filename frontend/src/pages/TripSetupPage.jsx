@@ -94,7 +94,7 @@ export default function TripSetupPage() {
           setError(err.data?.error || 'Route exceeds 300 km. Please choose closer destinations.');
           setErrorType('distance');
         } else if (err.status === 502) {
-          setError('Could not calculate route. Please try again.');
+          setError(err.data?.error || 'Could not calculate route. Please try again.');
           setErrorType('server');
         } else {
           setError(err.data?.error || err.message || 'Failed to create trip.');

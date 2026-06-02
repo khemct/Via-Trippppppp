@@ -36,7 +36,7 @@ async function getDirections(origin, destination) {
 function fetchJson(url) {
   return new Promise((resolve, reject) => {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 5000);
+    const timeout = setTimeout(() => controller.abort(), 15000);
 
     https.get(url, { signal: controller.signal }, (res) => {
       let data = '';
