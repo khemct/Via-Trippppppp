@@ -235,7 +235,7 @@ export default function TripSetupPage() {
                       onClick={() => setTravelStyle(s.id)}
                       className={`flex flex-col items-center gap-1 px-2.5 py-2.5 rounded-lg cursor-pointer text-[11px] ${
                         selected
-                          ? 'border-2 border-brand bg-card text-brand-text font-semibold'
+                          ? 'border-2 border-brand bg-card text-brand font-semibold'
                           : 'border border-line bg-line text-body'
                       }`}
                     >
