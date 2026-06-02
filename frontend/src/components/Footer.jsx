@@ -6,7 +6,7 @@ const columns = [
     content: (
       <div>
         <div className="flex items-center gap-2 mb-3">
-          <img src="/Via_trip_logo.png" alt="Via-Trip" className="w-10 h-10" />
+          <img src="/Via_trip_logo.png" alt="Via-Trip" className="w-[72px] h-[72px]" />
           <span className="text-base font-bold text-heading">Via-Trip</span>
         </div>
         <p className="text-sm text-muted leading-relaxed max-w-[240px]">
