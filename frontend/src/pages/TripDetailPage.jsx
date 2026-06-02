@@ -136,7 +136,7 @@ function InfoRow({ icon: Icon, label, value, capitalize }) {
         {Icon && <Icon />}
       </div>
       <div className="min-w-0">
-        <span className="text-xs text-muted">{label}</span>
+        <span className="text-sm text-muted">{label}</span>
         <p className={`text-sm font-medium text-heading ${capitalize ? 'capitalize' : ''} truncate`}>
           {value}
         </p>
@@ -147,7 +147,7 @@ function InfoRow({ icon: Icon, label, value, capitalize }) {
 
 function SectionHeading({ children }) {
   return (
-    <h3 className="text-xs font-semibold text-muted uppercase tracking-wider mb-3">
+    <h3 className="text-sm font-semibold text-muted uppercase tracking-wider mb-3">
       {children}
     </h3>
   );
@@ -168,7 +168,7 @@ function FeasibilityBadge({ status }) {
   const cls = styles[status] || 'bg-input text-muted';
   return (
     <div className="flex items-center gap-2">
-      <span className="text-xs text-muted">Feasibility</span>
+      <span className="text-sm text-muted">Feasibility</span>
       <span className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded ${cls}`}>
         {Icon && <Icon size={14} />}
         <span className="capitalize">{status}</span>
@@ -395,7 +395,7 @@ export default function TripDetailPage() {
                       name="name"
                       value={editForm.name}
                       onChange={handleEditChange}
-                      className="w-full border border-line-strong rounded-lg px-3 py-2 text-sm text-heading focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+                      className="w-full border border-line-strong rounded-lg px-3 py-2 text-sm text-heading focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
                     />
                   </div>
                   <div className="flex gap-4">
@@ -406,7 +406,7 @@ export default function TripDetailPage() {
                         name="travel_date"
                         value={editForm.travel_date}
                         onChange={handleEditChange}
-                        className="w-full border border-line-strong rounded-lg px-3 py-2 text-sm text-heading focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+                        className="w-full border border-line-strong rounded-lg px-3 py-2 text-sm text-heading focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
                       />
                     </div>
                     <div className="flex-1">
@@ -415,7 +415,7 @@ export default function TripDetailPage() {
                         name="status"
                         value={editForm.status}
                         onChange={handleEditChange}
-                        className="w-full border border-line-strong rounded-lg px-3 py-2 text-sm text-heading focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+                        className="w-full border border-line-strong rounded-lg px-3 py-2 text-sm text-heading focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
                       >
                         <option value="draft">Draft</option>
                         <option value="saved">Saved</option>
@@ -440,7 +440,7 @@ export default function TripDetailPage() {
                         max="30"
                         value={editForm.number_of_days}
                         onChange={handleEditChange}
-                        className="w-full border border-line-strong rounded-lg px-3 py-2 text-sm text-heading focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+                        className="w-full border border-line-strong rounded-lg px-3 py-2 text-sm text-heading focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
                       />
                     </div>
                     <div className="flex-1">
@@ -456,7 +456,7 @@ export default function TripDetailPage() {
                         onChange={handleEditChange}
                         className="w-full accent-brand"
                       />
-                      <div className="flex justify-between text-xs text-muted mt-0.5">
+                      <div className="flex justify-between text-sm text-muted mt-0.5">
                         <span>4h</span>
                         <span>16h</span>
                       </div>
@@ -504,7 +504,7 @@ export default function TripDetailPage() {
                       onChange={handleEditChange}
                       className="w-full accent-brand"
                     />
-                    <div className="flex justify-between text-xs text-muted mt-0.5">
+                    <div className="flex justify-between text-sm text-muted mt-0.5">
                       <span>5 min</span>
                       <span>180 min</span>
                     </div>

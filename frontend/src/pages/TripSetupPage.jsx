@@ -6,6 +6,7 @@ import { useAuth } from '../hooks/useAuth';
 import { trips as tripsApi } from '../services/api';
 import { decodePolyline } from '../utils/polyline';
 import Navbar from '../components/Navbar';
+import SearchInput from '../components/SearchInput';
 
 const TRAVEL_STYLE_ICONS = {
   chill: Smile, foodie: UtensilsCrossed, photographer: Camera, adventure: Mountain, budget: Coins,
@@ -160,22 +161,20 @@ export default function TripSetupPage() {
             {/* Origin */}
             <div>
               <label className="text-[13px] font-medium text-body block mb-1.5">Origin</label>
-              <input
+              <SearchInput
                 value={origin}
-                onChange={(e) => setOrigin(e.target.value)}
+                onChange={setOrigin}
                 placeholder="Where are you starting?"
-                className="w-full border border-line-strong rounded-lg bg-input px-3.5 py-2.5 text-sm text-heading outline-none box-border"
               />
             </div>
 
             {/* Destination */}
             <div>
               <label className="text-[13px] font-medium text-body block mb-1.5">Destination</label>
-              <input
+              <SearchInput
                 value={dest}
-                onChange={(e) => setDest(e.target.value)}
+                onChange={setDest}
                 placeholder="Where are you going?"
-                className="w-full border border-line-strong rounded-lg bg-input px-3.5 py-2.5 text-sm text-heading outline-none box-border"
               />
             </div>
 
@@ -236,7 +235,7 @@ export default function TripSetupPage() {
                       onClick={() => setTravelStyle(s.id)}
                       className={`flex flex-col items-center gap-1 px-2.5 py-2.5 rounded-lg cursor-pointer text-[11px] ${
                         selected
-                          ? 'border-2 border-brand bg-card text-brand-text font-semibold'
+                          ? 'border-2 border-brand bg-card text-brand font-semibold'
                           : 'border border-line bg-line text-body'
                       }`}
                     >

@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect, useCallback } from 'rea
 
 const ThemeContext = createContext();
 
-const COLOR_THEMES = ['adventure', 'bright', 'modern'];
+const COLOR_THEMES = ['adventure', 'bright', 'modern', 'vintage'];
 
 function getInitialTheme() {
   const stored = localStorage.getItem('viattrip_theme');
@@ -13,7 +13,7 @@ function getInitialTheme() {
 function getInitialColorTheme() {
   const stored = localStorage.getItem('viattrip_color_theme');
   if (COLOR_THEMES.includes(stored)) return stored;
-  return 'adventure';
+  return 'vintage';
 }
 
 export function ThemeProvider({ children }) {

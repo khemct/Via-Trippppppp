@@ -68,6 +68,10 @@ export const shared = {
   get: (shareToken) => request('GET', `/shared/${shareToken}`),
 };
 
+export const places = {
+  autocomplete: (q, signal) => request('GET', `/places/autocomplete?q=${encodeURIComponent(q)}`, null, null, signal),
+};
+
 export const itinerary = {
   seed: (tripId, token) => request('POST', `/trips/${tripId}/recommendations/seed`, null, token),
   reseed: (tripId, token) => request('POST', `/trips/${tripId}/recommendations/reseed`, null, token),

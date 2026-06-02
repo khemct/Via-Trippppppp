@@ -196,7 +196,7 @@ export default function ItineraryPage() {
           </div>
           <div className="flex items-center gap-3">
             <span className="text-sm font-medium text-heading">{trip.name}</span>
-            <span className="text-xs text-muted capitalize">{trip.travel_style}</span>
+            <span className="text-sm text-muted capitalize">{trip.travel_style}</span>
           </div>
         </div>
 

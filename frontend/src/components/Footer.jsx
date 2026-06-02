@@ -1,16 +1,18 @@
 import { Link } from 'react-router-dom';
-import { Mountain } from 'lucide-react';
 
 const columns = [
   {
     key: 'brand',
     content: (
       <div>
-        <div className="flex items-center gap-2 mb-3">
-          <div className="w-8 h-8 rounded-full bg-brand flex items-center justify-center text-white"><Mountain size={16} /></div>
-          <span className="text-base font-bold text-heading">Via-Trip</span>
+        <div className="flex items-center gap-1.5 mb-3">
+          <img src="/Via_trip_logo.png" alt="Via-Trip" className="w-[72px] h-[72px]" />
+          <div>
+            <div className="text-base font-bold text-heading leading-tight">Via-Trip</div>
+            <div className="text-xs text-muted leading-tight">Journey your way.</div>
+          </div>
         </div>
-        <p className="text-[13px] text-muted leading-relaxed max-w-[240px]">
+        <p className="text-sm text-muted leading-relaxed max-w-[240px]">
           Plan your perfect road trip, discover hidden gems, and collect memories along the way.
         </p>
       </div>
@@ -46,7 +48,7 @@ export default function Footer() {
                 <div className="text-xs font-semibold text-muted tracking-wider mb-3">{col.title}</div>
                 <div className="flex flex-col gap-2.5">
                   {col.links.map((link) => (
-                    <Link key={link} to="/" className="text-[13px] text-body no-underline">{link}</Link>
+                    <Link key={link} to="/" className="text-sm text-body no-underline">{link}</Link>
                   ))}
                 </div>
               </>
@@ -55,7 +57,7 @@ export default function Footer() {
         ))}
       </div>
 
-      <div className="border-t border-line py-4 px-6 text-center text-[13px] text-muted bg-deep">
+      <div className="border-t border-line py-4 px-6 text-center text-sm text-muted bg-deep">
         &copy; 2026 Via-Trip. All rights reserved.
       </div>
     </footer>

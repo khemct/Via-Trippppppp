@@ -66,7 +66,7 @@ export default function RecommendationPanel({
           <select
             value={filters.category}
             onChange={(e) => onFilterChange({ ...filters, category: e.target.value, cursor: null })}
-            className="flex-1 border border-line-strong rounded px-2 py-1.5 text-xs text-heading bg-input focus:outline-none focus:ring-1 focus:ring-brand"
+            className="flex-1 border border-line-strong rounded px-2 py-1.5 text-xs text-heading bg-input focus:outline-none focus:ring-1 focus:ring-secondary"
           >
             {CATEGORIES.map((c) => (
               <option key={c} value={c}>
@@ -77,7 +77,7 @@ export default function RecommendationPanel({
           <select
             value={filters.sort_by}
             onChange={(e) => onFilterChange({ ...filters, sort_by: e.target.value, cursor: null })}
-            className="border border-line-strong rounded px-2 py-1.5 text-xs text-heading bg-input focus:outline-none focus:ring-1 focus:ring-brand"
+            className="border border-line-strong rounded px-2 py-1.5 text-xs text-heading bg-input focus:outline-none focus:ring-1 focus:ring-secondary"
           >
             <option value="score">Best Match</option>
             <option value="distance">Nearest</option>
@@ -128,9 +128,9 @@ export default function RecommendationPanel({
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5 mb-0.5">
                       <CategoryIcon category={place.category} size={12} />
-                      <span className="text-xs font-medium text-heading truncate">{place.name}</span>
+                      <span className="text-sm font-medium text-heading truncate">{place.name}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-xs text-muted">
+                    <div className="flex items-center gap-2 text-sm text-muted">
                       {renderRating(place.rating)}
                       <span>({place.user_ratings_total || 0})</span>
                     </div>
@@ -181,7 +181,7 @@ export default function RecommendationPanel({
         <div className="shrink-0 p-3 border-t border-line">
           <button
             onClick={onLoadMore}
-            className="w-full text-xs font-medium text-brand-text py-2 border border-line-strong rounded hover:bg-input transition-colors"
+            className="w-full text-sm font-medium text-brand-text py-2 border border-line-strong rounded hover:bg-input transition-colors"
           >
             Load more
           </button>
