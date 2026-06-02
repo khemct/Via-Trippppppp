@@ -15,7 +15,7 @@ import RoleGuard from './components/RoleGuard';
 
 function Layout({ children, noGlobalNav }) {
   return (
-    <div className="min-h-screen bg-base flex flex-col">
+    <div className="min-h-screen flex flex-col">
       {!noGlobalNav && <GlobalNavBar />}
       {children}
     </div>
