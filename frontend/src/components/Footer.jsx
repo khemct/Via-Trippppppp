@@ -5,9 +5,12 @@ const columns = [
     key: 'brand',
     content: (
       <div>
-        <div className="flex items-center gap-2 mb-3">
+        <div className="flex items-center gap-1.5 mb-3">
           <img src="/Via_trip_logo.png" alt="Via-Trip" className="w-[72px] h-[72px]" />
-          <span className="text-base font-bold text-heading">Via-Trip</span>
+          <div>
+            <div className="text-base font-bold text-heading leading-tight">Via-Trip</div>
+            <div className="text-xs text-muted leading-tight">Journey your way.</div>
+          </div>
         </div>
         <p className="text-sm text-muted leading-relaxed max-w-[240px]">
           Plan your perfect road trip, discover hidden gems, and collect memories along the way.
