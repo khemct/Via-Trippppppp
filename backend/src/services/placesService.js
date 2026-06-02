@@ -44,12 +44,13 @@ function mapGoogleCategory(googleTypes) {
   return 'attraction';
 }
 
-function computeScore(place, travelStyle) {
+function computeScore(place, travelStyle, maxDetourKm = 3) {
   const { rating = 0, user_ratings_total = 0, distance_from_route = 99999, category = 'attraction' } = place;
 
+  const maxDetourM = maxDetourKm * 1000;
   const normRating = Math.min(rating / 5, 1);
   const popularity = Math.min(Math.log10(user_ratings_total + 1) / 4, 1);
-  const proximity = distance_from_route < 1000 ? 1 : Math.max(0, 1 - (distance_from_route - 1000) / 4000);
+  const proximity = distance_from_route < maxDetourM ? 1 : Math.max(0, 1 - (distance_from_route - maxDetourM) / maxDetourM);
   const styleAffinity = (STYLE_SCORES[travelStyle] && STYLE_SCORES[travelStyle][category]) || 50;
 
   const raw =
@@ -85,17 +86,25 @@ async function fetchNearbyPlaces(lat, lng, radiusM, apiKey) {
   return data.results || [];
 }
 
-async function seedTripCache(tripId, polylineEncoded, travelStyle, pool) {
+async function seedTripCache(tripId, polylineEncoded, travelStyle, maxDetourKm, pool) {
   const apiKey = process.env.GOOGLE_MAPS_API_KEY;
   if (!apiKey) throw Object.assign(new Error('GOOGLE_MAPS_API_KEY not configured'), { code: 'API_KEY_MISSING' });
 
   const points = decodePolyline(polylineEncoded);
   if (points.length < 2) throw Object.assign(new Error('Invalid polyline'), { code: 'INVALID_POLYLINE' });
 
-  const { samplePoints } = require('./polylineService');
-  const samples = samplePoints(points, 25);
+  const { samplePoints, computeCumulativeDistances } = require('./polylineService');
   const BATCH_SIZE = 3;
-  const radius = getSearchRadius(travelStyle);
+
+  const styleRadius = getSearchRadius(travelStyle);
+  const radius = Math.max(1000, Math.min(styleRadius, maxDetourKm * 1000));
+  const cumDists = computeCumulativeDistances(points);
+  const totalRouteKm = cumDists[cumDists.length - 1] / 1000;
+  const idealIntervalKm = Math.max(1, (radius * 2) / 1000);
+  const idealCount = Math.ceil(totalRouteKm / idealIntervalKm);
+  const clampedCount = Math.max(6, Math.min(25, idealCount));
+  const actualIntervalKm = Math.max(1, totalRouteKm / clampedCount);
+  const samples = samplePoints(points, actualIntervalKm);
   const allPlaces = new Map();
 
   for (let i = 0; i < samples.length; i += BATCH_SIZE) {
@@ -137,13 +146,15 @@ async function seedTripCache(tripId, polylineEncoded, travelStyle, pool) {
     );
   }
 
-  for (const place of placesArray) {
-    place.score = computeScore(place, travelStyle);
+  const filtered = placesArray.filter(p => p.distance_from_route <= maxDetourKm * 1000 * 2);
+
+  for (const place of filtered) {
+    place.score = computeScore(place, travelStyle, maxDetourKm);
   }
 
   const BATCH_INSERT_SIZE = 50;
-  for (let i = 0; i < placesArray.length; i += BATCH_INSERT_SIZE) {
-    const batch = placesArray.slice(i, i + BATCH_INSERT_SIZE);
+  for (let i = 0; i < filtered.length; i += BATCH_INSERT_SIZE) {
+    const batch = filtered.slice(i, i + BATCH_INSERT_SIZE);
     const values = batch.map((p, idx) => {
       const offset = idx * 14;
       return `($${offset + 1},$${offset + 2},$${offset + 3},ST_SetSRID(ST_MakePoint($${offset + 4},$${offset + 5}),4326),$${offset + 6},$${offset + 7},$${offset + 8}::jsonb,$${offset + 9},$${offset + 10}::jsonb,$${offset + 11},$${offset + 12},$${offset + 13},$${offset + 14})`;
@@ -176,7 +187,7 @@ async function seedTripCache(tripId, polylineEncoded, travelStyle, pool) {
     );
   }
 
-  return { count: placesArray.length };
+  return { count: filtered.length };
 }
 
 function computeMinDistance(coord, points) {
@@ -291,19 +302,19 @@ async function getRecommendations(tripId, filters = {}, pool) {
 
 async function reseedTripCache(tripId, pool) {
   const tripResult = await pool.query(
-    `SELECT route_polyline, travel_style FROM trips WHERE trip_id = $1`,
+    `SELECT route_polyline, travel_style, max_detour_km FROM trips WHERE trip_id = $1`,
     [tripId]
   );
   if (tripResult.rows.length === 0) {
     throw Object.assign(new Error('Trip not found'), { code: 'NOT_FOUND' });
   }
-  const { route_polyline, travel_style } = tripResult.rows[0];
+  const { route_polyline, travel_style, max_detour_km } = tripResult.rows[0];
   if (!route_polyline) {
     throw Object.assign(new Error('Trip has no route'), { code: 'NO_ROUTE' });
   }
 
   await pool.query('DELETE FROM trip_places_cache WHERE trip_id = $1', [tripId]);
-  return seedTripCache(tripId, route_polyline, travel_style, pool);
+  return seedTripCache(tripId, route_polyline, travel_style, parseFloat(max_detour_km) || 3, pool);
 }
 
 const guestMemoryCache = new Map();
@@ -316,7 +327,7 @@ async function seedGuestCache(routePolyline, travelStyle, pool) {
     return { places: cached.places, from_cache: true };
   }
 
-  const result = await seedTripCache('guest_' + hash, routePolyline, travelStyle, pool);
+  const result = await seedTripCache('guest_' + hash, routePolyline, travelStyle, 3, pool);
   const places = await pool.query(
     `SELECT cache_id, place_id, name,
             ST_X(coordinates::geometry) AS lng, ST_Y(coordinates::geometry) AS lat,

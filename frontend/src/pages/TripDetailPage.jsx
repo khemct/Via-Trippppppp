@@ -224,6 +224,7 @@ export default function TripDetailPage() {
   const [trip, setTrip] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [waypoints, setWaypoints] = useState([]);
 
   const [editing, setEditing] = useState(false);
   const [editForm, setEditForm] = useState({});
@@ -238,6 +239,7 @@ export default function TripDetailPage() {
       .get(tripId, token)
       .then((data) => {
         setTrip(data.trip);
+        setWaypoints(data.trip.waypoints || []);
         setEditForm({
           name: data.trip.name,
           travel_date: data.trip.travel_date,
@@ -628,6 +630,36 @@ export default function TripDetailPage() {
               <SectionHeading>Status</SectionHeading>
               <FeasibilityBadge status={trip.feasibility_status} />
             </div>
+
+            {waypoints.length > 0 && (
+              <>
+                <div className="border-t border-line" />
+                <div>
+                  <SectionHeading>Waypoints ({waypoints.length})</SectionHeading>
+                  <div className="space-y-2 max-h-[240px] overflow-y-auto">
+                    {waypoints.map((wp) => (
+                      <div
+                        key={wp.waypoint_id}
+                        className="flex items-center gap-2.5 bg-input rounded-lg px-3 py-2"
+                      >
+                        <span className="text-xs font-bold text-muted w-5 shrink-0 text-right">
+                          {wp.order}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-medium text-heading truncate">{wp.name}</p>
+                          <p className="text-[11px] text-muted">
+                            {wp.distance_from_route != null
+                              ? `${Math.round(wp.distance_from_route)}m from route`
+                              : ''}
+                          </p>
+                        </div>
+                        <span className="text-[11px] text-muted shrink-0 capitalize">{wp.category}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
 
           {/* Actions */}
@@ -658,6 +690,15 @@ export default function TripDetailPage() {
                 origin={originCoords}
                 destination={destCoords}
                 routePolyline={trip?.route_polyline}
+                waypoints={waypoints.map((wp) => ({
+                  waypoint_id: wp.waypoint_id,
+                  place_id: wp.place_id,
+                  name: wp.name,
+                  lat: parseFloat(wp.lat),
+                  lng: parseFloat(wp.lng),
+                  distance_from_route: wp.distance_from_route,
+                }))}
+                maxDetourKm={trip.max_detour_km}
                 height="100%"
               />
             </div>

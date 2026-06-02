@@ -17,10 +17,44 @@ function waypointColor(dist) {
   return '#dc2626';
 }
 
-export default function RouteMap({ origin, destination, routePolyline, waypoints, height }) {
+function haversine(p1, p2) {
+  const R = 6371000;
+  const toRad = (deg) => (deg * Math.PI) / 180;
+  const dLat = toRad(p2.lat - p1.lat);
+  const dLng = toRad(p2.lng - p1.lng);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRad(p1.lat)) *
+      Math.cos(toRad(p2.lat)) *
+      Math.sin(dLng / 2) *
+      Math.sin(dLng / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+function samplePoints(points, intervalKm) {
+  if (!points || points.length === 0) return [];
+  const sampled = [points[0]];
+  let accumulated = 0;
+  const intervalM = intervalKm * 1000;
+  for (let i = 1; i < points.length; i++) {
+    accumulated += haversine(points[i - 1], points[i]);
+    if (accumulated >= intervalM) {
+      sampled.push(points[i]);
+      accumulated = 0;
+    }
+  }
+  if (sampled[sampled.length - 1] !== points[points.length - 1]) {
+    sampled.push(points[points.length - 1]);
+  }
+  return sampled;
+}
+
+export default function RouteMap({ origin, destination, routePolyline, waypoints, maxDetourKm, height }) {
   const mapRef = useRef(null);
   const polylineRef = useRef(null);
   const markersRef = useRef([]);
+  const circlesRef = useRef([]);
 
   const path = useMemo(() => routePolyline ? decodePolyline(routePolyline) : [], [routePolyline]);
 
@@ -33,7 +67,7 @@ export default function RouteMap({ origin, destination, routePolyline, waypoints
 
   const mapStyle = useMemo(() => height ? { width: '100%', height } : containerStyle, [height]);
 
-  const redrawOverlays = useCallback((map, ori, dest, pth, wps) => {
+  const redrawOverlays = useCallback((map, ori, dest, pth, wps, maxKm) => {
     if (polylineRef.current) {
       polylineRef.current.setMap(null);
       polylineRef.current = null;
@@ -41,6 +75,9 @@ export default function RouteMap({ origin, destination, routePolyline, waypoints
 
     markersRef.current.forEach((m) => m.setMap(null));
     markersRef.current = [];
+
+    circlesRef.current.forEach((c) => c.setMap(null));
+    circlesRef.current = [];
 
     if (ori) {
       const m = new window.google.maps.Marker({
@@ -88,13 +125,33 @@ export default function RouteMap({ origin, destination, routePolyline, waypoints
       });
       pl.setMap(map);
       polylineRef.current = pl;
+
+      if (maxKm && maxKm > 0) {
+        const detourM = maxKm * 1000;
+        const interval = Math.max(1, (detourM * 2) / 1000);
+        const pts = samplePoints(pth, interval);
+        pts.forEach((pt) => {
+          const c = new window.google.maps.Circle({
+            center: pt,
+            radius: detourM,
+            fillColor: '#C3583C',
+            fillOpacity: 0.12,
+            strokeColor: '#C3583C',
+            strokeOpacity: 0.4,
+            strokeWeight: 2,
+            clickable: false,
+          });
+          c.setMap(map);
+          circlesRef.current.push(c);
+        });
+      }
     }
   }, []);
 
   const onMapLoad = useCallback((map) => {
     mapRef.current = map;
-    redrawOverlays(map, origin, destination, path, waypoints);
-  }, [origin, destination, path, waypoints, redrawOverlays]);
+    redrawOverlays(map, origin, destination, path, waypoints, maxDetourKm);
+  }, [origin, destination, path, waypoints, maxDetourKm, redrawOverlays]);
 
   const onMapUnmount = useCallback(() => {
     if (polylineRef.current) {
@@ -103,14 +160,16 @@ export default function RouteMap({ origin, destination, routePolyline, waypoints
     }
     markersRef.current.forEach((m) => m.setMap(null));
     markersRef.current = [];
+    circlesRef.current.forEach((c) => c.setMap(null));
+    circlesRef.current = [];
     mapRef.current = null;
   }, []);
 
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
-    redrawOverlays(map, origin, destination, path, waypoints);
-  }, [origin, destination, path, waypoints, redrawOverlays]);
+    redrawOverlays(map, origin, destination, path, waypoints, maxDetourKm);
+  }, [origin, destination, path, waypoints, maxDetourKm, redrawOverlays]);
 
   return (
     <LoadScriptNext googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>

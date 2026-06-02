@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Smile, UtensilsCrossed, Camera, Mountain, Coins, Map } from 'lucide-react';
-import { GoogleMap, LoadScriptNext, Marker, Polyline } from '@react-google-maps/api';
+import { GoogleMap, LoadScriptNext, Marker, Polyline, Circle } from '@react-google-maps/api';
 import { useAuth } from '../hooks/useAuth';
 import { trips as tripsApi } from '../services/api';
 import { decodePolyline } from '../utils/polyline';
@@ -34,6 +34,39 @@ const googleMapOptions = {
   gestureHandling: 'greedy',
 };
 
+function haversine(p1, p2) {
+  const R = 6371000;
+  const toRad = (deg) => (deg * Math.PI) / 180;
+  const dLat = toRad(p2.lat - p1.lat);
+  const dLng = toRad(p2.lng - p1.lng);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRad(p1.lat)) *
+      Math.cos(toRad(p2.lat)) *
+      Math.sin(dLng / 2) *
+      Math.sin(dLng / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+function samplePoints(points, intervalKm) {
+  if (!points || points.length === 0) return [];
+  const sampled = [points[0]];
+  let accumulated = 0;
+  const intervalM = intervalKm * 1000;
+  for (let i = 1; i < points.length; i++) {
+    accumulated += haversine(points[i - 1], points[i]);
+    if (accumulated >= intervalM) {
+      sampled.push(points[i]);
+      accumulated = 0;
+    }
+  }
+  if (sampled[sampled.length - 1] !== points[points.length - 1]) {
+    sampled.push(points[points.length - 1]);
+  }
+  return sampled;
+}
+
 function todayStr() {
   const d = new Date();
   return d.toISOString().split('T')[0];
@@ -52,6 +85,7 @@ export default function TripSetupPage() {
   const [dailyHours, setDailyHours] = useState(10);
   const [travelStyle, setTravelStyle] = useState('chill');
   const [stopDuration, setStopDuration] = useState(30);
+  const [maxDetourKm, setMaxDetourKm] = useState(3);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -84,11 +118,11 @@ export default function TripSetupPage() {
             daily_hours: parseInt(dailyHours, 10),
             travel_style: travelStyle,
             estimated_stop_duration: parseInt(stopDuration, 10),
+            max_detour_km: parseFloat(maxDetourKm),
           },
           token
         );
         setTrip(data.trip);
-        navigate(`/trips/${data.trip.trip_id}/itinerary`);
       } catch (err) {
         if (err.status === 400) {
           setError(err.data?.error || 'Route exceeds 300 km. Please choose closer destinations.');
@@ -104,13 +138,20 @@ export default function TripSetupPage() {
         setLoading(false);
       }
     },
-    [name, origin, dest, travelDate, numDays, dailyHours, travelStyle, stopDuration, token, navigate]
+    [name, origin, dest, travelDate, numDays, dailyHours, travelStyle, stopDuration, maxDetourKm, token, navigate]
   );
 
   const decodedPath = useMemo(
     () => trip?.route_polyline ? decodePolyline(trip.route_polyline) : [],
     [trip?.route_polyline]
   );
+
+  const detourCircles = useMemo(() => {
+    if (!decodedPath.length || !trip?.max_detour_km) return [];
+    const detourM = trip.max_detour_km * 1000;
+    const interval = Math.max(1, (detourM * 2) / 1000);
+    return samplePoints(decodedPath, interval);
+  }, [decodedPath, trip?.max_detour_km]);
 
   const center = useMemo(() => {
     if (trip?.origin_coordinates) return { lat: trip.origin_coordinates.latitude, lng: trip.origin_coordinates.longitude };
@@ -262,6 +303,26 @@ export default function TripSetupPage() {
               />
             </div>
 
+            {/* Max Detour Distance */}
+            <div>
+              <label className="text-[13px] font-medium text-body block mb-1.5">
+                Max detour distance ({maxDetourKm} km)
+              </label>
+              <input
+                type="range"
+                min={0.5}
+                max={10}
+                step={0.5}
+                value={maxDetourKm}
+                onChange={(e) => setMaxDetourKm(parseFloat(e.target.value))}
+                className="w-full accent-brand"
+              />
+              <div className="flex justify-between text-[11px] text-muted">
+                <span>0.5 km</span>
+                <span>10 km</span>
+              </div>
+            </div>
+
             {/* Error banner */}
             {error && (
               <div className="bg-red-50 border border-red-200 rounded-lg px-3 py-3 text-[13px] text-red-700">
@@ -320,13 +381,34 @@ export default function TripSetupPage() {
                     options={polylineOptions}
                   />
                 )}
+                {detourCircles.map((pt, i) => (
+                  <Circle
+                    key={i}
+                    center={pt}
+                    radius={trip.max_detour_km * 1000}
+                    options={{
+                      fillColor: '#C3583C',
+                      fillOpacity: 0.12,
+                      strokeColor: '#C3583C',
+                      strokeOpacity: 0.4,
+                      strokeWeight: 2,
+                      clickable: false,
+                    }}
+                  />
+                ))}
               </GoogleMap>
             </LoadScriptNext>
 
             {/* Success overlay */}
             {trip && (
-              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-brand text-brand-light px-5 py-2.5 rounded-lg text-sm font-medium shadow-lg whitespace-nowrap">
-                Route calculated! {trip.total_distance_km} km &mdash; let&apos;s explore.
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-brand text-brand-light px-5 py-3 rounded-lg text-sm font-medium shadow-lg">
+                <span>Route calculated! {trip.total_distance_km} km</span>
+                <button
+                  onClick={() => navigate(`/trips/${trip.trip_id}/itinerary`)}
+                  className="bg-brand-light text-brand px-3 py-1.5 rounded-md text-[13px] font-semibold border border-brand-hover cursor-pointer hover:opacity-90"
+                >
+                  View Itinerary
+                </button>
               </div>
             )}
           </div>

@@ -89,7 +89,7 @@ router.post('/:tripId/recommendations/seed', requireAuth, async (req, res) => {
 
   try {
     const tripCheck = await pool.query(
-      'SELECT user_id, route_polyline, travel_style FROM trips WHERE trip_id = $1',
+      'SELECT user_id, route_polyline, travel_style, max_detour_km FROM trips WHERE trip_id = $1',
       [tripId]
     );
     if (tripCheck.rows.length === 0) {
@@ -98,12 +98,12 @@ router.post('/:tripId/recommendations/seed', requireAuth, async (req, res) => {
     if (tripCheck.rows[0].user_id !== req.user.id) {
       return res.status(403).json({ error: 'Not authorized' });
     }
-    const { route_polyline, travel_style } = tripCheck.rows[0];
+    const { route_polyline, travel_style, max_detour_km } = tripCheck.rows[0];
     if (!route_polyline) {
       return res.status(400).json({ error: 'Trip has no route. Create trip with valid origin/destination first.' });
     }
 
-    const result = await seedTripCache(tripId, route_polyline, travel_style, pool);
+    const result = await seedTripCache(tripId, route_polyline, travel_style, parseFloat(max_detour_km) || 3, pool);
     res.json({ message: `Seeded ${result.count} places`, count: result.count });
   } catch (err) {
     if (err.code === 'API_KEY_MISSING') {

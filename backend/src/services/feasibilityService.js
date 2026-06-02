@@ -2,7 +2,7 @@ const { decodePolyline, haversine, closestPointOnSegment } = require('./polyline
 
 async function assessFeasibility(tripId, pool) {
   const tripResult = await pool.query(
-    `SELECT number_of_days, daily_hours, estimated_stop_duration, route_polyline
+    `SELECT number_of_days, daily_hours, estimated_stop_duration, route_polyline, max_detour_km
      FROM trips WHERE trip_id = $1`,
     [tripId]
   );
@@ -10,6 +10,7 @@ async function assessFeasibility(tripId, pool) {
     throw Object.assign(new Error('Trip not found'), { code: 'NOT_FOUND' });
   }
   const trip = tripResult.rows[0];
+  const maxDetourM = (parseFloat(trip.max_detour_km) || 3) * 1000;
   if (!trip.route_polyline) {
     return { status: 'feasible', details: { message: 'No route defined yet', note: 'feasibility_needs_route' } };
   }
@@ -29,8 +30,8 @@ async function assessFeasibility(tripId, pool) {
     return { status: 'feasible', details: { message: 'No waypoints yet' } };
   }
 
-  const nearRoute = waypoints.filter(w => w.distance_from_route < 1000);
-  const detours = waypoints.filter(w => w.distance_from_route >= 1000);
+  const nearRoute = waypoints.filter(w => w.distance_from_route < maxDetourM);
+  const detours = waypoints.filter(w => w.distance_from_route >= maxDetourM);
 
   const totalDetourMeters = detours.reduce((sum, w) => sum + w.distance_from_route * 2, 0);
   const totalStopMinutes = waypoints.reduce((sum, w) => sum + (w.stop_duration_minutes || 30), 0);
@@ -65,10 +66,11 @@ async function assessFeasibility(tripId, pool) {
   };
 }
 
-function assessWaypointFeasibility(place) {
+function assessWaypointFeasibility(place, maxDetourKm = 3) {
   if (!place) return null;
   const dist = place.distance_from_route || 99999;
-  const isDetour = dist >= 1000;
+  const maxDetourM = maxDetourKm * 1000;
+  const isDetour = dist >= maxDetourM;
   return {
     distance_from_route: Math.round(dist),
     category: place.category,

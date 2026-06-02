@@ -21,7 +21,7 @@ router.post(
   }),
   async (req, res) => {
     try {
-      const { name, origin, destination, travel_date, number_of_days, daily_hours, travel_style, estimated_stop_duration } = req.body;
+      const { name, origin, destination, travel_date, number_of_days, daily_hours, travel_style, estimated_stop_duration, max_detour_km } = req.body;
 
       const ndays = parseInt(number_of_days, 10);
       if (isNaN(ndays) || ndays < 1 || ndays > 30) {
@@ -36,6 +36,11 @@ router.post(
         return res.status(400).json({ error: 'estimated_stop_duration must be between 5 and 180' });
       }
 
+      const detourKm = max_detour_km !== undefined ? parseFloat(max_detour_km) : 3;
+      if (isNaN(detourKm) || detourKm < 0.5 || detourKm > 10) {
+        return res.status(400).json({ error: 'max_detour_km must be between 0.5 and 10' });
+      }
+
       const tripName = (name && name.trim()) ? name.trim() : `Trip to ${destination.trim()}`;
       const trip = await createTrip(req.user.id, {
         name: tripName,
@@ -46,6 +51,7 @@ router.post(
         daily_hours: dhours,
         travel_style: travel_style || 'chill',
         estimated_stop_duration: stopDur,
+        max_detour_km: detourKm,
       });
 
       res.status(201).json({ trip });
@@ -134,6 +140,12 @@ router.patch('/:tripId', requireAuth, async (req, res) => {
       const v = parseInt(req.body.estimated_stop_duration, 10);
       if (isNaN(v) || v < 5 || v > 180) return res.status(400).json({ error: 'estimated_stop_duration must be between 5 and 180' });
       req.body.estimated_stop_duration = v;
+    }
+
+    if (req.body.max_detour_km !== undefined) {
+      const v = parseFloat(req.body.max_detour_km);
+      if (isNaN(v) || v < 0.5 || v > 10) return res.status(400).json({ error: 'max_detour_km must be between 0.5 and 10' });
+      req.body.max_detour_km = v;
     }
 
     const trip = await updateTrip(req.params.tripId, req.user.id, req.body);
