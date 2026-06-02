@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { Mountain } from 'lucide-react';
 
 const columns = [
   {
@@ -7,7 +6,7 @@ const columns = [
     content: (
       <div>
         <div className="flex items-center gap-2 mb-3">
-          <div className="w-8 h-8 rounded-full bg-brand flex items-center justify-center text-white"><Mountain size={16} /></div>
+          <img src="/Via_trip_logo.png" alt="Via-Trip" className="w-10 h-10" />
           <span className="text-base font-bold text-heading">Via-Trip</span>
         </div>
         <p className="text-sm text-muted leading-relaxed max-w-[240px]">
