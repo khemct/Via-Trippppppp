@@ -1,0 +1,5 @@
+ALTER TABLE trips
+  ADD COLUMN IF NOT EXISTS share_token UUID UNIQUE DEFAULT NULL,
+  ADD COLUMN IF NOT EXISTS shared_at TIMESTAMPTZ DEFAULT NULL;
+
+CREATE INDEX IF NOT EXISTS idx_trips_share_token ON trips (share_token) WHERE share_token IS NOT NULL;

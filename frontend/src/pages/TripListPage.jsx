@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { trips as tripsApi } from '../services/api';
-import { MapPin, Flag, CalendarDays, Mountain, Route, Compass, Plus, Map, ArrowLeft, ArrowRight, Car, Clock, CheckCircle, AlertTriangle, XCircle, Navigation } from 'lucide-react';
+import { MapPin, Flag, CalendarDays, Mountain, Route, Compass, Plus, Map, ArrowLeft, ArrowRight, Car, Clock, CheckCircle, AlertTriangle, XCircle, Navigation, Share2, Check, Copy, X } from 'lucide-react';
 
 const statusConfig = {
   saved: { cls: 'bg-brand-light/60 text-brand-text', label: 'Saved' },
@@ -23,6 +23,10 @@ export default function TripListPage() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [sharePopoverId, setSharePopoverId] = useState(null);
+  const [generatingId, setGeneratingId] = useState(null);
+  const [copiedId, setCopiedId] = useState(null);
+  const popoverRefs = useRef({});
   const limit = 20;
 
   useEffect(() => {
@@ -37,6 +41,57 @@ export default function TripListPage() {
       .catch((err) => setError(err.message || 'Failed to load trips'))
       .finally(() => setLoading(false));
   }, [page, token]);
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      const popoverId = sharePopoverId;
+      if (!popoverId) return;
+      const ref = popoverRefs.current[popoverId];
+      if (ref && !ref.contains(e.target)) {
+        setSharePopoverId(null);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [sharePopoverId]);
+
+  const handleGenerateShare = useCallback(async (tripId) => {
+    setGeneratingId(tripId);
+    try {
+      const result = await tripsApi.generateShare(tripId, token);
+      setTrips((prev) =>
+        prev.map((t) =>
+          t.trip_id === tripId ? { ...t, share_token: result.share_token } : t
+        )
+      );
+    } catch (err) {
+      console.error('Generate share error:', err);
+    } finally {
+      setGeneratingId(null);
+    }
+  }, [token]);
+
+  const handleRevokeShare = useCallback(async (tripId) => {
+    try {
+      await tripsApi.revokeShare(tripId, token);
+      setTrips((prev) =>
+        prev.map((t) =>
+          t.trip_id === tripId ? { ...t, share_token: null } : t
+        )
+      );
+      setSharePopoverId(null);
+    } catch (err) {
+      console.error('Revoke share error:', err);
+    }
+  }, [token]);
+
+  const handleCopyLink = useCallback((tripId, shareToken) => {
+    const link = `${window.location.origin}/shared/${shareToken}`;
+    navigator.clipboard.writeText(link).then(() => {
+      setCopiedId(tripId);
+      setTimeout(() => setCopiedId(null), 2000);
+    });
+  }, []);
 
   const totalPages = Math.ceil(total / limit);
 
@@ -116,71 +171,161 @@ export default function TripListPage() {
               const sc = statusConfig[trip.status] || statusConfig.draft;
               const fc = feasibilityConfig[trip.feasibility_status];
               const FeasibilityIcon = fc?.icon;
+              const isShared = !!trip.share_token;
+              const isOpen = sharePopoverId === trip.trip_id;
               return (
-                <Link
+                <div
                   key={trip.trip_id}
-                  to={`/trips/${trip.trip_id}/itinerary`}
-                  className="block bg-card border border-line/40 rounded-2xl p-5 shadow-soft hover:shadow-soft-lg hover:-translate-y-1 transition-all duration-300 group"
+                  className="relative block bg-card border border-line/40 rounded-2xl p-5 shadow-soft hover:shadow-soft-lg hover:-translate-y-1 transition-all duration-300 group"
                 >
-                  {/* Top row: name + status */}
-                  <div className="flex items-start justify-between gap-3 mb-3">
-                    <h2 className="font-semibold text-heading truncate text-base">{trip.name}</h2>
-                    <span className={`shrink-0 text-xs font-medium px-2.5 py-0.5 rounded-full ${sc.cls}`}>
-                      {sc.label}
-                    </span>
-                  </div>
+                  {/* Card body is a link */}
+                  <Link
+                    to={`/trips/${trip.trip_id}/itinerary`}
+                    className="block before:absolute before:inset-0 before:z-0"
+                  >
+                    {/* Top row: name + status */}
+                    <div className="flex items-start justify-between gap-3 mb-3 relative z-10 pr-9">
+                      <h2 className="font-semibold text-heading truncate text-base pointer-events-none">{trip.name}</h2>
+                      <span className={`shrink-0 text-[11px] font-medium px-2.5 py-0.5 rounded-full ${sc.cls}`}>
+                        {sc.label}
+                      </span>
+                    </div>
 
-                  {/* Route */}
-                  <div className="flex items-center gap-1.5 text-sm text-body mb-2.5">
-                    <MapPin size={14} className="shrink-0 text-muted" />
-                    <span className="truncate">{trip.origin}</span>
-                    <ArrowRight size={12} className="shrink-0 text-muted" />
-                    <Flag size={14} className="shrink-0 text-muted" />
-                    <span className="truncate">{trip.destination}</span>
-                  </div>
+                    {/* Route */}
+                    <div className="flex items-center gap-1.5 text-sm text-body mb-2.5 relative z-10">
+                      <MapPin size={14} className="shrink-0 text-muted" />
+                      <span className="truncate">{trip.origin}</span>
+                      <ArrowRight size={12} className="shrink-0 text-muted" />
+                      <Flag size={14} className="shrink-0 text-muted" />
+                      <span className="truncate">{trip.destination}</span>
+                    </div>
 
-                  {/* Meta row 1: date · days · style */}
-                  <div className="flex items-center gap-3 text-sm text-muted mb-2 flex-wrap">
-                    <span className="inline-flex items-center gap-1">
-                      <CalendarDays size={13} />
-                      {trip.travel_date}
-                    </span>
-                    <span className="inline-flex items-center gap-1">
-                      <Car size={13} />
-                      {trip.number_of_days} day{trip.number_of_days > 1 ? 's' : ''}
-                    </span>
-                    <span className="inline-flex items-center gap-1">
-                      <Mountain size={13} />
-                      {trip.travel_style}
-                    </span>
-                  </div>
-
-                  {/* Meta row 2: distance · duration · waypoints · feasibility */}
-                  <div className="flex items-center gap-3 text-sm text-muted flex-wrap">
-                    <span className="inline-flex items-center gap-1">
-                      <Route size={13} />
-                      {trip.total_distance_km} km
-                    </span>
-                    {trip.total_duration_minutes && (
+                    {/* Meta row 1 */}
+                    <div className="flex items-center gap-3 text-[12px] text-muted mb-2 flex-wrap relative z-10">
                       <span className="inline-flex items-center gap-1">
-                        <Clock size={13} />
-                        {Math.round(trip.total_duration_minutes / 60)}h {trip.total_duration_minutes % 60}m
+                        <CalendarDays size={13} />
+                        {trip.travel_date}
                       </span>
-                    )}
-                    {trip.waypoint_count != null && (
                       <span className="inline-flex items-center gap-1">
-                        <Navigation size={13} />
-                        {trip.waypoint_count} stop{trip.waypoint_count !== 1 ? 's' : ''}
+                        <Car size={13} />
+                        {trip.number_of_days} day{trip.number_of_days > 1 ? 's' : ''}
                       </span>
-                    )}
-                    {FeasibilityIcon && (
-                      <span className={`inline-flex items-center gap-1 ${fc.cls}`}>
-                        <FeasibilityIcon size={13} />
-                        {fc.label}
+                      <span className="inline-flex items-center gap-1">
+                        <Mountain size={13} />
+                        {trip.travel_style}
                       </span>
-                    )}
-                  </div>
-                </Link>
+                    </div>
+
+                    {/* Meta row 2 */}
+                    <div className="flex items-center gap-3 text-[12px] text-muted flex-wrap relative z-10">
+                      <span className="inline-flex items-center gap-1">
+                        <Route size={13} />
+                        {trip.total_distance_km} km
+                      </span>
+                      {trip.total_duration_minutes && (
+                        <span className="inline-flex items-center gap-1">
+                          <Clock size={13} />
+                          {Math.round(trip.total_duration_minutes / 60)}h {trip.total_duration_minutes % 60}m
+                        </span>
+                      )}
+                      {trip.waypoint_count != null && (
+                        <span className="inline-flex items-center gap-1">
+                          <Navigation size={13} />
+                          {trip.waypoint_count} stop{trip.waypoint_count !== 1 ? 's' : ''}
+                        </span>
+                      )}
+                      {FeasibilityIcon && (
+                        <span className={`inline-flex items-center gap-1 ${fc.cls}`}>
+                          <FeasibilityIcon size={13} />
+                          {fc.label}
+                        </span>
+                      )}
+                    </div>
+                  </Link>
+
+                  {/* Share button */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSharePopoverId(isOpen ? null : trip.trip_id);
+                    }}
+                    className={`absolute top-3 right-3 z-20 w-8 h-8 flex items-center justify-center rounded-lg transition-all ${
+                      isShared
+                        ? 'bg-brand-light/40 text-brand-text'
+                        : 'opacity-0 group-hover:opacity-100 text-muted hover:bg-line/60'
+                    }`}
+                    title={isShared ? 'Share trip' : 'Share'}
+                  >
+                    <Share2 size={15} />
+                  </button>
+
+                  {/* Share popover */}
+                  {isOpen && (
+                    <div
+                      ref={(el) => { popoverRefs.current[trip.trip_id] = el; }}
+                      className="absolute top-12 right-3 z-50 bg-card border border-line rounded-xl shadow-soft-lg p-4 min-w-[280px]"
+                    >
+                      {!isShared ? (
+                        <div>
+                          <p className="text-sm font-medium text-heading mb-2">Share this trip</p>
+                          <p className="text-xs text-muted mb-3">
+                            Generate a link to share your trip plan with others.
+                          </p>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleGenerateShare(trip.trip_id); }}
+                            disabled={generatingId === trip.trip_id}
+                            className="w-full flex items-center justify-center gap-1.5 bg-brand text-brand-light px-3 py-2 rounded-lg text-sm font-medium border border-brand-hover hover:bg-brand-hover disabled:opacity-60 transition-all"
+                          >
+                            {generatingId === trip.trip_id ? (
+                              <span className="w-4 h-4 border-2 border-brand-light border-t-transparent rounded-full animate-spin" />
+                            ) : (
+                              <>
+                                <Share2 size={14} />
+                                Generate share link
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      ) : (
+                        <div>
+                          <p className="text-sm font-medium text-heading mb-2">Share link</p>
+                          <div className="flex items-center gap-1.5 bg-input border border-line-strong rounded-lg px-3 py-2 mb-2">
+                            <input
+                              readOnly
+                              value={`${window.location.origin}/shared/${trip.share_token}`}
+                              className="flex-1 text-xs text-heading bg-transparent outline-none truncate"
+                              onClick={(e) => e.target.select()}
+                            />
+                            <button
+                              onClick={(e) => { e.stopPropagation(); handleCopyLink(trip.trip_id, trip.share_token); }}
+                              className="shrink-0 w-7 h-7 flex items-center justify-center rounded-md hover:bg-line/60 text-muted transition-all"
+                              title="Copy"
+                            >
+                              {copiedId === trip.trip_id ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
+                            </button>
+                          </div>
+                          <p className="text-[11px] text-muted mb-2">
+                            Anyone with this link can view your trip plan.
+                          </p>
+                          <div className="border-t border-line/40 pt-2">
+                            <button
+                              onClick={(e) => { e.stopPropagation(); handleRevokeShare(trip.trip_id); }}
+                              className="text-xs text-red-400 hover:text-red-600 font-medium"
+                            >
+                              Revoke share link
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setSharePopoverId(null); }}
+                        className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-md hover:bg-line/60 text-muted transition-all"
+                      >
+                        <X size={13} />
+                      </button>
+                    </div>
+                  )}
+                </div>
               );
             })}
           </div>

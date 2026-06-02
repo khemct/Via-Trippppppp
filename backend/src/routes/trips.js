@@ -1,7 +1,7 @@
 const express = require('express');
 const { validate, required, minLength, maxLength, isIn } = require('../middleware/validate');
 const { requireAuth } = require('../middleware/requireAuth');
-const { createTrip, listTrips, getTrip, updateTrip, deleteTrip } = require('../services/tripService');
+const { createTrip, listTrips, getTrip, updateTrip, deleteTrip, generateShareToken, revokeShareToken } = require('../services/tripService');
 
 const router = express.Router();
 
@@ -166,6 +166,32 @@ router.delete('/:tripId', requireAuth, async (req, res) => {
       return res.status(403).json({ error: 'Not authorized' });
     }
     console.error('Delete trip error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// POST /api/trips/:tripId/share — generate share token
+router.post('/:tripId/share', requireAuth, async (req, res) => {
+  try {
+    const result = await generateShareToken(req.params.tripId, req.user.id);
+    res.json(result);
+  } catch (err) {
+    if (err.code === 'NOT_FOUND') return res.status(404).json({ error: 'Trip not found' });
+    if (err.code === 'FORBIDDEN') return res.status(403).json({ error: 'Not authorized' });
+    console.error('Share trip error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// DELETE /api/trips/:tripId/share — revoke share token
+router.delete('/:tripId/share', requireAuth, async (req, res) => {
+  try {
+    const result = await revokeShareToken(req.params.tripId, req.user.id);
+    res.json(result);
+  } catch (err) {
+    if (err.code === 'NOT_FOUND') return res.status(404).json({ error: 'Trip not found' });
+    if (err.code === 'FORBIDDEN') return res.status(403).json({ error: 'Not authorized' });
+    console.error('Revoke share error:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

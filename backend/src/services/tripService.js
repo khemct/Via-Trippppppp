@@ -12,6 +12,7 @@ const TRIP_SELECT = `
   route_polyline, total_distance_km,
   total_duration_minutes, total_duration_estimate,
   status, feasibility_status,
+  share_token, shared_at,
   created_at, updated_at
 `;
 
@@ -41,6 +42,8 @@ function rowToTrip(row) {
     total_duration_estimate: row.total_duration_estimate,
     status: row.status,
     feasibility_status: row.feasibility_status,
+    share_token: row.share_token || null,
+    shared_at: row.shared_at || null,
     waypoint_count: parseInt(row.waypoint_count, 10) || 0,
     created_at: row.created_at,
     updated_at: row.updated_at,
@@ -213,4 +216,61 @@ async function deleteTrip(tripId, userId) {
   await query('DELETE FROM trips WHERE trip_id = $1', [tripId]);
 }
 
-module.exports = { createTrip, listTrips, getTrip, updateTrip, deleteTrip };
+async function generateShareToken(tripId, userId) {
+  const existing = await query('SELECT user_id, share_token FROM trips WHERE trip_id = $1', [tripId]);
+  if (existing.rows.length === 0) {
+    throw Object.assign(new Error('Trip not found'), { code: 'NOT_FOUND' });
+  }
+  if (existing.rows[0].user_id !== userId) {
+    throw Object.assign(new Error('Not authorized'), { code: 'FORBIDDEN' });
+  }
+
+  if (existing.rows[0].share_token) {
+    return { share_token: existing.rows[0].share_token };
+  }
+
+  const crypto = require('crypto');
+  const shareToken = crypto.randomUUID();
+  const result = await query(
+    `UPDATE trips SET share_token = $1, shared_at = NOW()
+     WHERE trip_id = $2
+     RETURNING share_token`,
+    [shareToken, tripId]
+  );
+
+  return { share_token: result.rows[0].share_token };
+}
+
+async function revokeShareToken(tripId, userId) {
+  const existing = await query('SELECT user_id FROM trips WHERE trip_id = $1', [tripId]);
+  if (existing.rows.length === 0) {
+    throw Object.assign(new Error('Trip not found'), { code: 'NOT_FOUND' });
+  }
+  if (existing.rows[0].user_id !== userId) {
+    throw Object.assign(new Error('Not authorized'), { code: 'FORBIDDEN' });
+  }
+
+  await query(
+    `UPDATE trips SET share_token = NULL, shared_at = NULL WHERE trip_id = $1`,
+    [tripId]
+  );
+
+  return { message: 'Share token revoked' };
+}
+
+async function getSharedTrip(shareToken) {
+  const result = await query(
+    `SELECT ${TRIP_SELECT},
+            (SELECT COUNT(*) FROM trip_waypoints WHERE trip_id = t.trip_id) AS waypoint_count
+     FROM trips t WHERE share_token = $1`,
+    [shareToken]
+  );
+
+  if (result.rows.length === 0) {
+    throw Object.assign(new Error('Shared trip not found'), { code: 'NOT_FOUND' });
+  }
+
+  return rowToTrip(result.rows[0]);
+}
+
+module.exports = { createTrip, listTrips, getTrip, updateTrip, deleteTrip, generateShareToken, revokeShareToken, getSharedTrip };

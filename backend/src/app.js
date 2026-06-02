@@ -6,6 +6,7 @@ const waypointRoutes = require('./routes/waypoints');
 const recommendationRoutes = require('./routes/recommendations');
 const tripRoutes = require('./routes/trips');
 const placesRoutes = require('./routes/places');
+const sharedRoutes = require('./routes/shared');
 
 const app = express();
 
@@ -25,5 +26,6 @@ app.use('/api/trips', waypointRoutes);
 app.use('/api/trips', recommendationRoutes);
 app.use('/api/trips', tripRoutes);
 app.use('/api', placesRoutes);
+app.use('/api', sharedRoutes);
 
 module.exports = app;

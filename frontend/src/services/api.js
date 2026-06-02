@@ -58,6 +58,14 @@ export const trips = {
   update: (id, body, token) => request('PATCH', `/trips/${id}`, body, token),
 
   delete: (id, token) => request('DELETE', `/trips/${id}`, null, token),
+
+  generateShare: (id, token) => request('POST', `/trips/${id}/share`, null, token),
+
+  revokeShare: (id, token) => request('DELETE', `/trips/${id}/share`, null, token),
+};
+
+export const shared = {
+  get: (shareToken) => request('GET', `/shared/${shareToken}`),
 };
 
 export const places = {
