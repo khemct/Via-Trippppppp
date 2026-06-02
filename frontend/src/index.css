@@ -136,6 +136,25 @@
 
 @layer base {
   body {
-    @apply bg-base text-body;
+    @apply text-body;
+    background-color: var(--color-base);
+    background-image: url('/Main_bg03.png');
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: var(--color-base);
+    opacity: 0.5;
+    z-index: 0;
+    pointer-events: none;
+  }
+  #root {
+    position: relative;
+    z-index: 1;
   }
 }
