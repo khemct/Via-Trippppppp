@@ -2,9 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { trips as tripsApi } from '../services/api';
-import { MapPin, Flag, CalendarDays, Mountain, Route, Compass, Plus, Map, ArrowLeft, ArrowRight, Car, Clock, CheckCircle, AlertTriangle, XCircle, Navigation, Trash2 } from 'lucide-react';
-import ConfirmModal from '../components/ConfirmModal';
-
+import { MapPin, Flag, CalendarDays, Mountain, Route, Compass, Plus, Map, ArrowLeft, ArrowRight, Car, Clock, CheckCircle, AlertTriangle, XCircle, Navigation } from 'lucide-react';
 const statusConfig = {
   saved: { cls: 'bg-brand-light/60 text-brand-text', label: 'Saved' },
   draft: { cls: 'bg-input text-muted', label: 'Draft' },
@@ -24,8 +22,6 @@ export default function TripListPage() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [deleting, setDeleting] = useState(null);
-  const [deleteTarget, setDeleteTarget] = useState(null);
   const limit = 20;
 
   useEffect(() => {
@@ -40,21 +36,6 @@ export default function TripListPage() {
       .catch((err) => setError(err.message || 'Failed to load trips'))
       .finally(() => setLoading(false));
   }, [page, token]);
-
-  async function handleDeleteConfirm() {
-    if (!deleteTarget) return;
-    setDeleting(deleteTarget.trip_id);
-    try {
-      await tripsApi.delete(deleteTarget.trip_id, token);
-      setTrips((prev) => prev.filter((t) => t.trip_id !== deleteTarget.trip_id));
-      setTotal((prev) => prev - 1);
-    } catch (err) {
-      setError(err.message || 'Failed to delete trip');
-    } finally {
-      setDeleting(null);
-      setDeleteTarget(null);
-    }
-  }
 
   const totalPages = Math.ceil(total / limit);
 
@@ -202,24 +183,6 @@ export default function TripListPage() {
                       )}
                     </div>
                   </Link>
-
-                  {/* Delete button */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      setDeleteTarget(trip);
-                    }}
-                    disabled={deleting === trip.trip_id}
-                    className="absolute bottom-3 right-3 z-20 w-8 h-8 flex items-center justify-center rounded-lg opacity-0 group-hover:opacity-100 hover:bg-red-50 text-muted hover:text-red-500 disabled:opacity-30 transition-all"
-                    title="Delete trip"
-                  >
-                    {deleting === trip.trip_id ? (
-                      <span className="w-4 h-4 border-2 border-red-400 border-t-transparent rounded-full animate-spin" />
-                    ) : (
-                      <Trash2 size={15} />
-                    )}
-                  </button>
                 </div>
               );
             })}
@@ -267,17 +230,6 @@ export default function TripListPage() {
         </>
       )}
 
-      {/* Delete confirmation modal */}
-      <ConfirmModal
-        isOpen={!!deleteTarget}
-        onClose={() => setDeleteTarget(null)}
-        onConfirm={handleDeleteConfirm}
-        title="Delete trip"
-        message={`Are you sure you want to delete "${deleteTarget?.name || 'this trip'}"? This action cannot be undone.`}
-        confirmText={deleting ? 'Deleting...' : 'Delete'}
-        cancelText="Cancel"
-        danger={true}
-      />
     </div>
   );
 }
