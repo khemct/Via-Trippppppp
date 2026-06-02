@@ -19,7 +19,7 @@ const inspirations = [
   { name: 'Phuket', tags: 'Coastal · Freedom', rating: 4.7, img: '/Phuket.png' },
 ];
 
-const themeIcons = { adventure: Waves, bright: Sunset, modern: Palmtree };
+const themeIcons = { adventure: Waves, bright: Sunset, vintage: Palmtree };
 
 export default function HomePage() {
   const { colorTheme } = useTheme();

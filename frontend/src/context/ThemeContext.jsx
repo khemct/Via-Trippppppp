@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect, useCallback } from 'rea
 
 const ThemeContext = createContext();
 
-const COLOR_THEMES = ['adventure', 'bright', 'modern', 'vintage'];
+const COLOR_THEMES = ['adventure', 'bright', 'vintage'];
 
 function getInitialTheme() {
   const stored = localStorage.getItem('viattrip_theme');
