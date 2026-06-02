@@ -99,7 +99,38 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Section 2 — Features */}
+      {/* Section 2 — Inspiration */}
+      <section className="bg-base px-4 md:px-8 py-8 md:py-12">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-xl font-bold text-heading">Inspiration for Your Next Trip</h2>
+              <p className="text-sm text-muted mt-0.5">Popular destinations to get you started</p>
+            </div>
+            <Sparkles size={20} className="text-brand shrink-0" />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {inspirations.map((item) => (
+              <div key={item.name} className="bg-card rounded-2xl border border-line/40 overflow-hidden shadow-soft hover:shadow-soft-lg transition-all duration-300 hover:-translate-y-0.5 relative">
+                  <img src={item.img} alt={item.name} className="w-full block" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent pointer-events-none" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
+                    <div className="inline-flex items-center gap-1 bg-white/20 backdrop-blur-sm text-white rounded-full px-2.5 py-0.5 text-xs font-medium mb-2">
+                      <Trees size={9} />
+                      {item.tags}
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-base font-bold text-white drop-shadow-lg">{item.name}</span>
+                      <span className="text-sm text-amber-300 font-semibold drop-shadow-lg">★ {item.rating}</span>
+                    </div>
+                  </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Section 3 — Why Via-Trip? */}
       <section className="bg-card px-4 md:px-8 py-8 md:py-12">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-6">
@@ -116,42 +147,6 @@ export default function HomePage() {
                   <div className="min-w-0">
                     <div className="font-bold text-heading leading-tight">{f.title}</div>
                     <div className="text-sm text-muted leading-relaxed mt-1">{f.desc}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Section 3 — Inspiration */}
-      <section className="bg-base px-4 md:px-8 py-8 md:py-12">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="text-xl font-bold text-heading">Inspiration for Your Next Trip</h2>
-              <p className="text-sm text-muted mt-0.5">Popular destinations to get you started</p>
-            </div>
-            <Sparkles size={20} className="text-brand shrink-0" />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {inspirations.map((item) => (
-              <div key={item.name} className="bg-card rounded-2xl border border-line/40 overflow-hidden shadow-soft hover:shadow-soft-lg transition-all duration-300 hover:-translate-y-0.5">
-                <div
-                  className="h-[140px] bg-cover bg-center relative"
-                  style={{ backgroundImage: `url('${item.img}')` }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                  <span className="absolute bottom-3 left-3 text-white text-lg font-bold drop-shadow-lg">{item.name}</span>
-                </div>
-                <div className="p-4">
-                  <div className="inline-flex items-center gap-1 bg-brand-light/60 text-brand-text rounded-full px-2.5 py-0.5 text-[10px] font-medium mb-2">
-                    <Trees size={9} />
-                    {item.tags}
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-heading">{item.name}</span>
-                    <span className="text-sm text-amber-500 font-semibold">★ {item.rating}</span>
                   </div>
                 </div>
               </div>
