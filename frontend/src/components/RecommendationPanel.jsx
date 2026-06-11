@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { UtensilsCrossed, Coffee, Landmark, TreePine, ShoppingBag, Building2, Fuel, MapPin } from 'lucide-react';
+import PlaceThumbnail from './PlaceThumbnail';
 
 const CATEGORIES = ['', 'restaurant', 'cafe', 'attraction', 'park', 'museum', 'shopping', 'accommodation', 'gas_station'];
 
@@ -56,8 +57,15 @@ export default function RecommendationPanel({
   return (
     <div className="h-full flex flex-col bg-card border border-line-strong rounded-lg overflow-hidden">
       {/* Header */}
-      <div className="shrink-0 px-4 pt-4 pb-3 border-b border-line">
+      <div className="shrink-0 px-4 pt-4 pb-3 border-b border-line flex items-center justify-between">
         <h2 className="text-sm font-semibold text-heading">Recommendations</h2>
+        <button
+          onClick={onReseed}
+          disabled={seeding}
+          className="text-xs font-medium text-brand-text hover:underline disabled:opacity-50"
+        >
+          {seeding ? 'Seeding...' : 'Refresh'}
+        </button>
       </div>
 
       {/* Filters */}
@@ -124,40 +132,49 @@ export default function RecommendationPanel({
           <div className="divide-y divide-line">
             {places.map((place) => (
               <div key={place.place_id} className="px-4 py-3 hover:bg-deep transition-colors">
-                <div className="flex items-start justify-between gap-2">
+                <div className="flex gap-3">
+                  <PlaceThumbnail
+                    place={place}
+                    size={56}
+                    className="mt-0.5"
+                  />
                   <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-1.5 mb-0.5">
-                      <CategoryIcon category={place.category} size={12} />
-                      <span className="text-sm font-medium text-heading truncate">{place.name}</span>
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5 mb-0.5">
+                          <CategoryIcon category={place.category} size={12} />
+                          <span className="text-sm font-medium text-heading truncate">{place.name}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-muted">
+                          {renderRating(place.rating)}
+                          <span>({place.user_ratings_total || 0})</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <span
+                          className={`text-xs font-medium px-1.5 py-0.5 rounded ${
+                            place.score >= 70 ? 'bg-line text-brand-text' : place.score >= 50 ? 'bg-amber-50 text-amber-800' : 'bg-input text-muted'
+                          }`}
+                        >
+                          {place.score}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-muted">
-                      {renderRating(place.rating)}
-                      <span>({place.user_ratings_total || 0})</span>
+                    <div className="flex items-center justify-between mt-1.5">
+                      <span className="text-xs text-muted">
+                        {place.distance_from_route < 1000
+                          ? `${place.distance_from_route}m from route`
+                          : `${(place.distance_from_route / 1000).toFixed(1)}km detour`}
+                      </span>
+                      <button
+                        onClick={() => handleAdd(place)}
+                        disabled={adding[place.place_id]}
+                        className="text-xs font-medium text-brand-text hover:bg-input px-2 py-0.5 rounded transition-colors disabled:opacity-50"
+                      >
+                        {adding[place.place_id] ? 'Adding...' : '+ Add'}
+                      </button>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1.5 shrink-0">
-                    <span
-                      className={`text-xs font-medium px-1.5 py-0.5 rounded ${
-                        place.score >= 70 ? 'bg-line text-brand-text' : place.score >= 50 ? 'bg-amber-50 text-amber-800' : 'bg-input text-muted'
-                      }`}
-                    >
-                      {place.score}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between mt-1.5">
-                  <span className="text-xs text-muted">
-                    {place.distance_from_route < 1000
-                      ? `${place.distance_from_route}m from route`
-                      : `${(place.distance_from_route / 1000).toFixed(1)}km detour`}
-                  </span>
-                  <button
-                    onClick={() => handleAdd(place)}
-                    disabled={adding[place.place_id]}
-                    className="text-xs font-medium text-brand-text hover:bg-input px-2 py-0.5 rounded transition-colors disabled:opacity-50"
-                  >
-                    {adding[place.place_id] ? 'Adding...' : '+ Add'}
-                  </button>
                 </div>
               </div>
             ))}

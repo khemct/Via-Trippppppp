@@ -1,4 +1,5 @@
 import { UtensilsCrossed, Coffee, Landmark, TreePine, ShoppingBag, Building2, Fuel, MapPin } from 'lucide-react';
+import PlaceThumbnail from './PlaceThumbnail';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -36,6 +37,7 @@ function SortableWaypoint({ wp, onRemove, onUpdateDuration }) {
         </svg>
       </button>
       <span className="text-xs font-bold text-muted w-5 shrink-0">{wp.order}</span>
+      <PlaceThumbnail place={wp} size={32} />
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1">
           <CategoryIcon category={wp.category} size={12} />

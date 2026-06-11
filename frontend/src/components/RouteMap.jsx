@@ -50,7 +50,7 @@ function samplePoints(points, intervalKm) {
   return sampled;
 }
 
-export default function RouteMap({ origin, destination, routePolyline, waypoints, maxDetourKm, height }) {
+export default function RouteMap({ origin, destination, routePolyline, waypoints, maxDetourKm, height, onWaypointClick }) {
   const mapRef = useRef(null);
   const polylineRef = useRef(null);
   const markersRef = useRef([]);
@@ -67,7 +67,7 @@ export default function RouteMap({ origin, destination, routePolyline, waypoints
 
   const mapStyle = useMemo(() => height ? { width: '100%', height } : containerStyle, [height]);
 
-  const redrawOverlays = useCallback((map, ori, dest, pth, wps, maxKm) => {
+  const redrawOverlays = useCallback((map, ori, dest, pth, wps, maxKm, onWpClick) => {
     if (polylineRef.current) {
       polylineRef.current.setMap(null);
       polylineRef.current = null;
@@ -112,6 +112,9 @@ export default function RouteMap({ origin, destination, routePolyline, waypoints
             strokeWeight: 2,
           },
         });
+        if (onWpClick) {
+          m.addListener('click', () => onWpClick(wp));
+        }
         markersRef.current.push(m);
       });
     }
@@ -146,12 +149,12 @@ export default function RouteMap({ origin, destination, routePolyline, waypoints
         });
       }
     }
-  }, []);
+  }, [onWaypointClick]);
 
   const onMapLoad = useCallback((map) => {
     mapRef.current = map;
-    redrawOverlays(map, origin, destination, path, waypoints, maxDetourKm);
-  }, [origin, destination, path, waypoints, maxDetourKm, redrawOverlays]);
+    redrawOverlays(map, origin, destination, path, waypoints, maxDetourKm, onWaypointClick);
+  }, [origin, destination, path, waypoints, maxDetourKm, onWaypointClick, redrawOverlays]);
 
   const onMapUnmount = useCallback(() => {
     if (polylineRef.current) {
@@ -168,8 +171,8 @@ export default function RouteMap({ origin, destination, routePolyline, waypoints
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
-    redrawOverlays(map, origin, destination, path, waypoints, maxDetourKm);
-  }, [origin, destination, path, waypoints, maxDetourKm, redrawOverlays]);
+    redrawOverlays(map, origin, destination, path, waypoints, maxDetourKm, onWaypointClick);
+  }, [origin, destination, path, waypoints, maxDetourKm, onWaypointClick, redrawOverlays]);
 
   return (
     <LoadScriptNext googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>

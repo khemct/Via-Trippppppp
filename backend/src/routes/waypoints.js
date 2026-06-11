@@ -53,7 +53,7 @@ router.get('/:tripId/waypoints', requireAuth, async (req, res) => {
     const result = await pool.query(
       `SELECT w.waypoint_id, w.place_id, w.stop_duration_minutes, w."order",
               c.name, ST_X(c.coordinates::geometry) AS lng, ST_Y(c.coordinates::geometry) AS lat,
-              c.category, c.rating, c.photo_reference, c.distance_from_route, c.score
+              c.category, c.rating, c.review_count, c.photo_reference, c.photos, c.distance_from_route, c.score
        FROM trip_waypoints w
        JOIN trip_places_cache c ON w.trip_id = c.trip_id AND w.place_id = c.place_id
        WHERE w.trip_id = $1
@@ -260,7 +260,7 @@ router.put('/:tripId/waypoints/reorder', requireAuth, async (req, res) => {
 
     const result = await pool.query(
       `SELECT w.waypoint_id, w.place_id, w."order", w.stop_duration_minutes,
-              c.name, c.category, c.distance_from_route, c.score
+              c.name, c.category, c.rating, c.review_count, c.distance_from_route, c.score, c.photo_reference, c.photos
        FROM trip_waypoints w
        JOIN trip_places_cache c ON w.trip_id = c.trip_id AND w.place_id = c.place_id
        WHERE w.trip_id = $1
