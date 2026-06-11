@@ -60,8 +60,14 @@ export const trips = {
   delete: (id, token) => request('DELETE', `/trips/${id}`, null, token),
 };
 
+export function getPhotoUrl(photoReference, maxwidth = 400, maxheight = 400) {
+  if (!photoReference) return null;
+  return `/api/places/photo/${encodeURIComponent(photoReference)}?maxwidth=${maxwidth}&maxheight=${maxheight}`;
+}
+
 export const places = {
   autocomplete: (q, signal) => request('GET', `/places/autocomplete?q=${encodeURIComponent(q)}`, null, null, signal),
+  details: (placeId) => request('GET', `/places/details/${encodeURIComponent(placeId)}`),
 };
 
 export const itinerary = {

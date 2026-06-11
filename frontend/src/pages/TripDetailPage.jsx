@@ -5,6 +5,8 @@ import { useAuth } from '../hooks/useAuth';
 import { trips as tripsApi, itinerary as itineraryApi } from '../services/api';
 import RouteMap from '../components/RouteMap';
 import ConfirmModal from '../components/ConfirmModal';
+import PlaceThumbnail from '../components/PlaceThumbnail';
+import PlaceDetailModal from '../components/PlaceDetailModal';
 
 const STYLES = ['chill', 'foodie', 'photographer', 'adventure', 'budget'];
 
@@ -231,6 +233,7 @@ export default function TripDetailPage() {
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedPlace, setSelectedPlace] = useState(null);
 
   useEffect(() => {
     setLoading(true);
@@ -334,6 +337,11 @@ export default function TripDetailPage() {
     } catch (err) {
       setError(err.message || 'Failed to delete trip');
     }
+  }
+
+  function handleMarkerClick(wp) {
+    const full = waypoints.find(w => w.waypoint_id === wp.waypoint_id) || wp;
+    setSelectedPlace(full);
   }
 
   const originCoords = useMemo(
@@ -645,6 +653,7 @@ export default function TripDetailPage() {
                         <span className="text-xs font-bold text-muted w-5 shrink-0 text-right">
                           {wp.order}
                         </span>
+                        <PlaceThumbnail place={wp} size={32} />
                         <div className="min-w-0 flex-1">
                           <p className="text-sm font-medium text-heading truncate">{wp.name}</p>
                           <p className="text-[11px] text-muted">
@@ -700,6 +709,7 @@ export default function TripDetailPage() {
                 }))}
                 maxDetourKm={trip.max_detour_km}
                 height="100%"
+                onWaypointClick={handleMarkerClick}
               />
             </div>
           </div>
@@ -716,6 +726,13 @@ export default function TripDetailPage() {
         cancelText="Cancel"
         danger={true}
       />
+
+      {selectedPlace && (
+        <PlaceDetailModal
+          place={selectedPlace}
+          onClose={() => setSelectedPlace(null)}
+        />
+      )}
     </div>
   );
 }

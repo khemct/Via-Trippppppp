@@ -147,7 +147,11 @@ async function getTrip(tripId, userId) {
                 'order', w."order",
                 'stop_duration_minutes', w.stop_duration_minutes,
                 'category', c.category,
-                'distance_from_route', c.distance_from_route
+                'rating', c.rating,
+                'review_count', c.review_count,
+                'distance_from_route', c.distance_from_route,
+                'photo_reference', c.photo_reference,
+                'photos', c.photos
               ) ORDER BY w."order")
               FROM trip_waypoints w
               JOIN trip_places_cache c ON w.trip_id = c.trip_id AND w.place_id = c.place_id

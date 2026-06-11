@@ -6,6 +6,7 @@ import useWaypoints from '../hooks/useWaypoints';
 import RouteMap from '../components/RouteMap';
 import RecommendationPanel from '../components/RecommendationPanel';
 import ItinerarySidebar from '../components/ItinerarySidebar';
+import PlaceDetailModal from '../components/PlaceDetailModal';
 
 export default function ItineraryPage() {
   const { tripId } = useParams();
@@ -27,6 +28,7 @@ export default function ItineraryPage() {
   const { waypoints, loading: waypointsLoading, add: addWaypointFn, remove: removeWaypointFn, updateDuration: updateWaypointDuration, reorder: reorderWaypoints } = useWaypoints(tripId, token);
 
   const [feasibility, setFeasibility] = useState(null);
+  const [selectedPlace, setSelectedPlace] = useState(null);
 
   useEffect(() => {
     filtersRef.current = filters;
@@ -73,7 +75,7 @@ export default function ItineraryPage() {
     setSeeding(true);
     setRecsError('');
     try {
-      await itineraryApi.seed(tripId, token);
+      await itineraryApi.reseed(tripId, token);
       await fetchRecommendations(null);
     } catch (err) {
       setRecsError(err.data?.error || err.message || 'Failed to seed recommendations');
@@ -129,6 +131,11 @@ export default function ItineraryPage() {
   function handleUpdateDuration(waypointId, minutes) {
     updateWaypointDuration(waypointId, minutes);
     setTimeout(fetchFeasibility, 800);
+  }
+
+  function handleMarkerClick(wp) {
+    const full = waypoints.find(w => w.waypoint_id === wp.waypoint_id) || wp;
+    setSelectedPlace(full);
   }
 
   async function handleReorder(orderArray) {
@@ -235,6 +242,7 @@ export default function ItineraryPage() {
               waypoints={routeWaypoints}
               maxDetourKm={trip.max_detour_km}
               height="100%"
+              onWaypointClick={handleMarkerClick}
             />
           </div>
 
@@ -252,6 +260,13 @@ export default function ItineraryPage() {
           </div>
         </div>
       </div>
+
+      {selectedPlace && (
+        <PlaceDetailModal
+          place={selectedPlace}
+          onClose={() => setSelectedPlace(null)}
+        />
+      )}
     </div>
   );
 }

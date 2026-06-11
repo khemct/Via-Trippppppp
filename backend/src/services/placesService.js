@@ -117,7 +117,8 @@ async function seedTripCache(tripId, polylineEncoded, travelStyle, maxDetourKm, 
         for (const place of result.value) {
           if (!allPlaces.has(place.place_id)) {
             const coords = place.geometry?.location || {};
-            const photos = place.photos || [];
+            const googlePhotos = place.photos || [];
+            const photoRefs = googlePhotos.map(p => p.photo_reference).filter(Boolean);
             allPlaces.set(place.place_id, {
               place_id: place.place_id,
               name: place.name,
@@ -127,7 +128,8 @@ async function seedTripCache(tripId, polylineEncoded, travelStyle, maxDetourKm, 
               rating: place.rating || 0,
               user_ratings_total: place.user_ratings_total || 0,
               vicinity: place.vicinity || '',
-              photo_reference: photos.length > 0 ? photos[0].photo_reference : null,
+              photo_reference: photoRefs.length > 0 ? photoRefs[0] : null,
+              photos: photoRefs,
               opening_hours: place.opening_hours || null,
               types: place.types ? place.types.join(',') : '',
             });
@@ -152,40 +154,49 @@ async function seedTripCache(tripId, polylineEncoded, travelStyle, maxDetourKm, 
     place.score = computeScore(place, travelStyle, maxDetourKm);
   }
 
-  const BATCH_INSERT_SIZE = 50;
-  for (let i = 0; i < filtered.length; i += BATCH_INSERT_SIZE) {
-    const batch = filtered.slice(i, i + BATCH_INSERT_SIZE);
-    const values = batch.map((p, idx) => {
-      const offset = idx * 14;
-      return `($${offset + 1},$${offset + 2},$${offset + 3},ST_SetSRID(ST_MakePoint($${offset + 4},$${offset + 5}),4326),$${offset + 6},$${offset + 7},$${offset + 8}::jsonb,$${offset + 9},$${offset + 10}::jsonb,$${offset + 11},$${offset + 12},$${offset + 13},$${offset + 14})`;
-    }).join(',');
+    const BATCH_INSERT_SIZE = 50;
+    for (let i = 0; i < filtered.length; i += BATCH_INSERT_SIZE) {
+      const batch = filtered.slice(i, i + BATCH_INSERT_SIZE);
+      const values = batch.map((p, idx) => {
+        const offset = idx * 15;
+        return `($${offset + 1},$${offset + 2},$${offset + 3},ST_SetSRID(ST_MakePoint($${offset + 4},$${offset + 5}),4326),$${offset + 6},$${offset + 7},$${offset + 8}::jsonb,$${offset + 9},$${offset + 10}::jsonb,$${offset + 11},$${offset + 12},$${offset + 13},$${offset + 14},$${offset + 15}::jsonb)`;
+      }).join(',');
 
-    const params = [];
-    for (const p of batch) {
-      params.push(
-        tripId, p.place_id, p.name,
-        p.lng, p.lat,
-        p.category,
-        p.rating,
-        JSON.stringify([]),
-        (p.photo_reference || '').substring(0, 500) || null,
-        JSON.stringify(p.opening_hours || {}),
-        Math.round(p.distance_from_route),
-        p.score,
-        (p.vicinity || '').substring(0, 500),
-        p.user_ratings_total || 0
+      const params = [];
+      for (const p of batch) {
+        params.push(
+          tripId, p.place_id, p.name,
+          p.lng, p.lat,
+          p.category,
+          p.rating,
+          JSON.stringify([]),
+          p.photo_reference || null,
+          JSON.stringify(p.opening_hours || {}),
+          Math.round(p.distance_from_route),
+          p.score,
+          (p.vicinity || '').substring(0, 500),
+          p.user_ratings_total || 0,
+          JSON.stringify(p.photos || [])
+        );
+      }
+
+      await pool.query(
+        `INSERT INTO trip_places_cache (trip_id, place_id, name, coordinates, category, rating, reviews, photo_reference, opening_hours, distance_from_route, score, vicinity, review_count, photos)
+         VALUES ${values}
+         ON CONFLICT (trip_id, place_id) DO UPDATE SET
+           score = EXCLUDED.score,
+           distance_from_route = EXCLUDED.distance_from_route,
+           photo_reference = EXCLUDED.photo_reference,
+           photos = EXCLUDED.photos,
+           name = EXCLUDED.name,
+           rating = EXCLUDED.rating,
+           category = EXCLUDED.category,
+           vicinity = EXCLUDED.vicinity,
+           opening_hours = EXCLUDED.opening_hours,
+           review_count = EXCLUDED.review_count`,
+        params
       );
     }
-
-    await pool.query(
-      `INSERT INTO trip_places_cache (trip_id, place_id, name, coordinates, category, rating, reviews, photo_reference, opening_hours, distance_from_route, score, vicinity, review_count)
-       VALUES ${values}
-       ON CONFLICT (trip_id, place_id) DO UPDATE SET
-         score = EXCLUDED.score,
-         distance_from_route = EXCLUDED.distance_from_route`,
-      params
-    );
-  }
 
   return { count: filtered.length };
 }
@@ -273,7 +284,7 @@ async function getRecommendations(tripId, filters = {}, pool) {
     SELECT c.cache_id, c.place_id, c.name,
            ST_X(c.coordinates::geometry) AS lng, ST_Y(c.coordinates::geometry) AS lat,
            c.category, c.rating, c.review_count,
-           c.photo_reference, c.opening_hours, c.vicinity, c.distance_from_route, c.score,
+           c.photo_reference, c.photos, c.opening_hours, c.vicinity, c.distance_from_route, c.score,
            c.reviews
     FROM trip_places_cache c
     WHERE c.trip_id = $1 ${whereClause}
@@ -331,8 +342,8 @@ async function seedGuestCache(routePolyline, travelStyle, pool) {
   const places = await pool.query(
     `SELECT cache_id, place_id, name,
             ST_X(coordinates::geometry) AS lng, ST_Y(coordinates::geometry) AS lat,
-            category, rating, user_ratings_total,
-            photo_reference, opening_hours, distance_from_route, score,
+            category, rating, review_count, user_ratings_total,
+            photo_reference, photos, opening_hours, distance_from_route, score,
             reviews
      FROM trip_places_cache WHERE trip_id = $1
      ORDER BY score DESC, place_id ASC`,
