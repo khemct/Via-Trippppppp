@@ -62,7 +62,7 @@ export default function RecommendationPanel({
         <button
           onClick={onReseed}
           disabled={seeding}
-          className="text-xs font-medium text-brand-text hover:underline disabled:opacity-50"
+          className="text-xs font-medium text-brand border border-brand rounded-md px-2.5 py-1 hover:bg-brand hover:text-brand-light disabled:opacity-50 transition-colors"
         >
           {seeding ? 'Seeding...' : 'Refresh'}
         </button>
@@ -169,7 +169,7 @@ export default function RecommendationPanel({
                       <button
                         onClick={() => handleAdd(place)}
                         disabled={adding[place.place_id]}
-                        className="text-xs font-medium text-brand-text hover:bg-input px-2 py-0.5 rounded transition-colors disabled:opacity-50"
+                        className="text-xs font-medium text-brand border border-brand rounded px-2 py-0.5 hover:bg-brand hover:text-brand-light disabled:opacity-50 transition-colors"
                       >
                         {adding[place.place_id] ? 'Adding...' : '+ Add'}
                       </button>
