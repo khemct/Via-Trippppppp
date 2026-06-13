@@ -206,11 +206,31 @@ router.delete('/:tripId/waypoints/:waypointId', requireAuth, async (req, res) =>
       return res.status(404).json({ error: 'Waypoint not found' });
     }
 
-    await pool.query(
-      `UPDATE trip_waypoints SET "order" = "order" - 1
-       WHERE trip_id = $1 AND "order" > $2`,
-      [tripId, result.rows[0].order]
-    );
+    const deletedOrder = result.rows[0].order;
+
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
+
+      await client.query(
+        `UPDATE trip_waypoints SET "order" = "order" + 1000000
+         WHERE trip_id = $1 AND "order" > $2`,
+        [tripId, deletedOrder]
+      );
+
+      await client.query(
+        `UPDATE trip_waypoints SET "order" = "order" - 1000001
+         WHERE trip_id = $1 AND "order" > $2`,
+        [tripId, deletedOrder + 1000000]
+      );
+
+      await client.query('COMMIT');
+    } catch (err) {
+      await client.query('ROLLBACK');
+      throw err;
+    } finally {
+      client.release();
+    }
 
     res.json({ message: 'Waypoint removed' });
     refreshFeasibilityStatus(tripId, pool);
@@ -238,25 +258,48 @@ router.put('/:tripId/waypoints/reorder', requireAuth, async (req, res) => {
     }
   }
 
-  try {
-    const client = await pool.connect();
     try {
-      await client.query('BEGIN');
+      const client = await pool.connect();
+      try {
+        await client.query('BEGIN');
 
-      for (const item of order) {
         await client.query(
-          `UPDATE trip_waypoints SET "order" = $1 WHERE waypoint_id = $2 AND trip_id = $3`,
-          [item.order, item.waypoint_id, tripId]
+          `UPDATE trip_waypoints SET "order" = "order" + 1000000 WHERE trip_id = $1`,
+          [tripId]
         );
-      }
 
-      await client.query('COMMIT');
-    } catch (err) {
-      await client.query('ROLLBACK');
-      throw err;
-    } finally {
-      client.release();
-    }
+        for (const item of order) {
+          await client.query(
+            `UPDATE trip_waypoints SET "order" = $1 WHERE waypoint_id = $2 AND trip_id = $3`,
+            [item.order, item.waypoint_id, tripId]
+          );
+        }
+
+        const waypointIds = order.map((o) => o.waypoint_id);
+        const maxOrder = order.reduce((max, o) => Math.max(max, o.order), 0);
+        const missingResult = await client.query(
+          `SELECT waypoint_id FROM trip_waypoints
+           WHERE trip_id = $1 AND waypoint_id <> ALL($2)
+           ORDER BY "order" ASC`,
+          [tripId, waypointIds]
+        );
+
+        let nextOrder = maxOrder;
+        for (const row of missingResult.rows) {
+          nextOrder++;
+          await client.query(
+            `UPDATE trip_waypoints SET "order" = $1 WHERE waypoint_id = $2 AND trip_id = $3`,
+            [nextOrder, row.waypoint_id, tripId]
+          );
+        }
+
+        await client.query('COMMIT');
+      } catch (err) {
+        await client.query('ROLLBACK');
+        throw err;
+      } finally {
+        client.release();
+      }
 
     const result = await pool.query(
       `SELECT w.waypoint_id, w.place_id, w."order", w.stop_duration_minutes,

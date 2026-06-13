@@ -14,7 +14,7 @@ function CategoryIcon({ category, size = 12 }) {
 }
 
 function SortableWaypoint({ wp, onRemove, onUpdateDuration }) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: wp.waypoint_id });
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging } = useSortable({ id: wp.waypoint_id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -29,7 +29,7 @@ function SortableWaypoint({ wp, onRemove, onUpdateDuration }) {
       style={style}
       className="flex items-center gap-1.5 px-3 py-2.5 border-b border-line hover:bg-deep transition-colors"
     >
-      <button {...attributes} {...listeners} aria-label="Drag to reorder" className="cursor-grab text-[#6b6650] hover:text-body shrink-0 px-1">
+      <button ref={setActivatorNodeRef} {...attributes} {...listeners} aria-label="Drag to reorder" className="cursor-grab text-[#6b6650] hover:text-body shrink-0 px-1">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
           <circle cx="9" cy="5" r="1.5" /><circle cx="15" cy="5" r="1.5" />
           <circle cx="9" cy="12" r="1.5" /><circle cx="15" cy="12" r="1.5" />

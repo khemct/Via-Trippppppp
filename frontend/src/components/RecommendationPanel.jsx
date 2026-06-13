@@ -198,10 +198,16 @@ export default function RecommendationPanel({
         <div className="shrink-0 p-3 border-t border-line">
           <button
             onClick={onLoadMore}
-            className="w-full text-sm font-medium text-brand-text py-2 border border-line-strong rounded hover:bg-input transition-colors"
+            className="w-full text-sm font-semibold text-brand border-2 border-brand rounded-lg py-2.5 hover:bg-brand hover:text-white transition-colors"
           >
             Load more
           </button>
+        </div>
+      )}
+
+      {loading && places.length > 0 && (
+        <div className="shrink-0 p-3 border-t border-line">
+          <div className="w-full text-sm text-center text-muted py-2">Loading more...</div>
         </div>
       )}
 
