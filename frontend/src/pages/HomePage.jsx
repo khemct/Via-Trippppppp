@@ -105,7 +105,7 @@ export default function HomePage() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-xl font-bold text-heading">Inspiration for Your Next Trip</h2>
-              <p className="text-sm text-muted mt-0.5">Popular destinations to get you started</p>
+              <p className="text-sm text-body mt-0.5">Popular destinations to get you started</p>
             </div>
             <Sparkles size={20} className="text-brand shrink-0" />
           </div>
@@ -135,7 +135,7 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-6">
             <h2 className="text-xl font-bold text-heading mb-1">Why Via-Trip?</h2>
-            <p className="text-sm text-muted max-w-md mx-auto">Everything you need to plan the perfect road trip</p>
+            <p className="text-sm text-body max-w-md mx-auto">Everything you need to plan the perfect road trip</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {features.map((f) => (
