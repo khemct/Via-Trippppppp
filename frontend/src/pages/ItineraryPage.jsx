@@ -24,11 +24,18 @@ export default function ItineraryPage() {
 
   const [filters, setFilters] = useState({ category: '', rating_min: 0, sort_by: 'score', cursor: null });
   const filtersRef = useRef(filters);
+  const fetchGenRef = useRef(0);
+  const mountedRef = useRef(true);
 
   const { waypoints, loading: waypointsLoading, add: addWaypointFn, remove: removeWaypointFn, updateDuration: updateWaypointDuration, reorder: reorderWaypoints } = useWaypoints(tripId, token);
 
   const [feasibility, setFeasibility] = useState(null);
   const [selectedPlace, setSelectedPlace] = useState(null);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => { mountedRef.current = false; };
+  }, []);
 
   useEffect(() => {
     filtersRef.current = filters;
@@ -38,19 +45,25 @@ export default function ItineraryPage() {
     setTripLoading(true);
     tripsApi
       .get(tripId, token)
-      .then((data) => setTrip(data.trip))
+      .then((data) => {
+        if (mountedRef.current) setTrip(data.trip);
+      })
       .catch(() => {})
-      .finally(() => setTripLoading(false));
+      .finally(() => {
+        if (mountedRef.current) setTripLoading(false);
+      });
   }, [tripId, token]);
 
   const fetchRecommendations = useCallback(
     async (cursor) => {
+      const gen = ++fetchGenRef.current;
       setRecsLoading(true);
       setRecsError('');
       try {
         const params = { limit: 20, ...filtersRef.current };
         if (cursor) params.cursor = cursor;
         const data = await itineraryApi.listRecommendations(tripId, params, token);
+        if (gen !== fetchGenRef.current) return;
         if (cursor) {
           setPlaces((prev) => [...prev, ...data.places]);
         } else {
@@ -59,13 +72,16 @@ export default function ItineraryPage() {
         setHasMore(data.has_more);
         setNextCursor(data.next_cursor);
       } catch (err) {
+        if (gen !== fetchGenRef.current) return;
         if (err.status === 500) {
           setRecsError('No recommendations yet. Seed from route.');
         } else {
           setRecsError(err.message || 'Failed to load recommendations');
         }
       } finally {
-        setRecsLoading(false);
+        if (gen === fetchGenRef.current) {
+          setRecsLoading(false);
+        }
       }
     },
     [tripId, token]
@@ -101,20 +117,12 @@ export default function ItineraryPage() {
 
   function handleFilterChange(newFilters) {
     setFilters(newFilters);
+    filtersRef.current = newFilters;
     setPlaces([]);
     setNextCursor(null);
     setHasMore(false);
     setRecsError('');
-    const params = { limit: 20, ...newFilters };
-    itineraryApi
-      .listRecommendations(tripId, params, token)
-      .then((data) => {
-        setPlaces(data.places);
-        setHasMore(data.has_more);
-        setNextCursor(data.next_cursor);
-      })
-      .catch((err) => setRecsError(err.message || 'Failed to load'))
-      .finally(() => setRecsLoading(false));
+    fetchRecommendations(null);
   }
 
   async function handleAddWaypoint(place) {
