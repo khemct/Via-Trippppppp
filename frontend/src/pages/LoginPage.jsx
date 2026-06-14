@@ -113,7 +113,7 @@ export default function LoginPage() {
                 <input type="checkbox" defaultChecked className="accent-brand" />
                 Remember me
               </label>
-              <Link to="/forgot-password" className="text-sm text-brand-text font-medium no-underline">
+              <Link to="/forgot-password" className="text-sm text-brand font-medium no-underline hover:text-brand-hover">
                 Forgot Password?
               </Link>
             </div>
@@ -160,7 +160,7 @@ export default function LoginPage() {
 
           <p className="text-center mt-4 text-sm text-body">
             Don&apos;t have an account?{' '}
-            <Link to="/register" className="text-brand-text font-semibold no-underline">
+            <Link to="/register" className="text-brand font-semibold no-underline hover:text-brand-hover">
               Register now →
             </Link>
           </p>
